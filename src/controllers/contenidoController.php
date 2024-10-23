@@ -9,13 +9,16 @@ use cesar\ProyectoTest\Config\Parameters;
 use cesar\ProyectoTest\Helpers\Authentication;
 use cesar\ProyectoTest\Models\ContenidoModel;
 
-class InicioController {
+class contenidoController {
     public function index(){
-        $contenidoModel = new ContenidoModel();
-        $peliculas = $contenidoModel->get4RandPeliculas();
-
-        ViewController::show("views/inicio/inicio.php", ['peliculas' => $peliculas]);
     }
 
+    public function getAllPeliculas(){
+        $contenidoModel = new ContenidoModel();
+        $peliculas = $contenidoModel->getAllPeliculas();
+
+        ViewController::show("views/contenido/peliculas.php", ['peliculas' => $peliculas]);
+
+    }
     
 }

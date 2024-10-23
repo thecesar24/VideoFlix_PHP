@@ -60,6 +60,9 @@
                         <li class="nav-item">
                             <a class="nav-link" id="iniciar-sesion" href="<?= Parameters::$BASE_URL . "Usuario/datos" ?>">Datos Usuario</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="iniciar-sesion" href="<?= Parameters::$BASE_URL . "Usuario/datos" ?>">Mi Espacio</a>
+                        </li>
                         <?php }; ?>
 
                         <li class="nav-item">

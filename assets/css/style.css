@@ -154,7 +154,7 @@ main {
 
 .card-title {
     padding: 10px;
-    color: #fff;
+    color: #000;
     font-size: 18px;
     text-align: center;
     box-sizing: border-box;
@@ -364,7 +364,16 @@ main {
     overflow: hidden;
     margin-bottom: 10px;
     width: 100%;
+    max-width: 268.4px;
     margin: 0;  
+}
+
+.card-title-lista {
+    padding: 10px;
+    color: #fff;
+    font-size: 18px;
+    text-align: center;
+    box-sizing: border-box;
 }
 
 /* ----------------------- 
