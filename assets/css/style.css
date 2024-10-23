@@ -95,7 +95,7 @@ main {
 /* ----------------------- 
    Card 
 ----------------------- */
-.peliculas, .series, .cortos {
+.peliculas, .series, .cortos, .documentales {
     margin-top: 50px;
     margin-bottom: 50px;
     display: flex;
@@ -346,7 +346,7 @@ main {
    Listado todas 
 ----------------------- */
 
-.container-lista-peliculas{
+.container-lista-peliculas, .container-lista-cortos, .container-lista-documentales{
     margin-top: 20px;
     margin-bottom: 50px;
 }
@@ -384,9 +384,10 @@ main {
         min-width: 100%;
     }
 
-    .peliculas, .series, .cortos {
+    .peliculas, .series, .cortos, .documentales {
         width: 80%;
         margin: auto;
+        margin-bottom: 50px;
     }
 
     .listar-todas-cards .card{

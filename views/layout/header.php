@@ -38,13 +38,13 @@
                             <a class="nav-link" id="series" href="#">Series</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="peliculas" href="#">Películas</a>
+                            <a class="nav-link" id="peliculas" href="<?= Parameters::$BASE_URL . 'Contenido/Peliculas' ?>">Películas</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="cortos" href="#">Cortos</a>
+                            <a class="nav-link" id="cortos" href="<?= Parameters::$BASE_URL . 'Contenido/Cortos' ?>">Cortos</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="documentales" href="#">Documentales</a>
+                            <a class="nav-link" id="documentales" href="<?= Parameters::$BASE_URL . 'Contenido/Documentales' ?>">Documentales</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav ml-auto">

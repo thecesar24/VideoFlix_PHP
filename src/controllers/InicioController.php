@@ -12,9 +12,13 @@ use cesar\ProyectoTest\Models\ContenidoModel;
 class InicioController {
     public function index(){
         $contenidoModel = new ContenidoModel();
-        $peliculas = $contenidoModel->get4RandPeliculas();
 
-        ViewController::show("views/inicio/inicio.php", ['peliculas' => $peliculas]);
+        $peliculas = $contenidoModel->get4RandByTipoContenido('pelicula');
+     //   $series = $contenidoModel->get4RandByTipoContenido('pelicula');
+        $cortos = $contenidoModel->get4RandByTipoContenido('corto');
+        $documentales = $contenidoModel->get4RandByTipoContenido('documental');
+
+        ViewController::show("views/inicio/inicio.php", ['peliculas' => $peliculas, 'cortos' => $cortos, 'documentales' => $documentales]);
     }
 
     

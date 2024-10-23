@@ -11,11 +11,12 @@ class ContenidoModel extends Model{
         $this->tabla = "contenido";
     }
 
-    public function get4RandPeliculas() {
+    public function get4RandByTipoContenido($tipoContenido) {
         try {
-            $consulta = "SELECT * FROM contenido WHERE tipo_contenido = 'pelicula' ORDER BY RAND() LIMIT 4";
+            $consulta = "SELECT * FROM contenido WHERE tipo_contenido = :tipoContenido ORDER BY RAND() LIMIT 4";
     
             $sentencia = $this->conn->prepare($consulta);
+            $sentencia->bindParam(':tipoContenido', $tipoContenido, \PDO::PARAM_STR);
             $sentencia->execute();
             
             $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
@@ -27,11 +28,12 @@ class ContenidoModel extends Model{
         }        
     }
 
-    public function getAllPeliculas() {
+    public function getAllByTipoContenido($tipoContenido) {
         try {
-            $consulta = "SELECT * FROM contenido WHERE tipo_contenido = 'pelicula'";
+            $consulta = "SELECT * FROM contenido WHERE tipo_contenido = :tipoContenido";
     
             $sentencia = $this->conn->prepare($consulta);
+            $sentencia->bindParam(':tipoContenido', $tipoContenido, \PDO::PARAM_STR);
             $sentencia->execute();
             
             $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
