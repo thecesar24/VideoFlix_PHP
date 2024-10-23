@@ -1,0 +1,42 @@
+<?php
+	namespace cesar\ProyectoTest\Helpers;
+    use cesar\ProyectoTest\Config\Parameters;
+    use cesar\ProyectoTest\Models\CursoModel;
+
+	class Validations{
+
+        public static function validateName($nombre):bool{
+            return (!empty($nombre) && preg_match("/^[a-zñáéíóú]+([ ][a-zñáéíóú]+)*$/", strtolower($nombre)));
+        }
+        
+        public static function validateFormatPassword($password): bool {
+            // Verificar si la contraseña está vacía
+            if (empty($password)) {
+                return false;
+            }
+            
+            // Verificar la longitud mínima de la contraseña
+            if (strlen($password) < Parameters::$PASSWORD_MIN_LENGTH) {
+                return false;
+            }
+        
+            // Verificar que contenga al menos un carácter alfabético
+           // if (!preg_match('/[a-zA-Z]/', $password)) {
+         //       return false;
+          //  }
+        
+            // Verificar que contenga al menos una letra mayúscula
+          //  if (!preg_match('/[A-Z]/', $password)) {
+          //      return false;
+         //   }
+        
+            // Verificar que contenga al menos un carácter especial
+          //  if (!preg_match('/[!@#$%^&*(),.?":{}|<>]/', $password)) {
+          //      return false;
+         //   }
+        
+            return true;
+        }
+        
+        
+    }

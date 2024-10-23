@@ -1,0 +1,20 @@
+{
+    "name": "cesar/proyecto-test",
+    "description": "Blog MVC",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "cesar\\ProyectoTest\\Controllers\\": "src/controllers/",
+            "cesar\\ProyectoTest\\Models\\": "src/models/",
+            "cesar\\ProyectoTest\\Config\\": "src/config/",
+            "cesar\\ProyectoTest\\Database\\": "src/database/",
+            "cesar\\ProyectoTest\\Helpers\\": "src/helpers/",
+            "cesar\\ProyectoTest\\Entities\\": "src/entities/"
+        }
+    },
+    "require": {
+        "stefangabos/zebra_pagination": "^2.4",
+        "monolog/monolog": "^3.5"
+    }
+}

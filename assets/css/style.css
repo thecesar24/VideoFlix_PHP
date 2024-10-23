@@ -1,0 +1,486 @@
+:root {
+    --fuente-color: #fff;
+    --bg-color: #333;
+}
+
+/* ----------------------- 
+   General 
+----------------------- */
+html, body {
+    overflow-x: hidden; /* Evitar el desbordamiento horizontal */
+}
+
+html {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ----------------------- 
+   Header 
+----------------------- */
+header {
+    background-color: var(--bg-color);
+    color: var(--fuente-color);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, .5);
+}
+
+.header-image {
+    width: 100%;
+    height: 50px;
+    object-fit: cover;
+}
+
+/* ----------------------- 
+   Main 
+----------------------- */
+main {
+    margin-top: 70px;
+    flex: 1;
+    background-color: lightgrey;
+}
+
+/* ----------------------- 
+   Navigation 
+----------------------- */
+.navbar-content {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.nav-item {
+    margin-right: 10px;
+}
+
+.navbar-nav .nav-link {
+    color: var(--fuente-color);
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--fuente-color);
+    background-color: #444;
+    transition: 0.3s;
+}
+
+/* ----------------------- 
+   Search 
+----------------------- */
+.search-container {
+    width: 100%;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+#registro, #iniciar-sesion {
+    color: var(--fuente-color);
+}
+
+/* ----------------------- 
+   Card 
+----------------------- */
+.peliculas, .series, .cortos {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+.ver-mas-container {
+    display: flex;
+    justify-content: flex-end;  
+    margin-top: 10px;
+}
+
+.ver-mas{
+    padding: 10px;
+    width: 150px;
+    margin-right: 10px;
+    border-radius: 50px;
+    color: var(--fuente-color);
+    border: none;
+    background-color: #007bff;
+    transition: background-color 0.3s;
+}
+
+.ver-mas:hover{
+    background-color: #0056b3;
+}
+
+.card {
+    margin-left: 10px;
+    margin-right: 10px;
+    position: relative;
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card-img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, .8));
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.card-title {
+    padding: 10px;
+    color: #fff;
+    font-size: 18px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* Ajuste para pantallas pequeñas */
+@media (max-width: 768px) {
+    .recomendadas-cards .card {
+        flex: 1 1 40%;
+        max-width: 50%;
+    }
+
+    .card-img {
+        height: 250px;
+    }
+}
+
+/* ----------------------- 
+   Forms 
+----------------------- */
+.container-iniciar-sesion, .container-register, .container-datos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.formulario-iniciar-sesion, .formulario-register, .datos {
+    background-color: var(--bg-color);
+    color: var(--fuente-color);
+    width: 100%;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.formulario-register p, .formulario-iniciar-sesion p, .datos p{
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+}
+
+.formulario-iniciar-sesion input, .formulario-register input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.formulario-iniciar-sesion input:focus, .formulario-register input:focus {
+    border-color: #555;
+}
+
+.formulario-iniciar-sesion button, .formulario-register button, .datos button{
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.formulario-iniciar-sesion button:hover, .formulario-register button:hover, .datos button:hover {
+    background-color: #0056b3;
+}
+
+/* ----------------------- 
+   Datos 
+----------------------- */
+
+.container-datos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.datos {
+    background-color: var(--bg-color);
+    color: var(--fuente-color);
+    width: 100%;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.datos h2{
+    margin: auto;
+    width: 90%;
+}
+
+.datos-opciones{
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+
+.datos-opciones a{
+    width: 40%;
+}
+
+/* ----------------------- 
+   Video 
+----------------------- */
+.container-ver-video {
+    margin-top: 30px;
+}
+
+.video-responsive {
+    position: relative;
+    overflow: hidden;
+    padding-top: 56.25%;
+}
+
+.video-responsive iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* ----------------------- 
+   Comments 
+----------------------- */
+.seccion-comentarios button {
+    margin-top: 10px;
+    width: 100%;
+    padding: 5px;
+    border-radius: 30px;
+    background-color: #007bff;
+    color: var(--fuente-color);
+    border: none;
+}
+
+.seccion-comentarios button:hover {
+    background-color: #0056b3;
+}
+
+/* ----------------------- 
+   Recommendations 
+----------------------- */
+.recomendadas {
+    margin-bottom: 50px;
+}
+
+.recomendadas h5 {
+    margin-top: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.recomendadas-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+}
+
+.recomendadas-cards .card {
+    flex: 1 1 40%;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    width: 100%;
+    margin: 0;
+}
+
+/* ----------------------- 
+   Listado todas 
+----------------------- */
+
+.container-lista-peliculas{
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
+.listar-todas-cards{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between
+}
+
+.listar-todas-cards .card{
+    flex: 1 1 20%;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    width: 100%;
+    margin: 0;  
+}
+
+/* ----------------------- 
+   Media Queries 
+----------------------- */
+@media (min-width: 350px) and (max-width: 767px) {
+    .search-container input {
+        min-width: 100%;
+    }
+
+    .peliculas, .series, .cortos {
+        width: 80%;
+        margin: auto;
+    }
+
+    .listar-todas-cards .card{
+        flex: 1 1 40%;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        width: 100%;
+        margin: 0;  
+    }
+
+    .formulario-register p, .formulario-iniciar-sesion p{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .datos h2{
+        margin: auto;
+        width: 100%;
+    }
+    
+    .datos-opciones{
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+    }
+    
+    .datos-opciones a{
+        width: 45%;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .nav-item {
+        min-width: 80%;
+        margin: auto;
+    }
+
+    .search-container {
+        min-width: 80%;
+        margin: auto;
+    }
+
+    .search-container input {
+        min-width: 100%;
+    }
+
+    .container-iniciar-sesion, .container-register {
+        padding: 10px;
+    }
+
+    .formulario-iniciar-sesion {
+        width: 90%;
+    }
+
+    .formulario-register p, .formulario-iniciar-sesion p{
+        display: flex;
+        flex-direction: column;
+        width: 80%;
+    }
+
+    .datos h2{
+        margin: auto;
+        width: 100%;
+    }
+
+    .datos-opciones{
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .datos-opciones a{
+        width: 45%;
+    }
+    
+}
+
+@media (min-width: 1024px) {
+    .navbar-custom {
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+
+    .carousel {
+        height: 500px;
+        overflow: hidden;
+    }
+}
+
+/* ----------------------- 
+   Footer 
+----------------------- */
+footer {
+    background-color: var(--bg-color);
+}
+
+/* ----------------------- 
+   Social Media 
+----------------------- */
+.social-media {
+    width: fit-content;
+    height: 25px;
+    object-fit: cover;
+}
