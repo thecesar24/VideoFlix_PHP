@@ -15,14 +15,14 @@ class contenidoController {
 
     public function Peliculas(){
         $contenidoModel = new ContenidoModel();
-        $peliculas = $contenidoModel->getAllByTipoContenido('pelicula');
+        $peliculas = $contenidoModel->getAllByTipoContenido('peliculas');
 
         ViewController::show("views/contenido/peliculas.php", ['peliculas' => $peliculas]);
 
     }
     public function Series(){
         $contenidoModel = new ContenidoModel();
-        $series = $contenidoModel->getAll();
+        $series = $contenidoModel->getAllByTipoContenido('series');
 
         ViewController::show("views/contenido/series.php", ['series' => $series]);
 
@@ -36,7 +36,7 @@ class contenidoController {
     }
     public function Documentales(){
         $contenidoModel = new ContenidoModel();
-        $documentales = $contenidoModel->getAllByTipoContenido('documental');
+        $documentales = $contenidoModel->getAllByTipoContenido('documentales');
 
         ViewController::show("views/contenido/documentales.php", ['documentales' => $documentales]);
 
