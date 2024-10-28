@@ -1,8 +1,5 @@
 <?php
 namespace cesar\ProyectoTest\Models;
-use cesar\ProyectoTest\Entities\UserEntity;
-use cesar\ProyectoTest\Config\Parameters;
-
 
 class ContenidoModel extends Model{
 

@@ -9,7 +9,7 @@ $peliculas = $data["peliculas"]??NULL;
             <div class="listar-todas-cards">
             <?php if (!empty($peliculas)){ ?>
                     <?php foreach ($peliculas as $pelicula){ ?>
-                        <div class="card">
+                        <div class="card-listar card">
                             <a href="ver.html" class="card-link">
                                 <img class="card-img" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/' . $pelicula->portada ?>" alt="<?=$pelicula->titulo ?>">
                                 <div class="card-overlay">

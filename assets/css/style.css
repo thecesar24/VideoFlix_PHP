@@ -137,7 +137,7 @@ main {
 .card-img {
     width: 100%;
     height: 300px;
-    object-fit: cover;
+  
 }
 
 .card-overlay {
@@ -158,6 +158,7 @@ main {
     font-size: 18px;
     text-align: center;
     box-sizing: border-box;
+    height: 43px;
 }
 
 /* Ajuste para pantallas pequeñas */
@@ -355,7 +356,6 @@ main {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    justify-content: space-between
 }
 
 .listar-todas-cards .card{
@@ -365,6 +365,7 @@ main {
     margin-bottom: 10px;
     width: 100%;
     max-width: 268.4px;
+    max-height: 300px;
     margin: 0;  
 }
 
@@ -374,6 +375,25 @@ main {
     font-size: 18px;
     text-align: center;
     box-sizing: border-box;
+}
+
+.slick-slide{
+    height: auto;
+}
+
+.card {
+    width: 200px;
+    height: 500px;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 70%;
+    object-fit:fill;
+}
+
+.card-body{
+    height: 152px;
 }
 
 /* ----------------------- 
@@ -390,13 +410,19 @@ main {
         margin-bottom: 50px;
     }
 
-    .listar-todas-cards .card{
+    .listar-todas-cards .card-listar{
         flex: 1 1 40%;
         border-radius: 8px;
         overflow: hidden;
         margin-bottom: 10px;
         width: 100%;
-        margin: 0;  
+        margin: 0;
+        max-height: 250px;
+    }
+
+    .card {
+        width: 200px;
+        height: 400px;
     }
 
     .formulario-register p, .formulario-iniciar-sesion p{
@@ -434,6 +460,16 @@ main {
 
     .search-container input {
         min-width: 100%;
+    }
+
+    .listar-todas-cards .card-listar{
+        flex: 1 1 40%;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        width: 100%;
+        margin: 0;
+        max-height: 250px;
     }
 
     .container-iniciar-sesion, .container-register {

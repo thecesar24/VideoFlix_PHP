@@ -150,6 +150,7 @@ class UsuarioController {
         exit();
     }
 
+    /*
     public function dashboard() {
         // Verificar si el usuario está logueado
         if (!Authentication::isUserLogged()) {
@@ -170,5 +171,7 @@ class UsuarioController {
       //      'videosVistos' => $videosVistos
         ]);
     }
+
+    */
     
 }

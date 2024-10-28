@@ -1,6 +1,5 @@
 <?php
 namespace cesar\ProyectoTest\Controllers;
-use cesar\ProyectoTest\Models\CategoriaModel;
 use cesar\ProyectoTest\Controllers\ErrorController;
 
 class ViewController{
