@@ -92,6 +92,81 @@ main {
     color: var(--fuente-color);
 }
 
+.slick-track{
+    display: flex;
+}
+
+.slick-track div{
+    height: 80%;
+}
+
+/* ----------------------- 
+   Card Inicio 
+----------------------- */
+
+.slider-container .card {
+    width: 200px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    transition: transform 0.3s;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.slider-container .card:hover {
+    transform: scale(1.05);
+}
+
+.card-img-top {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 15px;
+    text-align: center;
+    background-color: #f8f9fa;
+}
+
+.card-title {
+    font-size: 1rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .slider-container .card {
+        width: 150px;
+    }
+
+    .card-img-top {
+        height: 200px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .slider-container {
+        justify-content: space-around;
+    }
+}
+
 /* ----------------------- 
    Card 
 ----------------------- */
@@ -108,7 +183,7 @@ main {
     margin-top: 10px;
 }
 
-.ver-mas{
+.ver-mas {
     padding: 10px;
     width: 150px;
     margin-right: 10px;
@@ -119,15 +194,8 @@ main {
     transition: background-color 0.3s;
 }
 
-.ver-mas:hover{
+.ver-mas:hover {
     background-color: #0056b3;
-}
-
-.card {
-    margin-left: 10px;
-    margin-right: 10px;
-    position: relative;
-    transition: transform 0.3s;
 }
 
 .card:hover {
@@ -137,7 +205,6 @@ main {
 .card-img {
     width: 100%;
     height: 300px;
-  
 }
 
 .card-overlay {
@@ -153,24 +220,10 @@ main {
 }
 
 .card-title {
-    padding: 10px;
     color: #000;
-    font-size: 18px;
+    font-size: 15px;
     text-align: center;
     box-sizing: border-box;
-    height: 43px;
-}
-
-/* Ajuste para pantallas pequeñas */
-@media (max-width: 768px) {
-    .recomendadas-cards .card {
-        flex: 1 1 40%;
-        max-width: 50%;
-    }
-
-    .card-img {
-        height: 250px;
-    }
 }
 
 /* ----------------------- 
@@ -197,7 +250,7 @@ main {
     gap: 20px;
 }
 
-.formulario-register p, .formulario-iniciar-sesion p, .datos p{
+.formulario-register p, .formulario-iniciar-sesion p, .datos p {
     display: flex;
     flex-direction: column;
     width: 60%;
@@ -219,7 +272,7 @@ main {
     border-color: #555;
 }
 
-.formulario-iniciar-sesion button, .formulario-register button, .datos button{
+.formulario-iniciar-sesion button, .formulario-register button, .datos button {
     width: 100%;
     padding: 12px;
     border-radius: 8px;
@@ -238,7 +291,6 @@ main {
 /* ----------------------- 
    Datos 
 ----------------------- */
-
 .container-datos {
     display: flex;
     justify-content: center;
@@ -260,18 +312,18 @@ main {
     gap: 20px;
 }
 
-.datos h2{
+.datos h2 {
     margin: auto;
     width: 90%;
 }
 
-.datos-opciones{
+.datos-opciones {
     display: flex;
     width: 100%;
     justify-content: space-around;
 }
 
-.datos-opciones a{
+.datos-opciones a {
     width: 40%;
 }
 
@@ -315,50 +367,20 @@ main {
 }
 
 /* ----------------------- 
-   Recommendations 
------------------------ */
-.recomendadas {
-    margin-bottom: 50px;
-}
-
-.recomendadas h5 {
-    margin-top: 20px;
-    font-weight: bold;
-    text-align: center;
-}
-
-.recomendadas-cards {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: space-between;
-}
-
-.recomendadas-cards .card {
-    flex: 1 1 40%;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 10px;
-    width: 100%;
-    margin: 0;
-}
-
-/* ----------------------- 
    Listado todas 
 ----------------------- */
-
-.container-lista-peliculas, .container-lista-cortos, .container-lista-documentales{
+.container-lista-peliculas, .container-lista-cortos, .container-lista-documentales {
     margin-top: 20px;
     margin-bottom: 50px;
 }
 
-.listar-todas-cards{
+.listar-todas-cards {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
 }
 
-.listar-todas-cards .card{
+.listar-todas-cards .card {
     flex: 1 1 20%;
     border-radius: 8px;
     overflow: hidden;
@@ -377,40 +399,39 @@ main {
     box-sizing: border-box;
 }
 
-.slick-slide{
+.slick-slide {
     height: auto;
 }
 
-.card {
-    width: 200px;
-    height: 500px;
-}
-
-.card-img-top {
-    width: 100%;
-    height: 70%;
-    object-fit:fill;
-}
-
-.card-body{
-    height: 152px;
-}
 
 /* ----------------------- 
    Media Queries 
 ----------------------- */
-@media (min-width: 350px) and (max-width: 767px) {
+
+@media (min-width: 350px) and (max-width: 450px) {
+
+    .peliculas, .series, .cortos, .documentales {
+        width: 65%;
+        margin: auto;
+        margin-bottom: 50px;
+    }
+
+
+}
+
+
+@media (min-width: 451px) and (max-width: 767px) {
     .search-container input {
         min-width: 100%;
     }
 
     .peliculas, .series, .cortos, .documentales {
-        width: 80%;
+        width: 95%;
         margin: auto;
         margin-bottom: 50px;
     }
 
-    .listar-todas-cards .card-listar{
+    .listar-todas-cards .card-listar {
         flex: 1 1 40%;
         border-radius: 8px;
         overflow: hidden;
@@ -420,29 +441,24 @@ main {
         max-height: 250px;
     }
 
-    .card {
-        width: 200px;
-        height: 400px;
-    }
-
-    .formulario-register p, .formulario-iniciar-sesion p{
+    .formulario-register p, .formulario-iniciar-sesion p {
         display: flex;
         flex-direction: column;
         width: 100%;
     }
 
-    .datos h2{
+    .datos h2 {
         margin: auto;
         width: 100%;
     }
     
-    .datos-opciones{
+    .datos-opciones {
         display: flex;
         width: 100%;
         justify-content: space-around;
     }
     
-    .datos-opciones a{
+    .datos-opciones a {
         width: 45%;
     }
 }
@@ -462,7 +478,7 @@ main {
         min-width: 100%;
     }
 
-    .listar-todas-cards .card-listar{
+    .listar-todas-cards .card-listar {
         flex: 1 1 40%;
         border-radius: 8px;
         overflow: hidden;
@@ -480,30 +496,35 @@ main {
         width: 90%;
     }
 
-    .formulario-register p, .formulario-iniciar-sesion p{
+    .formulario-register p, .formulario-iniciar-sesion p {
         display: flex;
         flex-direction: column;
         width: 80%;
     }
 
-    .datos h2{
+    .datos h2 {
         margin: auto;
         width: 100%;
     }
 
-    .datos-opciones{
+    .datos-opciones {
         display: flex;
         width: 100%;
         justify-content: space-between;
     }
 
-    .datos-opciones a{
+    .datos-opciones a {
         width: 45%;
     }
-    
 }
 
 @media (min-width: 1024px) {
+    .peliculas, .series, .cortos, .documentales {
+        width: 75%;
+        margin: auto;
+        margin-bottom: 50px;
+    }
+
     .navbar-custom {
         margin-left: 10%;
         margin-right: 10%;
@@ -512,6 +533,7 @@ main {
     .carousel {
         height: 500px;
         overflow: hidden;
+        margin-bottom: 50px;
     }
 }
 
