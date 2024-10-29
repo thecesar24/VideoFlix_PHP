@@ -469,6 +469,12 @@ main {
         margin: auto;
     }
 
+    .peliculas, .series, .cortos, .documentales {
+        width: 85%;
+        margin: auto;
+        margin-bottom: 50px;
+    }
+
     .search-container {
         min-width: 80%;
         margin: auto;
