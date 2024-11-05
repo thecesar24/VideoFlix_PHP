@@ -1,7 +1,7 @@
 <?php 
-    use cesar\ProyectoTest\Config\Parameters
-?>
+    use cesar\ProyectoTest\Config\Parameters;
 
+?>
 
     <div class="container container-dashboard">
         <h1>Bienvenido, <?= htmlspecialchars($usuario->getNombre()) ?>!</h1>

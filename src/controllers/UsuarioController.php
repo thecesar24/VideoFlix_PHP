@@ -132,18 +132,86 @@ class UsuarioController {
         }
     }
 
+
     public function datos(){
         if (!Authentication::isUserLogged()) {
             header("Location: " . Parameters::$BASE_URL . "Usuario/login");
             exit();
+        }else{
+
+            $id = $_SESSION['user']->getid();
+
+            $usuarioModel = new UsuarioModel();
+            $datos = $usuarioModel->getOne($id);
+
+            $userEntity = $_SESSION['user'];
+
+            ViewController::show('views/usuarios/datos.php', ['usuario' => $userEntity, 'datos' => $datos]);
+
         }
-        $userEntity = $_SESSION['user'];
-        ViewController::show('views/usuarios/datos.php', [
-            'usuario' => $userEntity]);
     }
-    
-    public function closeSession()
-    {
+
+    public function editDatos() {
+        if (Authentication::isUserLogged()) {
+            
+            ViewController::show('views/usuarios/editarDatos.php');
+
+        }else {
+            header("Location: " . Parameters::$BASE_URL . "Usuario/login");
+            exit();
+        }
+    }
+
+    public function updateDatos() {
+        if (Authentication::isUserLogged()) {
+            $errores = [];
+            $userEntity = $_SESSION['user'];
+
+            // Collect POST data
+            $nombre = $_POST['nombre'] ?? '';
+            $apellidos = $_POST['apellidos'] ?? '';
+            $telefono = $_POST['telefono'] ?? '';
+            $email = $_POST['email'] ?? '';
+            $username = $_POST['username'] ?? '';
+
+         /*    if (!Validations::validateName($nombre) || !Validations::validateName($apellidos)) {
+                $errores['nombre'] = "Formato incorrecto en el nombre o apellido.";
+            }
+           if (!Validations::validatePhone($telefono)) {
+                $errores['telefono'] = "Número de teléfono no válido.";
+            }
+            if (!Validations::validateEmail($email)) {
+                $errores['email'] = "Correo electrónico no válido.";
+            }*/
+            if (!empty($errores)) {
+                ViewController::show('views/usuarios/editarDatos.php', ['validationsError' => $errores, 'dataPOST' => $_POST]);
+                return;
+            }   
+
+            $userEntity->setNombre($nombre)
+                   ->setApellidos($apellidos)
+                   ->setTelefono($telefono)
+                   ->setEmail($email)
+                   ->setUsername($username);
+
+            $usuarioModel = new UsuarioModel();
+            $statusUpdate = $usuarioModel->update($userEntity);
+
+            if ($statusUpdate) {
+                $_SESSION['user'] = $userEntity;  // Update session data
+                $_SESSION['successMessage'] = "Datos actualizados correctamente.";
+                header("Location: " . Parameters::$BASE_URL . "Usuario/datos");
+            }else {
+                $_SESSION['errorMessage'] = "Hubo un problema al actualizar sus datos.";
+                ViewController::show('views/usuarios/editarDatos.php', ['dataPOST' => $_POST]);
+            }
+        }else {
+            header("Location: " . Parameters::$BASE_URL . "Usuario/login");
+            exit();
+        }
+    }
+
+    public function closeSession() {
         if (Authentication::isUserLogged()) unset($_SESSION['user']);   
         
         header("Location: " . PARAMETERS::$BASE_URL);
