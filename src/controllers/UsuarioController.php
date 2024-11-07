@@ -25,6 +25,9 @@ class UsuarioController {
             // Obtener los valores del formulario
             $nombre = $_POST['nombre'] ?? '';
             $apellidos = $_POST['apellidos'] ?? '';
+            $telefono = $_POST['aptelefonoellidos'] ?? '';
+            $email = $_POST['email'] ?? '';
+            $username = $_POST['username'] ?? '';
             $password = $_POST['password'] ?? '';
             $password2 = $_POST['password2'] ?? '';
             
@@ -33,6 +36,14 @@ class UsuarioController {
                 $errores['nombre'] = "Formato incorrecto";
             }
     
+            if (!Validations::validateTelefono($telefono)) {
+                $errores['telefono'] = "Número de teléfono no válido.";
+            }
+
+            if (!Validations::validateEmail($email)) {
+                $errores['email'] = "Correo electrónico no válido.";
+            }
+
             if (!Validations::validateFormatPassword($password)) {
                 $errores['password'] = "Formato Contraseña no válido. Debe ser una cadena de mínimo " . Parameters::$PASSWORD_MIN_LENGTH . " caracteres, Contener una letra Mayuscula y un caracter especial.";
             }
@@ -40,6 +51,12 @@ class UsuarioController {
             if ($password !== $password2) {
                 $errores['password2'] = "El campo 'Contraseña' y 'Confirmar Contraseña' deben coincidir";
             }
+            
+            if (!empty($errores)) {
+                $_SESSION['errores'] = $errores;
+                ViewController::show('views/usuarios/registrar.php', ['dataPOST' => $_POST]);
+                exit();
+            }  
     
             // Crear instancias de modelos
             $usuarioModel = new UsuarioModel();
@@ -49,9 +66,9 @@ class UsuarioController {
                 $userEntity = new UserEntity();
                 $userEntity->setNombre($nombre)
                            ->setApellidos($apellidos)
-                           ->setTelefono($_POST["telefono"])
-                           ->setEmail($_POST["email"])
-                           ->setUsername($_POST["username"])
+                           ->setTelefono($telefono)
+                           ->setEmail($email)
+                           ->setUsername($username)
                            ->setPassword($password);
 
                 // Registrar usuario y verificar el estado
@@ -61,7 +78,7 @@ class UsuarioController {
                 ViewController::show('views/usuarios/registrar.php', ['statusRegister' => $statusRegister]);
             } else {
                 // Si hay errores, mostrar el formulario nuevamente con los errores
-                ViewController::show('views/usuarios/registrar.php', ['dataPOST' => $_POST, 'validationsError' => $errores]);
+                ViewController::show('views/usuarios/registrar.php', ['dataPOST' => $_POST]);
             }
         }
     }    
@@ -174,18 +191,19 @@ class UsuarioController {
             $email = $_POST['email'] ?? '';
             $username = $_POST['username'] ?? '';
 
-         /*    if (!Validations::validateName($nombre) || !Validations::validateName($apellidos)) {
+            if (!Validations::validateName($nombre) || !Validations::validateName($apellidos)) {
                 $errores['nombre'] = "Formato incorrecto en el nombre o apellido.";
             }
-           if (!Validations::validatePhone($telefono)) {
+            if (!Validations::validateTelefono($telefono)) {
                 $errores['telefono'] = "Número de teléfono no válido.";
             }
             if (!Validations::validateEmail($email)) {
                 $errores['email'] = "Correo electrónico no válido.";
-            }*/
+            }
             if (!empty($errores)) {
-                ViewController::show('views/usuarios/editarDatos.php', ['validationsError' => $errores, 'dataPOST' => $_POST]);
-                return;
+                $_SESSION['errores'] = $errores;
+                ViewController::show('views/usuarios/editarDatos.php', ['dataPOST' => $_POST]);
+                exit();
             }   
 
             $userEntity->setNombre($nombre)
@@ -194,15 +212,16 @@ class UsuarioController {
                    ->setEmail($email)
                    ->setUsername($username);
 
+
             $usuarioModel = new UsuarioModel();
             $statusUpdate = $usuarioModel->update($userEntity);
 
             if ($statusUpdate) {
-                $_SESSION['user'] = $userEntity;  // Update session data
-                $_SESSION['successMessage'] = "Datos actualizados correctamente.";
+                $_SESSION['user'] = $userEntity;
+                $_SESSION['mensaje'] = "Datos actualizados correctamente.";
                 header("Location: " . Parameters::$BASE_URL . "Usuario/datos");
             }else {
-                $_SESSION['errorMessage'] = "Hubo un problema al actualizar sus datos.";
+                $errores['error'] = "Hubo un problema al actualizar sus datos.";
                 ViewController::show('views/usuarios/editarDatos.php', ['dataPOST' => $_POST]);
             }
         }else {

@@ -8,9 +8,14 @@ if (!Authentication::isUserLogged()) {
     exit();
 }
 
-// Obtén la información del usuario desde la sesión
 $userEntity = $_SESSION['user'];
 $datos = $data['datos']??NULL;
+
+if (isset($_SESSION['mensaje'])) {
+    echo "<div id='mensaje-temporal' >{$_SESSION['mensaje']}</div>";
+    unset($_SESSION['mensaje']);
+}
+
 ?>
 
     <div class="container container-datos">

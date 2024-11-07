@@ -10,43 +10,40 @@ if (!Authentication::isUserLogged()) {
 
 // Obtén la información del usuario desde la sesión
 $userEntity = $_SESSION['user'];
-$validationsError = $data['validationsError'];
+
+if (isset($_SESSION['errores'])) {
+    foreach ($_SESSION['errores'] as $error) {
+        echo "<p class='error'>$error</p>"; // Muestra cada mensaje de error
+    }
+    unset($_SESSION['errores']); // Limpiar los errores después de mostrarlos
+}
 
 ?>
-
-<?php if (!empty($validationsError)): ?>
-    <div class="error-messages">
-        <?php foreach ($validationsError as $error): ?>
-            <p style="color: red;"><?= htmlspecialchars($error) ?></p>
-        <?php endforeach; ?>
-    </div>
-<?php endif; ?>
-
     <div class="container container-datos">
         <div class="datos">
             <form action="<?=Parameters::$BASE_URL . "Usuario/updateDatos"?>" method="post">
                 <h1>Datos del Usuario</h1>
                 <p>
                     <strong>Nombre:</strong>
-                    <input type="text" name="" id="" value="<?= $userEntity->getNombre() ?>">
+                    <input type="text" name="nombre" id="" value="<?= $userEntity->getNombre() ?>">
                 </p>
                 <p>
                     <strong>Apellidos:</strong>
-                    <input type="text" name="" id="" value="<?= $userEntity->getApellidos() ?>">
+                    <input type="text" name="apellidos" id="" value="<?= $userEntity->getApellidos() ?>">
                 </p>
                 <p>
                     <strong>Correo Electrónico:</strong>
-                    <input type="email" name="" id="" value="<?= $userEntity->getEmail() ?>">
+                    <input type="email" name="email" id="" value="<?= $userEntity->getEmail() ?>">
                 </p>
                 <p>
                     <strong>Teléfono:</strong>
-                    <input type="tel" name="" id="" value="<?= $userEntity->getTelefono() ?>">
+                    <input type="tel" name="telefono" id="" value="<?= $userEntity->getTelefono() ?>">
                 </p>
                 <p>
                     <strong>Nombre de Usuario:</strong>
-                    <input type="text" name="" id="" value="<?= $userEntity->getUsername() ?>">
+                    <input type="text" name="username" id="" value="<?= $userEntity->getUsername() ?>">
                 </p>
-                <input type="submit" value="Editar">
+                <input type="submit" value="Confirmar">
             </form>
             
             <h2>Opciones</h2>

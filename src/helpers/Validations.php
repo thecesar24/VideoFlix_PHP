@@ -9,6 +9,14 @@
             return (!empty($nombre) && preg_match("/^[a-zñáéíóú]+([ ][a-zñáéíóú]+)*$/", strtolower($nombre)));
         }
         
+        public static function validateEmail($email):bool{
+            return (!empty($email) && filter_var($email, FILTER_VALIDATE_EMAIL));
+        }
+
+        public static function validateTelefono($telefono):bool{
+            return (!empty($telefono) && preg_match("/^[0-9]{7,15}$/", $telefono));
+        }
+        
         public static function validateFormatPassword($password): bool {
             // Verificar si la contraseña está vacía
             if (empty($password)) {

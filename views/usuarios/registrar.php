@@ -3,15 +3,16 @@
 	use cesar\ProyectoTest\Helpers\ErrorHelpers;
 
     $dataPOST = $data["dataPOST"]??NULL;
-    $validationsError = $data["validationsError"]??NULL;
-    
-    if (isset($data['statusRegister'])){
-        if ($data['statusRegister']){
-        echo "<div class='alerta'>Registro completado</div>";
-		}else{
-    	echo "<div class='alerta alerta-error'>Error al registrar</div>";
-	}
-}
+   
+
+    if (isset($_SESSION['errores'])) {
+        echo "<div class='error-container'>";
+            foreach ($_SESSION['errores'] as $error) {
+                echo "<p class='error'>$error</p>"; // Muestra cada mensaje de error
+            }
+        echo "</div>";
+        unset($_SESSION['errores']); // Limpiar los errores después de mostrarlos
+    }
 ?>
 <div class="container container-register">
         	<form class="formulario-register" action="<?=Parameters::$BASE_URL?>Usuario/registerSave" method="post">

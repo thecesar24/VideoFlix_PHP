@@ -37,7 +37,7 @@
                             <a class="nav-link" id="inicio" href="<?=Parameters::$BASE_URL . "Inicio/index" ?>">Inicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="series" href="#">Series</a>
+                            <a class="nav-link" id="series" href="<?= Parameters::$BASE_URL . 'Contenido/Series' ?>">Series</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="peliculas" href="<?= Parameters::$BASE_URL . 'Contenido/Peliculas' ?>">Películas</a>
