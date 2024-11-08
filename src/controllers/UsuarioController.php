@@ -25,7 +25,7 @@ class UsuarioController {
             // Obtener los valores del formulario
             $nombre = $_POST['nombre'] ?? '';
             $apellidos = $_POST['apellidos'] ?? '';
-            $telefono = $_POST['aptelefonoellidos'] ?? '';
+            $telefono = $_POST['telefono'] ?? '';
             $email = $_POST['email'] ?? '';
             $username = $_POST['username'] ?? '';
             $password = $_POST['password'] ?? '';

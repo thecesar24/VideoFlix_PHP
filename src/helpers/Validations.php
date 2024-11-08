@@ -14,7 +14,7 @@
         }
 
         public static function validateTelefono($telefono):bool{
-            return (!empty($telefono) && preg_match("/^[0-9]{7,15}$/", $telefono));
+            return (!empty($telefono) && preg_match("/^[0-9]{9}$/", $telefono));
         }
         
         public static function validateFormatPassword($password): bool {

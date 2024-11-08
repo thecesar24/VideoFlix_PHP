@@ -308,7 +308,7 @@ main {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 20px;
 }
 
@@ -325,6 +325,20 @@ main {
 
 .datos-opciones a {
     width: 40%;
+}
+
+.datos-usuario {
+    width: 80%;
+    background-color: #7c7c7c;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.datos-usuario p {
+    width: 50%;
 }
 
 /* ----------------------- 
@@ -617,23 +631,12 @@ footer {
     object-fit: cover;
 }
 
-.error-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px; /* Espacio entre errores */
-    position: fixed; 
-    top: 20%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1111; /* Asegura que esté encima de otros elementos */
-}
-
 .error {
     background-color: #c40c15; 
     color: #fff;
     padding: 15px 25px; 
     border-radius: 5px;
+    position: fixed; 
     text-align: center;
     transition: opacity 0.5s ease;
     width: 100%; /* Opcional: Ajustar el ancho */

@@ -5,9 +5,13 @@
     $dataPOST = $data["dataPOST"]??NULL;
     $validationsError = $data["validationsError"]??NULL;
     
-    if(isset($_SESSION['errorLogin'])){
-        echo "<div class='alerta alerta-error'>{$_SESSION['errorLogin']}</div>";
-        unset($_SESSION['errorLogin']);
+    if (isset($_SESSION['errores'])) {
+        echo "<div class='error-container'>";
+            foreach ($_SESSION['errores'] as $error) {
+                echo "<p class='error'>$error</p>"; // Muestra cada mensaje de error
+            }
+        echo "</div>";
+        unset($_SESSION['errores']); // Limpiar los errores después de mostrarlos
     }
 ?>
 
