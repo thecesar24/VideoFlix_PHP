@@ -15,8 +15,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css"/>
 
-
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=menu" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     <link rel="stylesheet" href="<?=Parameters::$BASE_URL?>assets/css/style.css">
 </head>
@@ -63,7 +62,7 @@
                             <a class="nav-link" id="iniciar-sesion" href="<?= Parameters::$BASE_URL . "Usuario/datos" ?>">Datos Usuario</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="iniciar-sesion" href="<?= Parameters::$BASE_URL . "Usuario/datos" ?>">Mi Espacio</a>
+                            <a class="nav-link" id="iniciar-sesion" href="<?= Parameters::$BASE_URL . "SeguirViendo/miEspacio" ?>">Mi Espacio</a>
                         </li>
                         <?php }; ?>
 

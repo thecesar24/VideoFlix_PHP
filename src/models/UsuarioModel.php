@@ -58,17 +58,27 @@ class UsuarioModel extends Model{
                          WHERE id = :id";
             
             $sentencia = $this->conn->prepare($consulta);
-            $sentencia->bindParam(':nombre', $userEntity->getNombre());
-            $sentencia->bindParam(':apellidos', $userEntity->getApellidos());
-            $sentencia->bindParam(':telefono', $userEntity->getTelefono());
-            $sentencia->bindParam(':email', $userEntity->getEmail());
-            $sentencia->bindParam(':id', $userEntity->getId());
-            $sentencia->bindParam(':username', $userEntity->getUsername());
+    
+            // Asigna los valores a variables antes de pasarlos a bindParam()
+            $nombre = $userEntity->getNombre();
+            $apellidos = $userEntity->getApellidos();
+            $telefono = $userEntity->getTelefono();
+            $email = $userEntity->getEmail();
+            $id = $userEntity->getId();
+            $username = $userEntity->getUsername();
+    
+            $sentencia->bindParam(':nombre', $nombre);
+            $sentencia->bindParam(':apellidos', $apellidos);
+            $sentencia->bindParam(':telefono', $telefono);
+            $sentencia->bindParam(':email', $email);
+            $sentencia->bindParam(':id', $id);
+            $sentencia->bindParam(':username', $username);
             
             return $sentencia->execute();
-
+    
         } catch (\PDOException $e) {
             return NULL;
         }
     }
+
 }

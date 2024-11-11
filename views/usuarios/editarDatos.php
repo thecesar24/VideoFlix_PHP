@@ -20,7 +20,7 @@ if (isset($_SESSION['errores'])) {
 
 ?>
     <div class="container container-datos">
-        <div class="datos">
+        <div class="datos editar-datos">
             <form action="<?=Parameters::$BASE_URL . "Usuario/updateDatos"?>" method="post">
                 <h1>Datos del Usuario</h1>
                 <p>
@@ -43,7 +43,7 @@ if (isset($_SESSION['errores'])) {
                     <strong>Nombre de Usuario:</strong>
                     <input type="text" name="username" id="" value="<?= $userEntity->getUsername() ?>">
                 </p>
-                <input type="submit" value="Confirmar">
+                <input id="botonConfirmar" type="submit" value="Confirmar">
             </form>
             
             <h2>Opciones</h2>

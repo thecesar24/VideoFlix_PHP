@@ -212,7 +212,6 @@ class UsuarioController {
                    ->setEmail($email)
                    ->setUsername($username);
 
-
             $usuarioModel = new UsuarioModel();
             $statusUpdate = $usuarioModel->update($userEntity);
 
