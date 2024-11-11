@@ -36,5 +36,25 @@ class contenidoController {
         ViewController::show("views/contenido/documentales.php", ['documentales' => $documentales]);
 
     }
-    
+
+    public function  verContenido() {
+        $idCodificado = $_GET['idContenido'];
+        $idContenido = base64_decode($idCodificado);
+
+        $contenidoModel = new ContenidoModel();
+        $contenido = $contenidoModel->getOne($idContenido);
+
+        $tipoContenido = $contenido->tipo_contenido;
+
+        if ($contenido) {
+            $recomendadas = $contenidoModel->get4RandByTipoContenido($tipoContenido);
+
+            ViewController::show('views/contenido/ver.php', ['contenido'=> $contenido, 
+                                                                             'recomendadas' => $recomendadas]);
+            exit();
+        } else {
+            ViewController::showError(404);
+            exit();
+        }
+    }
 }

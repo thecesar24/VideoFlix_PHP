@@ -230,13 +230,13 @@ main {
     position: absolute;
     right: 0;
     padding: 10px;
-    z-index: 1000;
+    z-index: 900;
 }
 
 
 .favorito .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-    color: pink;
+    color: #fff;
     font-size: 35px;
     transition: color 0.3s ease;
 }

@@ -9,8 +9,13 @@ $series = $data["series"]??NULL;
             <div class="listar-todas-cards">
             <?php if (!empty($series)){ ?>
                     <?php foreach ($series as $serie){ ?>
-                        <div class="card">
-                            <a href="ver.html" class="card-link">
+                        <?php $idCodificado = base64_encode($serie->id) ?>
+                        
+                        <div class="card-listar card">
+                            <a class="favorito" href="#">
+                                <span class="material-symbols-outlined">favorite</span>
+                            </a>
+                            <a href="<?=Parameters::$BASE_URL . "contenido/verContenido?idContenido="?><?php echo urlencode($idCodificado) ?>" class="card-link">
                                 <img class="card-img" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/' . $series->portada ?>" alt="<?=$series->titulo ?>">
                                 <div class="card-overlay">
                                     <div class="card-title-lista"><?=$series->titulo ?></div>

@@ -9,8 +9,13 @@ $cortos = $data["cortos"]??NULL;
             <div class="listar-todas-cards">
             <?php if (!empty($cortos)){ ?>
                     <?php foreach ($cortos as $corto){ ?>
-                        <div class="card">
-                            <a href="ver.html" class="card-link">
+                        <?php $idCodificado = base64_encode($corto->id) ?>
+                        
+                        <div class="card-listar card">
+                            <a class="favorito" href="#">
+                                <span class="material-symbols-outlined">favorite</span>
+                            </a>
+                            <a href="<?=Parameters::$BASE_URL . "contenido/verContenido?idContenido="?><?php echo urlencode($idCodificado) ?>" class="card-link">
                                 <img class="card-img" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/' . $corto->portada ?>" alt="<?=$corto->titulo ?>">
                                 <div class="card-overlay">
                                     <div class="card-title-lista"><?=$corto->titulo ?></div>
