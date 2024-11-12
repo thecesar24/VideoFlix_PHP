@@ -42,5 +42,20 @@ class ContenidoModel extends Model{
         }        
     }
     
+    public function getContenidoUrlAmigable($slug) {
+        try {
+            $consulta = "SELECT * FROM contenido WHERE slug = :slug";
     
+            $sentencia = $this->conn->prepare($consulta);
+            $sentencia->bindParam(':slug', $slug, \PDO::PARAM_STR);
+            $sentencia->execute();
+            
+            $resultado = $sentencia->fetch(\PDO::FETCH_OBJ);
+    
+            return $resultado; 
+    
+        } catch (\PDOException $e) {
+            echo '<p>Fallo en la conexion: ' . $e->getMessage() . '</p>';
+        }        
+    }   
 }

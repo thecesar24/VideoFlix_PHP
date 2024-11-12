@@ -4,6 +4,11 @@
     Options -Indexes
     RewriteCond %{SCRIPT_FILENAME} !-d 
     RewriteCond %{SCRIPT_FILENAME} !-f 
+    
+    # Regla para contenido/verContenido
+    RewriteRule ^contenido/verContenido/([a-zA-Z0-9-]+)$ index.php?controller=contenido&action=verContenido&slug=$1 [L,QSA]
+    
+    # Regla index
     RewriteRule ^(.*)/(.*)$ index.php?controller=$1&action=$2 [QSA]
 
 </ifModule>

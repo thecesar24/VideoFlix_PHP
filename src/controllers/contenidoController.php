@@ -37,21 +37,28 @@ class contenidoController {
 
     }
 
-    public function  verContenido() {
-        $idCodificado = $_GET['idContenido'];
-        $idContenido = base64_decode($idCodificado);
-
+    public function verContenido() {
+        $slug = $_GET['slug'];
         $contenidoModel = new ContenidoModel();
-        $contenido = $contenidoModel->getOne($idContenido);
-
-        $tipoContenido = $contenido->tipo_contenido;
-
+        $contenido = $contenidoModel->getContenidoUrlAmigable($slug);
+        
         if ($contenido) {
-            $recomendadas = $contenidoModel->get4RandByTipoContenido($tipoContenido);
+            $idContenido = $contenidoModel->getContenidoUrlAmigable($slug)->id;
+            
+            $contenido = $contenidoModel->getOne($idContenido);
 
-            ViewController::show('views/contenido/ver.php', ['contenido'=> $contenido, 
-                                                                             'recomendadas' => $recomendadas]);
-            exit();
+            $tipoContenido = $contenido->tipo_contenido;
+
+            if ($contenido) {
+                $recomendadas = $contenidoModel->get4RandByTipoContenido($tipoContenido);
+
+                ViewController::show('views/contenido/ver.php', ['contenido'=> $contenido, 
+                                                                                 'recomendadas' => $recomendadas]);
+                exit();
+            } else {
+                ViewController::showError(404);
+                exit();
+            }
         } else {
             ViewController::showError(404);
             exit();

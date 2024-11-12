@@ -15,7 +15,7 @@ $peliculas = $data["peliculas"]??NULL;
                             <a class="favorito" href="#">
                                 <span class="material-symbols-outlined">favorite</span>
                             </a>
-                            <a href="<?=Parameters::$BASE_URL . "contenido/verContenido?idContenido="?><?php echo urlencode($idCodificado) ?>" class="card-link">
+                            <a href="<?=Parameters::$BASE_URL . "contenido/verContenido/" . "$pelicula->slug"?>" class="card-link">
                                 <img class="card-img" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/' . $pelicula->portada ?>" alt="<?=$pelicula->titulo ?>">
                                 <div class="card-overlay">
                                     <div class="card-title-lista">

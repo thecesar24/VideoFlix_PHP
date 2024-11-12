@@ -9,13 +9,11 @@ $documentales = $data["documentales"]??NULL;
             <div class="listar-todas-cards">
             <?php if (!empty($documentales)){ ?>
                     <?php foreach ($documentales as $documental){ ?>
-                        <?php $idCodificado = base64_encode($documental->id) ?>
-                        
                         <div class="card-listar card">
                             <a class="favorito" href="#">
                                 <span class="material-symbols-outlined">favorite</span>
                             </a>
-                            <a href="<?=Parameters::$BASE_URL . "contenido/verContenido?idContenido="?><?php echo urlencode($idCodificado) ?>" class="card-link">
+                            <a href="<?=Parameters::$BASE_URL . "contenido/verContenido/" . "$documental->slug"?>" class="card-link">
                                 <img class="card-img" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/' . $documental->portada ?>" alt="<?=$documental->titulo ?>">
                                 <div class="card-overlay">
                                     <div class="card-title-lista"><?=$documental->titulo ?></div>
