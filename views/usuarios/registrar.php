@@ -8,10 +8,10 @@
     if (isset($_SESSION['errores'])) {
         echo "<div class='error-container'>";
             foreach ($_SESSION['errores'] as $error) {
-                echo "<p class='error'>$error</p>"; // Muestra cada mensaje de error
+                echo "<p class='error'>$error</p>";
             }
         echo "</div>";
-        unset($_SESSION['errores']); // Limpiar los errores después de mostrarlos
+        unset($_SESSION['errores']);
     }
 ?>
 <div class="container container-register">
