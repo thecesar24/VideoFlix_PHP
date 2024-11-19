@@ -36,14 +36,7 @@ $documentales = $data["documentales"]??NULL;
                             <img class="card-img-top" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/' . $pelicula->portada ?>" alt="<?=$pelicula->titulo ?>">
                             <div class="card-body">
                                 <h5 class="card-title"><?=$pelicula->titulo ?></h5>
-                                <a href="<?= Parameters::$BASE_URL . 'pelicula/' . $pelicula->id ?>" class="btn btn-primary">Ver detalles</a>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <img class="card-img-top" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/' . $pelicula->portada ?>" alt="<?=$pelicula->titulo ?>">
-                            <div class="card-body">
-                                <h5 class="card-title"><?=$pelicula->titulo ?></h5>
-                                <a href="<?= Parameters::$BASE_URL . 'pelicula/' . $pelicula->id ?>" class="btn btn-primary">Ver detalles</a>
+                                <a href="<?=Parameters::$BASE_URL . 'ver/' . $pelicula->slug?>" class="btn btn-primary">Ver detalles</a>
                             </div>
                         </div>
                     <?php } ?>
@@ -64,7 +57,7 @@ $documentales = $data["documentales"]??NULL;
                             <img class="card-img-top" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/' . $serie->portada ?>" alt="<?=$serie->titulo ?>">
                             <div class="card-body">
                                 <h5 class="card-title"><?=$serie->titulo ?></h5>
-                                <a href="<?= Parameters::$BASE_URL . 'serie/' . $serie->id ?>" class="btn btn-primary">Ver detalles</a>
+                                <a href="<?=Parameters::$BASE_URL . 'ver/' . $serie->slug?>"  class="btn btn-primary">Ver detalles</a>
                             </div>
                         </div>
                     <?php } ?>
@@ -85,7 +78,7 @@ $documentales = $data["documentales"]??NULL;
                             <img class="card-img-top" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/' . $corto->portada ?>" alt="<?=$corto->titulo ?>">
                             <div class="card-body">
                                 <h5 class="card-title"><?=$corto->titulo ?></h5>
-                                <a href="<?= Parameters::$BASE_URL . 'corto/' . $corto->id ?>" class="btn btn-primary">Ver detalles</a>
+                                <a href="<?=Parameters::$BASE_URL . 'ver/' . $corto->slug?>" class="btn btn-primary">Ver detalles</a>
                             </div>
                         </div>
                     <?php } ?>
@@ -106,7 +99,7 @@ $documentales = $data["documentales"]??NULL;
                             <img class="card-img-top" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/' . $documental->portada ?>" alt="<?=$documental->titulo ?>">
                             <div class="card-body">
                                 <h5 class="card-title"><?=$documental->titulo ?></h5>
-                                <a href="<?= Parameters::$BASE_URL . 'documental/' . $documental->id ?>" class="btn btn-primary">Ver detalles</a>
+                                <a href="<?=Parameters::$BASE_URL . 'ver/' . $documental->slug?>" class="btn btn-primary">Ver detalles</a>
                             </div>
                         </div>
                     <?php } ?>

@@ -24,7 +24,7 @@ $recomendadas = $data["recomendadas"]??NULL;
                 <div class="recomendadas-cards">
                     <?php foreach($recomendadas as $recomendada) { ?>
                     <div class="card">
-                        <a href="URL_DEL_ENLACE" class="card-link">
+                        <a href="<?=Parameters::$BASE_URL . 'ver/' . $recomendada->slug?>" class="card-link">
                             <img class="card-img" src="<?=Parameters::$BASE_URL . 'assets/img/Portadas/' . $recomendada->portada ?>" alt="Card image">
                             <div class="card-overlay">
                                 <div class="card-title"><?=$recomendada->titulo?></div>
@@ -32,7 +32,7 @@ $recomendadas = $data["recomendadas"]??NULL;
                         </a>
                     </div> 
                     <div class="card">
-                        <a href="URL_DEL_ENLACE" class="card-link">
+                        <a href="<?=Parameters::$BASE_URL . 'ver/' . $recomendada->slug?>" class="card-link">
                             <img class="card-img" src="<?=Parameters::$BASE_URL . 'assets/img/Portadas/' . $recomendada->portada ?>" alt="Card image">
                             <div class="card-overlay">
                                 <div class="card-title"><?=$recomendada->titulo?></div>

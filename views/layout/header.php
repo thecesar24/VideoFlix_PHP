@@ -49,7 +49,7 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
-                        <?php if (Authentication::isUserLogged() == false) { ?>
+                        <?php if (!Authentication::isUserLogged()) { ?>
                         <li class="nav-item">
                             <a class="nav-link" id="registro" href="<?= Parameters::$BASE_URL . "Usuario/register" ?>">Registro</a>
                         </li>
@@ -57,12 +57,17 @@
                             <a class="nav-link" id="iniciar-sesion" href="<?= Parameters::$BASE_URL . "Usuario/login" ?>">Iniciar Sesión</a>
                         </li>
                         <?php }; ?>
-                        <?php if (Authentication::isUserLogged() == true) { ?>
+                        <?php if (Authentication::isUserLogged()) { ?>
                         <li class="nav-item">
                             <a class="nav-link" id="iniciar-sesion" href="<?= Parameters::$BASE_URL . "Usuario/datos" ?>">Datos Usuario</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="iniciar-sesion" href="<?= Parameters::$BASE_URL . "SeguirViendo/miEspacio" ?>">Mi Espacio</a>
+                        </li>
+                        <li class="nav-item user-icon">
+                            <a class="" href="">
+                                <div class="material-symbols-outlined">account_circle</div>
+                            </a>
                         </li>
                         <?php }; ?>
 

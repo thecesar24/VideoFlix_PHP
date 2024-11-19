@@ -97,7 +97,7 @@ class UsuarioController {
     
             // Validar que los campos no estén vacíos
             if (empty($username) || empty($password)) {
-                $_SESSION['errorLogin'] = "Por favor, ingrese su nombre de usuario y contraseña.";
+                $_SESSION['errores'][] = "Por favor, ingrese su nombre de usuario y contraseña.";
                 header("Location: " . Parameters::$BASE_URL . "/Usuario/login");
                 exit();
             }
@@ -126,23 +126,23 @@ class UsuarioController {
     
                     // Redirigir al dashboard si el login es exitoso
                     if (Authentication::isUserLogged()) {
-                        header("Location: " . Parameters::$BASE_URL . "/Usuario/dashboard");
+                        header("Location: " . Parameters::$BASE_URL . "SeguirViendo/miEspacio");
                         exit();
                     } else {
                         // Redirigir si hay un error inesperado
-                        $_SESSION['errorLogin'] = "Hubo un problema iniciando sesión.";
+                        $_SESSION['errores'][] = "Hubo un problema iniciando sesión.";
                         header("Location: " . Parameters::$BASE_URL . "/Usuario/login");
                         exit();
                     }
                 } else {
                     // Contraseña incorrecta
-                    $_SESSION['errorLogin'] = "Login incorrecto!!";
+                    $_SESSION['errores'][] = "Login incorrecto!!";
                     header("Location: " . Parameters::$BASE_URL . "/Usuario/login");
                     exit();
                 }
             } else {
                 // Usuario no encontrado
-                $_SESSION['errorLogin'] = "Login incorrecto!!";
+                $_SESSION['errores'][] = "Usuario no encontrado!!";
                 header("Location: " . Parameters::$BASE_URL . "/Usuario/login");
                 exit();
             }

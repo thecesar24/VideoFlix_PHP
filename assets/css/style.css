@@ -79,13 +79,27 @@ main {
     transition: 0.3s;
 }
 
+.user-icon a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.user-icon a div {
+    font-size: 2.2rem;
+    text-decoration: none;
+    color: #fff;
+}
+
+
 /* ----------------------- 
    Search 
 ----------------------- */
 .search-container {
     width: 100%;
     border-radius: 5px;
-    padding: 5px;
 }
 
 #registro, #iniciar-sesion {
