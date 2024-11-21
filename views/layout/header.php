@@ -51,10 +51,16 @@
                     <ul class="navbar-nav ml-auto">
                         <?php if (!Authentication::isUserLogged()) { ?>
                         <li class="nav-item">
-                            <a class="nav-link" id="registro" href="<?= Parameters::$BASE_URL . "Usuario/register" ?>">Registro</a>
+                            <a class="nav-link register" id="registro" href="<?= Parameters::$BASE_URL . "Usuario/register" ?>">
+                                <span class="nav-link material-symbols-outlined" id="iniciar-sesion">person_add</span>
+                                <p>Registro</p>
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="iniciar-sesion" href="<?= Parameters::$BASE_URL . "Usuario/login" ?>">Iniciar Sesión</a>
+                            <a class="nav-link login" id="iniciar-sesion" href="<?= Parameters::$BASE_URL . "Usuario/login" ?>">
+                                <span class="nav-link material-symbols-outlined" id="iniciar-sesion">login</span>
+                                <p>Iniciar Sesión</p>
+                            </a>
                         </li>
                         <?php }; ?>
                         <?php if (Authentication::isUserLogged()) { ?>
@@ -71,9 +77,9 @@
                         </li>
                         <?php }; ?>
 
-                        <li class="nav-item">
-                            <form class="form-inline my-2 my-lg-0 search-container">
-                                <input class="form-control mr-sm-2" type="search" placeholder="Buscar..." aria-label="Buscar">
+                        <li class="nav-item buscador">
+                            <form class="form-inline my-2 my-lg-0 search-container" action="<?=Parameters::$BASE_URL . "Contenido/buscarContenido"?>" method="post">
+                                <input class="form-control mr-sm-2" type="search" name="busqueda" placeholder="Buscar..." aria-label="Buscar">
                             </form>
                         </li>
                     </ul>

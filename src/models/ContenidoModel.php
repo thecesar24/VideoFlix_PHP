@@ -57,5 +57,24 @@ class ContenidoModel extends Model{
         } catch (\PDOException $e) {
             echo '<p>Fallo en la conexion: ' . $e->getMessage() . '</p>';
         }        
+    }
+
+    public function buscarContenido($busqueda) {
+        try {
+            $consulta = "SELECT * FROM contenido WHERE titulo LIKE :busqueda";
+    
+            $sentencia = $this->conn->prepare($consulta);
+            $sentencia->bindParam(':busqueda', $busqueda, \PDO::PARAM_STR);
+            $sentencia->execute();
+            
+            $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+    
+            return $resultado; 
+    
+        } catch (\PDOException $e) {
+            echo '<p>Fallo en la conexion: ' . $e->getMessage() . '</p>';
+        }        
     }   
+
+
 }

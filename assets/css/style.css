@@ -93,6 +93,22 @@ main {
     color: #fff;
 }
 
+.login , .register {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.login p , .register p {
+    margin: 0;
+    height: auto;
+    display: flex;
+    align-items: center;
+}
+
+.buscador {
+    display: flex;
+    align-items: center;
+}
 
 /* ----------------------- 
    Search 

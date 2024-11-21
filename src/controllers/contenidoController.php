@@ -52,8 +52,7 @@ class contenidoController {
             if ($contenido) {
                 $recomendadas = $contenidoModel->get4RandByTipoContenido($tipoContenido);
 
-                ViewController::show('views/contenido/ver.php', ['contenido'=> $contenido, 
-                                                                                 'recomendadas' => $recomendadas]);
+                ViewController::show('views/contenido/ver.php', ['contenido'=> $contenido, 'recomendadas' => $recomendadas]);
                 exit();
             } else {
                 ViewController::showError(404);
@@ -63,5 +62,15 @@ class contenidoController {
             ViewController::showError(404);
             exit();
         }
+    }
+    
+    public function buscarContenido() {
+        $busqueda = $_POST['busqueda'];
+        $busquedaConComodines = "%".$busqueda."%";
+        $contenidoModel = new ContenidoModel;
+
+        $resultados = $contenidoModel->buscarContenido($busquedaConComodines);
+
+        ViewController::show('views/contenido/buscarContenido.php', ['resultados' => $resultados]);
     }
 }
