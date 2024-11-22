@@ -13,6 +13,11 @@
         echo "</div>";
         unset($_SESSION['errores']);
     }
+
+    if (isset($_SESSION['mensaje'])) {
+        echo "<div id='mensaje-temporal' >{$_SESSION['mensaje']}</div>";
+        unset($_SESSION['mensaje']);
+    }
 ?>
 <div class="container container-register">
         	<form class="formulario-register" action="<?=Parameters::$BASE_URL?>Usuario/registerSave" method="post">

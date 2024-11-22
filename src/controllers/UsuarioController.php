@@ -74,6 +74,7 @@ class UsuarioController {
                 // Registrar usuario y verificar el estado
                 $statusRegister = $usuarioModel->register($userEntity);
 
+                $_SESSION['mensaje'] = "Usuario registrado correctamente.";
                 // Mostrar la vista con el resultado del registro
                 ViewController::show('views/usuarios/registrar.php', ['statusRegister' => $statusRegister]);
             } else {
