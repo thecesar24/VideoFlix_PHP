@@ -1,5 +1,6 @@
 <?php
 use cesar\ProyectoTest\Config\Parameters;
+use cesar\ProyectoTest\Helpers\Authentication;
 
 $series = $data["series"]??NULL;
 ?>
@@ -12,9 +13,11 @@ $series = $data["series"]??NULL;
                         <?php $idCodificado = base64_encode($serie->id) ?>
                         
                         <div class="card-listar card">
-                            <a class="favorito" href="#">
+                            <?php if(Authentication::isUserLogged()){ ?>
+                            <div class="favorito">
                                 <span class="material-symbols-outlined">favorite</span>
-                            </a>
+                            </div>
+                            <?php } ?>
                             <a href="<?=Parameters::$BASE_URL . "contenido/verContenido?idContenido="?><?php echo urlencode($idCodificado) ?>" class="card-link">
                                 <img class="card-img" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/' . $series->portada ?>" alt="<?=$series->titulo ?>">
                                 <div class="card-overlay">

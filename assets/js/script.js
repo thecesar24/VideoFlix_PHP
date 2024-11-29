@@ -57,11 +57,31 @@ window.onload = function() {
     });
 
     document.querySelectorAll('.favorito').forEach(item => {
-        item.addEventListener('click', function(event) {
-            event.preventDefault();  // Prevenir la acción predeterminada de enlaces
+        item.addEventListener('click', function() {
+            const isFavorite = this.classList.contains('clicked');
             
-            // Alternar la clase 'clicked' para cambiar el estado del favorito
             this.classList.toggle('clicked');
+
+            const favorito = isFavorite ? 0 : 1; 
+
+            const idContenido = this.getAttribute('data-id');
+
+            const baseURL = 'http://localhost/VideoFlix_PHP/';
+            const url = baseURL + 'ContenidoFavorito/AniadirFavorito';
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            xhr.send('favorito=' + favorito + '&idContenido=' + idContenido);
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    console.log('Estado de favorito actualizado: ' + favorito + ' idContenido: ' + idContenido);
+                } else {
+                    console.log('Hubo un error al actualizar el estado.');
+                }
+            };
         });
     });
     

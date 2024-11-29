@@ -4,7 +4,7 @@ namespace cesar\ProyectoTest\Controllers;
 
 use cesar\ProyectoTest\Models\ContenidoModel;
 
-class contenidoController {
+class ContenidoController {
     public function index(){
     }
 

@@ -1,7 +1,9 @@
 <?php
 use cesar\ProyectoTest\Config\Parameters;
+use cesar\ProyectoTest\Helpers\Authentication;
 
 $peliculas = $data["peliculas"]??NULL;
+
 ?>
 
 <div class="container container-lista-peliculas">
@@ -10,9 +12,12 @@ $peliculas = $data["peliculas"]??NULL;
             <?php if (!empty($peliculas)){ ?>
                     <?php foreach ($peliculas as $pelicula){ ?>
                         <div class="card-listar card">
-                            <a class="favorito" href="#">
+                            <?php if(Authentication::isUserLogged()){ ?>
+                            <div class="favorito" data-id= "<?=$pelicula->id?>">
                                 <span class="material-symbols-outlined">favorite</span>
-                            </a>
+                            </div>
+                            <?php } ?>
+                            
                             <a href="<?=Parameters::$BASE_URL . "ver/" . "$pelicula->slug"?>" class="card-link">
                                 <img class="card-img" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/' . $pelicula->portada ?>" alt="<?=$pelicula->titulo ?>">
                                 <div class="card-overlay">

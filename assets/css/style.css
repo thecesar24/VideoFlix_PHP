@@ -270,6 +270,7 @@ main {
     color: #fff;
     font-size: 35px;
     transition: color 0.3s ease;
+    cursor: pointer;
 }
 
 .favorito.clicked .material-symbols-outlined {
@@ -277,6 +278,7 @@ main {
     color: red;
     font-size: 35px;
     transition: color 0.3s ease;
+    cursor: pointer;
 }
 
 /* Estilo cuando se hace hover (corazón relleno) */

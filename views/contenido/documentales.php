@@ -1,5 +1,6 @@
 <?php
 use cesar\ProyectoTest\Config\Parameters;
+use cesar\ProyectoTest\Helpers\Authentication;
 
 $documentales = $data["documentales"]??NULL;
 ?>
@@ -10,9 +11,11 @@ $documentales = $data["documentales"]??NULL;
             <?php if (!empty($documentales)){ ?>
                     <?php foreach ($documentales as $documental){ ?>
                         <div class="card-listar card">
-                            <a class="favorito" href="#">
+                            <?php if(Authentication::isUserLogged()){ ?>
+                            <div class="favorito">
                                 <span class="material-symbols-outlined">favorite</span>
-                            </a>
+                            </div>
+                            <?php } ?>
                             <a href="<?=Parameters::$BASE_URL . "contenido/verContenido/" . "$documental->slug"?>" class="card-link">
                                 <img class="card-img" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/' . $documental->portada ?>" alt="<?=$documental->titulo ?>">
                                 <div class="card-overlay">
