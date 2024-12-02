@@ -2,6 +2,7 @@
 
 namespace cesar\ProyectoTest\Controllers;
 
+use cesar\ProyectoTest\Models\ContenidoFavoritoModel;
 use cesar\ProyectoTest\Models\ContenidoModel;
 
 class ContenidoController {
@@ -11,29 +12,41 @@ class ContenidoController {
     public function Peliculas(){
         $contenidoModel = new ContenidoModel();
         $peliculas = $contenidoModel->getAllByTipoContenido('peliculas');
+        
+        $contenidoFavoritoModel = new ContenidoFavoritoModel();
+        $favoritos = $contenidoFavoritoModel->getAll();
 
-        ViewController::show("views/contenido/peliculas.php", ['peliculas' => $peliculas]);
+        ViewController::show("views/contenido/peliculas.php", ['peliculas' => $peliculas, 'favoritos' => $favoritos]);
 
     }
     public function Series(){
         $contenidoModel = new ContenidoModel();
         $series = $contenidoModel->getAllByTipoContenido('series');
 
-        ViewController::show("views/contenido/series.php", ['series' => $series]);
+        $contenidoFavoritoModel = new ContenidoFavoritoModel();
+        $favoritos = $contenidoFavoritoModel->getAll();
+
+        ViewController::show("views/contenido/series.php", ['series' => $series, 'favoritos' => $favoritos]);
 
     }
     public function Cortos(){
         $contenidoModel = new ContenidoModel();
         $cortos = $contenidoModel->getAllByTipoContenido('corto');
+        
+        $contenidoFavoritoModel = new ContenidoFavoritoModel();
+        $favoritos = $contenidoFavoritoModel->getAll();
 
-        ViewController::show("views/contenido/cortos.php", ['cortos' => $cortos]);
+        ViewController::show("views/contenido/cortos.php", ['cortos' => $cortos, 'favoritos' => $favoritos]);
 
     }
     public function Documentales(){
         $contenidoModel = new ContenidoModel();
         $documentales = $contenidoModel->getAllByTipoContenido('documentales');
 
-        ViewController::show("views/contenido/documentales.php", ['documentales' => $documentales]);
+        $contenidoFavoritoModel = new ContenidoFavoritoModel();
+        $favoritos = $contenidoFavoritoModel->getAll();
+
+        ViewController::show("views/contenido/documentales.php", ['documentales' => $documentales, 'favoritos' => $favoritos]);
 
     }
 

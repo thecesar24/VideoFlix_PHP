@@ -59,6 +59,24 @@ class ContenidoModel extends Model{
         }        
     }
 
+    public function getAllByIdContenido($idContenido) {
+        try {
+            $consulta = "SELECT * FROM $this->tabla WHERE id = :idContenido";
+    
+            $sentencia = $this->conn->prepare($consulta);
+            $sentencia->bindParam(':idContenido', $idContenido, \PDO::PARAM_INT);
+            $sentencia->execute();
+            
+            $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+    
+            return $resultado; 
+    
+        } catch (\PDOException $e) {
+            echo '<p>Fallo en la conexion: ' . $e->getMessage() . '</p>';
+        }        
+    }
+    
+
     public function buscarContenido($busqueda) {
         try {
             $consulta = "SELECT * FROM contenido WHERE titulo LIKE :busqueda";

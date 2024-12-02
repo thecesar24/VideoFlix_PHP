@@ -22,10 +22,14 @@ class ContenidoFavoritoController {
 
             if ($favorito == "1") {
                 $contenidoFavoritoModel->aniadirFavorito($idContenido, $idUsuario);
+                $_SESSION['mensaje'] = "Contenido añadido como favorito";
             }
             if ($favorito == "0") {
                 $contenidoFavoritoModel->eliminarFavorito($idContenido, $idUsuario);
+                $_SESSION['mensaje'] = "Contenido eliminado como favorito";
             }
+
+            echo json_encode(['mensaje' => $_SESSION['mensaje']]);
         } else {
             ViewController::showError(403);
         }

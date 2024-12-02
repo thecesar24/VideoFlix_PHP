@@ -9,23 +9,34 @@ $series = $data["series"]??NULL;
             <h2>Todas las Series:</h2>
             <div class="listar-todas-cards">
             <?php if (!empty($series)){ ?>
-                    <?php foreach ($series as $serie){ ?>
-                        <?php $idCodificado = base64_encode($serie->id) ?>
-                        
-                        <div class="card-listar card">
-                            <?php if(Authentication::isUserLogged()){ ?>
-                            <div class="favorito">
+                <?php 
+                // Preprocesar favoritos para eficiencia
+                $favoritos_ids = [];
+                if (Authentication::isUserLogged()) {
+                    foreach ($favoritos as $favorito) {
+                        $favoritos_ids[$favorito['id_contenido']] = true;
+                    }
+                }
+                foreach ($series as $serie) { ?>
+                    <div class="card-listar card">
+                        <?php if (Authentication::isUserLogged()) { 
+                            $isFavorito = isset($favoritos_ids[$serie->id]); ?>
+                            <div class="favorito <?= $isFavorito ? 'clicked' : '' ?>" data-id="<?= htmlspecialchars($serie->id) ?>">
                                 <span class="material-symbols-outlined">favorite</span>
                             </div>
-                            <?php } ?>
-                            <a href="<?=Parameters::$BASE_URL . "contenido/verContenido?idContenido="?><?php echo urlencode($idCodificado) ?>" class="card-link">
-                                <img class="card-img" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/' . $series->portada ?>" alt="<?=$series->titulo ?>">
-                                <div class="card-overlay">
-                                    <div class="card-title-lista"><?=$series->titulo ?></div>
+                        <?php } ?>
+                        
+                        <a href="<?= htmlspecialchars(Parameters::$BASE_URL . "ver/" . $serie->slug) ?>" class="card-link">
+                            <img class="card-img" src="<?= htmlspecialchars(Parameters::$BASE_URL . 'assets/img/Portadas/' . $serie->portada) ?>" 
+                                 alt="<?= htmlspecialchars($serie->titulo) ?>">
+                            <div class="card-overlay">
+                                <div class="card-title-lista">
+                                    <?= htmlspecialchars($serie->titulo) ?>
                                 </div>
-                            </a>
-                        </div>
-                    <?php } ?>
+                            </div>
+                        </a>
+                    </div>
+                <?php } ?>
                 <?php }else{ ?>
                     <p>No hay series disponibles en este momento.</p>
                 <?php }; ?>

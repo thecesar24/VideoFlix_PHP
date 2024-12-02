@@ -3,6 +3,7 @@
 namespace cesar\ProyectoTest\Controllers;
 
 use cesar\ProyectoTest\Config\Parameters;
+use cesar\ProyectoTest\Models\ContenidoFavoritoModel;
 use cesar\ProyectoTest\Models\SeguirViendoModel;
 use cesar\ProyectoTest\Models\ContenidoModel;
 use cesar\ProyectoTest\Helpers\Authentication;
@@ -15,11 +16,12 @@ class SeguirViendoController {
     public function miEspacio() {
         if (Authentication::isUserLogged()) {
             $userEntity = $_SESSION['user'];
+            $idUsuario = $userEntity->getId();
 
             $seguirViendoModel = new SeguirViendoModel();
             $contenidoModel = new ContenidoModel();
 
-            $idContenidos = $seguirViendoModel->getContenidosByUser($userEntity->getId());
+            $idContenidos = $seguirViendoModel->getContenidosByUser($idUsuario);
 
             $contenidos = [];
 
@@ -28,8 +30,13 @@ class SeguirViendoController {
                 $contenidos[] = $contenido;
             }
 
+            $contenidofavoritoModel = new ContenidoFavoritoModel();
+
+            $favoritos = $contenidofavoritoModel->getAllPorUser($idUsuario);
+
             ViewController::show("views/usuarios/miEspacio.php", ['contenidos' => $contenidos,
-                                                                                  'userEntity' => $userEntity]);
+                                                                                  'userEntity' => $userEntity,
+                                                                                  'favoritos' => $favoritos]);
             exit();
 
         } else {

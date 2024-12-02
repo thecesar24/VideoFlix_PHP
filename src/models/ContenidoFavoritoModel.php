@@ -50,5 +50,26 @@ class ContenidoFavoritoModel extends Model{
             return ['status' => 'error', 'message' => 'Fallo en la conexión: ' . $e->getMessage()];
         }
     }
+    public function getAllPorUser($idUsuario) {
+        try {
+            $consulta = "SELECT * 
+                         FROM $this->tabla f
+                         JOIN contenido c ON f.id_contenido = c.id 
+                         WHERE f.id_usuario = :idUsuario";
+    
+            $sentencia = $this->conn->prepare($consulta);
+            $sentencia->bindParam(':idUsuario', $idUsuario, \PDO::PARAM_INT);
+            $sentencia->execute();
+            $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+    
+            return $resultado;
+    
+        } catch (\PDOException $e) {
+            // En caso de error, retornamos el mensaje de error
+            return ['status' => 'error', 'message' => 'Fallo en la conexión: ' . $e->getMessage()];
+        }
+    }
+
+
     
 }
