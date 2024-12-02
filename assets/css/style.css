@@ -507,6 +507,19 @@ main {
     background-color: #0056b3;
 }
 
+.comentarios {
+    display: none;
+}
+
+.comentarios div {
+    background-color: #fff;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 /* ----------------------- 
    Recomendadas Cards 
 ----------------------- */

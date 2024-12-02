@@ -2,6 +2,7 @@
 
 namespace cesar\ProyectoTest\Controllers;
 
+use cesar\ProyectoTest\Models\ComentariosModel;
 use cesar\ProyectoTest\Models\ContenidoFavoritoModel;
 use cesar\ProyectoTest\Models\ContenidoModel;
 
@@ -62,10 +63,16 @@ class ContenidoController {
 
             $tipoContenido = $contenido->tipo_contenido;
 
+            $comentariosModel = new ComentariosModel();
+
+            $comentarios = $comentariosModel->getAllByIdContenido($idContenido);
+
             if ($contenido) {
                 $recomendadas = $contenidoModel->get4RandByTipoContenido($tipoContenido);
 
-                ViewController::show('views/contenido/ver.php', ['contenido'=> $contenido, 'recomendadas' => $recomendadas]);
+                ViewController::show('views/contenido/ver.php', ['contenido'=> $contenido, 
+                'recomendadas' => $recomendadas, 'comentarios' => $comentarios]);
+                
                 exit();
             } else {
                 ViewController::showError(404);

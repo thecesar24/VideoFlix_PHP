@@ -54,6 +54,17 @@ errorElements.forEach(errorElement => {
     }, 3000); // Oculta automáticamente después de 3 segundos
 });
 
+document.getElementById('mostrar-comentarios').addEventListener('click', function() {
+    comentarios = document.getElementById('comentarios');
+    
+    if (comentarios.style.display == 'block') {
+        comentarios.style.display = 'none';
+    } else {
+        comentarios.style.display = 'block';
+    }
+    
+});
+
 
 window.onload = function() {
     document.querySelectorAll('.favorito').forEach(item => {
