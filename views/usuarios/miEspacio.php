@@ -53,7 +53,7 @@
                                 <img class="card-img-top" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/' . $favorito->portada ?>" alt="<?=$favorito->titulo ?>">
                                 <div class="card-body">
                                     <h5 class="card-title"><?=$favorito->titulo ?></h5>
-                                    <a href="<?= Parameters::$BASE_URL . 'contenido/' . $favorito->id ?>" class="btn btn-primary">Ver detalles</a>
+                                    <a href="<?= Parameters::$BASE_URL . 'ver/' . $favorito->slug ?>" class="btn btn-primary">Ver detalles</a>
                                 </div>
                             </div>
                         <?php } ?>

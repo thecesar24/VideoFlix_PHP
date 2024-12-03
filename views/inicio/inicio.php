@@ -36,7 +36,7 @@ $documentales = $data["documentales"]??NULL;
                             <img class="card-img-top" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/' . $pelicula->portada ?>" alt="<?=$pelicula->titulo ?>">
                             <div class="card-body">
                                 <h5 class="card-title"><?=$pelicula->titulo ?></h5>
-                                <a href="<?=Parameters::$BASE_URL . 'ver/' . $pelicula->slug?>" class="btn btn-primary">Ver detalles</a>
+                                <a href="<?=Parameters::$BASE_URL . 'Contenido/verInfo?slug=' . $pelicula->slug?>" class="btn btn-primary">Ver detalles</a>
                             </div>
                         </div>
                     <?php } ?>

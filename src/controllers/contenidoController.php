@@ -2,6 +2,7 @@
 
 namespace cesar\ProyectoTest\Controllers;
 
+use cesar\ProyectoTest\Helpers\Authentication;
 use cesar\ProyectoTest\Models\ComentariosModel;
 use cesar\ProyectoTest\Models\ContenidoFavoritoModel;
 use cesar\ProyectoTest\Models\ContenidoModel;
@@ -66,13 +67,19 @@ class ContenidoController {
             $comentariosModel = new ComentariosModel();
 
             $comentarios = $comentariosModel->getAllByIdContenido($idContenido);
-
+            
             if ($contenido) {
                 $recomendadas = $contenidoModel->get4RandByTipoContenido($tipoContenido);
 
-                ViewController::show('views/contenido/ver.php', ['contenido'=> $contenido, 
-                'recomendadas' => $recomendadas, 'comentarios' => $comentarios]);
-                
+                if (Authentication::isUserLogged()) {
+                    $userEntity = $_SESSION['user'];
+                    $idUsuario = $userEntity->getId();
+                    ViewController::show('views/contenido/ver.php', ['contenido'=> $contenido, 
+                    'recomendadas' => $recomendadas, 'comentarios' => $comentarios, 'idUsuario' => $idUsuario]);
+                } else {
+                    ViewController::show('views/contenido/ver.php', ['contenido'=> $contenido, 
+                    'recomendadas' => $recomendadas, 'comentarios' => $comentarios]);
+                }
                 exit();
             } else {
                 ViewController::showError(404);
@@ -92,5 +99,32 @@ class ContenidoController {
         $resultados = $contenidoModel->buscarContenido($busquedaConComodines);
 
         ViewController::show('views/contenido/buscarContenido.php', ['resultados' => $resultados]);
+    }
+
+    public function verInfo(){
+        $slug = $_GET['slug'];
+        $apikey = '68fbbd15';
+
+        $url = "http://www.omdbapi.com/?t=" . urlencode($slug) . "&apikey=" . $apikey . "&language=es";
+        $response = file_get_contents($url);
+        if (!$response) {
+            die('Error al obtener datos de la API.');
+        }
+        
+        // Decodificar la respuesta JSON
+        $data = json_decode($response, true);
+        if ($data === null) {
+            die('Error al decodificar JSON: ' . json_last_error_msg());
+        }
+        
+        // Verificar si la película fue encontrada
+        if ($data['Response'] == 'True') {
+            $informacion = $data;
+
+            ViewController::show('views/contenido/info.php', ['informacion' => $informacion, 'slug' => $slug]);
+            exit();
+        } else {
+            echo 'No se encontraron resultados para la película.';
+        }
     }
 }

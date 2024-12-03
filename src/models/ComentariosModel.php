@@ -10,7 +10,9 @@ class ComentariosModel extends Model{
 
     public function getAllByIdContenido($idContenido) {
         try {
-            $consulta = "SELECT * FROM $this->tabla WHERE id_contenido = :idContenido";
+            $consulta = "SELECT * FROM $this->tabla co
+                         JOIN usuarios u ON co.id_usuario = u.id 
+                         WHERE id_contenido = :idContenido";
     
             $sentencia = $this->conn->prepare($consulta);
             $sentencia->bindParam(':idContenido', $idContenido, \PDO::PARAM_INT);

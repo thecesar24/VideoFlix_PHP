@@ -11,21 +11,25 @@ $favoritos = $data["favoritos"]??NULL;
             <div class="listar-todas-cards">
             <?php if (!empty($documentales)){ ?>
                 <?php 
-                // Preprocesar favoritos para eficiencia
-                $favoritos_ids = [];
-                if (Authentication::isUserLogged()) {
-                    foreach ($favoritos as $favorito) {
-                        $favoritos_ids[$favorito['id_contenido']] = true;
+                    $favoritos_ids = [];
+                    if (Authentication::isUserLogged()) {
+                        $userEntity = $_SESSION['user'];
+                        $idUsuario = $userEntity->getId();
+                        
+                        foreach ($favoritos as $favorito) {
+                            if ($favorito['id_usuario'] == $idUsuario) {
+                                $favoritos_ids[$favorito['id_contenido']] = true;
+                            }
+                        }
                     }
-                }
-                foreach ($documentales as $documental) { ?>
-                    <div class="card-listar card">
-                        <?php if (Authentication::isUserLogged()) { 
-                            $isFavorito = isset($favoritos_ids[$documental->id]); ?>
-                            <div class="favorito <?= $isFavorito ? 'clicked' : '' ?>" data-id="<?= htmlspecialchars($documental->id) ?>">
-                                <span class="material-symbols-outlined">favorite</span>
-                            </div>
-                        <?php } ?>
+                    foreach ($documentales as $documental) { ?>
+                        <div class="card-listar card">
+                            <?php if (Authentication::isUserLogged()) { 
+                                $isFavorito = isset($favoritos_ids[$documental->id]); ?>
+                                <div class="favorito <?= $isFavorito ? 'clicked' : '' ?>" data-id="<?= htmlspecialchars($documental->id) ?>">
+                                    <span class="material-symbols-outlined">favorite</span>
+                                </div>
+                            <?php } ?>
                         
                         <a href="<?= htmlspecialchars(Parameters::$BASE_URL . "ver/" . $documental->slug) ?>" class="card-link">
                             <img class="card-img" src="<?= htmlspecialchars(Parameters::$BASE_URL . 'assets/img/Portadas/' . $documental->portada) ?>" 

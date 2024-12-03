@@ -140,8 +140,7 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     overflow: hidden;
     transition: transform 0.3s;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin: 10px;
 }
 
 .slider-container .card:hover {
@@ -509,15 +508,111 @@ main {
 
 .comentarios {
     display: none;
+    flex-direction: column;
 }
 
-.comentarios div {
+#comentarios {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.comentarios > div, .comentarios > p{
     background-color: #fff;
     border: 1px solid black;
     border-radius: 10px;
-    padding: 5px;
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.comentario{
+    padding: 10px;
+}
+
+.comentario span:first-child {
+    font-weight: bold;
+}
+
+.comentarioOtro {
+    width: 80%;
+    background-color: #f1f1f1 !important; 
+    align-self: flex-start;
+}
+
+.comentarioPropio {
+    width: 80%;
+    background-color: #e3fdda !important; 
+    align-self: flex-end;
+}
+
+.insertar-comentario {
+    padding: 5px;
+}
+
+.insertar-comentario form {
+    display: flex;
+    justify-content: space-evenly;
+    height: fit-content;
+    align-items: center;
+    gap: 10px;
+}
+
+.input-contenedor {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-grow: 1;
+    position: relative;
+}
+
+#contador {
+    font-size: 0.7em;
+    color: #666;
+    position: absolute;
+    right: 10px;
+    top: 0;
+    z-index: 1;
+}
+
+.input-contenedor label {
+    flex-shrink: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    height: fit-content;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.input-contenedor input {
+    width: 100%;
+    padding: 8px; /* Ajusta el relleno interno para mejor estética */
+    border: 1px solid #ccc; /* Estilo del borde */
+    border-radius: 4px; /* Bordes redondeados */
+    padding-right: 40px; 
+}
+
+
+.insertar-comentario form div input{
+    border-radius: 5px;
+    border: 0.5px solid gray;
+    height: 40px;
+}
+
+#insertar-comentario-Confirm{
+    border-radius: 5px;
+    padding: 5px 10px;
+    flex-shrink: 0;
+    background-color: #007bff;
+    color: var(--fuente-color);
+    border: none;
+}
+#insertar-comentario-Confirm:hover {
+    background-color: #0056b3;
 }
 
 /* ----------------------- 
@@ -596,7 +691,17 @@ main {
         margin-bottom: 50px;
     }
 
+    .insertar-comentario form {
+        display: flex;
+        flex-direction: column;
+        height: fit-content;
+        align-items: center;
+        gap: 10px;
+    }
 
+    .input-contenedor{
+        width: 100%;
+    }
 }
 
 
@@ -817,6 +922,7 @@ main {
         width: 100%;
         margin: 0;
     }
+
 }
 
 @media (min-width: 1024px) {
@@ -890,6 +996,7 @@ footer {
     transition: opacity 0.5s ease;
     width: 100%; /* Opcional: Ajustar el ancho */
     box-sizing: border-box;
+    z-index: 1001; 
 }
 
 

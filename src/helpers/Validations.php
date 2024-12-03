@@ -16,6 +16,12 @@
         public static function validateTelefono($telefono):bool{
             return (!empty($telefono) && preg_match("/^[0-9]{9}$/", $telefono));
         }
+
+        public static function validateComentario($comentario): bool {
+            return (strlen($comentario) <= Parameters::$COMENTARIO_MAX_LENGTH) &&
+                   (!empty($comentario) &&
+                    preg_match("/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,!?():'\"-]*$/", $comentario));
+        }
         
         public static function validateFormatPassword($password): bool {
             // Verificar si la contraseña está vacía

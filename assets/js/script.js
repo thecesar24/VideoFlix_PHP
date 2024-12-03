@@ -54,16 +54,33 @@ errorElements.forEach(errorElement => {
     }, 3000); // Oculta automáticamente después de 3 segundos
 });
 
-document.getElementById('mostrar-comentarios').addEventListener('click', function() {
-    comentarios = document.getElementById('comentarios');
+if (document.getElementById('mostrar-comentarios')) {
+    document.getElementById('mostrar-comentarios').addEventListener('click', function () {
+        const comentarios = document.getElementById('comentarios');
+        
+        if (comentarios.style.display === 'flex') {
+            comentarios.style.opacity = '0'; // Cambiar opacidad a 0 para transición
+            setTimeout(() => {
+                comentarios.style.display = 'none'; // Ocultar después de la transición
+            }, 500); // Tiempo igual al de la transición en CSS
+        } else {
+            comentarios.style.display = 'flex'; // Mostrar inmediatamente
+            setTimeout(() => {
+                comentarios.style.opacity = '1'; // Cambiar opacidad para mostrar
+            }, 0); // Pequeño retraso para activar la transición
+        }
+    });
     
-    if (comentarios.style.display == 'block') {
-        comentarios.style.display = 'none';
-    } else {
-        comentarios.style.display = 'block';
-    }
+    const inputComentario = document.getElementById('idComentario');
+    const contador = document.getElementById('contador');
+    const maxLength = inputComentario.getAttribute('maxlength');
     
-});
+    inputComentario.addEventListener('input', function () {
+        const currentLength = inputComentario.value.length;
+        contador.textContent = `${currentLength}/${maxLength}`;
+    });    
+}
+
 
 
 window.onload = function() {

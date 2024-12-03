@@ -18,8 +18,8 @@
                 <div class="col-md-4">
                     <h5>Contacto</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">Email</a></li>
-                        <li><a href="#" class="text-white">Teléfono</a></li>
+                        <li><a href="mailto:<?=Parameters::$EMAIL_PAGINA?>?subject=Consulta&body=Hola,%20me%20gustaría%20saber%20más..." class="text-white">Envíanos un email</a></li>
+                        <li><a href="tel:+645448725" class="text-white">Llamar para soporte</a></li>
                         <li>
                             <a href="#"><img class="social-media" src="<?=Parameters::$BASE_URL?>assets/img/Social_Media/instagram.png" alt="#"></a>
                             <a href="#"><img class="social-media" src="<?=Parameters::$BASE_URL?>assets/img/Social_Media/facebook.png" alt="#"></a>

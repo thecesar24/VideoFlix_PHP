@@ -18,11 +18,15 @@ if (isset($_SESSION['mensaje'])) {
             <div class="listar-todas-cards">
             <?php if (!empty($peliculas)){ ?>
                 <?php 
-                // Preprocesar favoritos para eficiencia
                 $favoritos_ids = [];
                 if (Authentication::isUserLogged()) {
+                    $userEntity = $_SESSION['user'];
+                    $idUsuario = $userEntity->getId();
+                    
                     foreach ($favoritos as $favorito) {
-                        $favoritos_ids[$favorito['id_contenido']] = true;
+                        if ($favorito['id_usuario'] == $idUsuario) {
+                            $favoritos_ids[$favorito['id_contenido']] = true;
+                        }
                     }
                 }
                 foreach ($peliculas as $pelicula) { ?>
