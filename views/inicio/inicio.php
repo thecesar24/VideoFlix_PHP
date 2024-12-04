@@ -6,6 +6,13 @@ $series = $data["series"]??NULL;
 $cortos = $data["cortos"]??NULL;
 $documentales = $data["documentales"]??NULL;
 
+if (isset($_SESSION['errores'])) {
+    foreach ($_SESSION['errores'] as $error) {
+        echo "<p class='error'>$error</p>"; // Muestra cada mensaje de error
+    }
+    unset($_SESSION['errores']); // Limpiar los errores después de mostrarlos
+}
+
 ?>
 <div id="carouselExample" class="carousel slide" data-ride="carousel" data-interval="3000">
             <div class="carousel-inner">
@@ -37,7 +44,7 @@ $documentales = $data["documentales"]??NULL;
                             <div class="card-body">
                                 <h5 class="card-title"><?=$pelicula->titulo ?></h5>
                                 <a href="<?=Parameters::$BASE_URL . 'Contenido/verInfo?slug=' . $pelicula->slug?>" class="btn btn-primary">Ver detalles</a>
-                            </div>
+                            </div>  
                         </div>
                     <?php } ?>
                 <?php }else{ ?>

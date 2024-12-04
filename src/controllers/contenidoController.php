@@ -6,6 +6,7 @@ use cesar\ProyectoTest\Helpers\Authentication;
 use cesar\ProyectoTest\Models\ComentariosModel;
 use cesar\ProyectoTest\Models\ContenidoFavoritoModel;
 use cesar\ProyectoTest\Models\ContenidoModel;
+use cesar\ProyectoTest\Config\Parameters;
 
 class ContenidoController {
     public function index(){
@@ -101,30 +102,43 @@ class ContenidoController {
         ViewController::show('views/contenido/buscarContenido.php', ['resultados' => $resultados]);
     }
 
+
     public function verInfo(){
+
         $slug = $_GET['slug'];
-        $apikey = '68fbbd15';
 
-        $url = "http://www.omdbapi.com/?t=" . urlencode($slug) . "&apikey=" . $apikey . "&language=es";
-        $response = file_get_contents($url);
-        if (!$response) {
-            die('Error al obtener datos de la API.');
-        }
-        
-        // Decodificar la respuesta JSON
-        $data = json_decode($response, true);
-        if ($data === null) {
-            die('Error al decodificar JSON: ' . json_last_error_msg());
-        }
-        
-        // Verificar si la película fue encontrada
-        if ($data['Response'] == 'True') {
-            $informacion = $data;
+        $contenidoModel = new ContenidoModel();
+        $resultado = $contenidoModel->getContenidoUrlAmigable($slug);
 
-            ViewController::show('views/contenido/info.php', ['informacion' => $informacion, 'slug' => $slug]);
+        if ($resultado->slug != $slug) {
+            $_SESSION['errores'][] = 'No se encontraron resultados para la película.';
+            header("Location: " . Parameters::$BASE_URL . 'Inicio/index');
             exit();
-        } else {
-            echo 'No se encontraron resultados para la película.';
+        }
+        
+        try {
+            $omdbController = new OmdbApiController();
+            $informacion = $omdbController->obtenerDatosOMDb($slug);
+
+            if ($informacion) {
+                $youtubeApiController = new YoutubeApiController();
+                $youtubeTrailer = $youtubeApiController->getTrailer($informacion['Title']);
+
+                ViewController::show('views/contenido/info.php', [
+                    'informacion' => $informacion,
+                    'slug' => $slug, 
+                    'youtubeTrailer' => $youtubeTrailer
+                ]);
+            } else {
+                $_SESSION['errores'][] = 'No se encontraron resultados para la película.';
+                header("Location: " . Parameters::$BASE_URL . 'Inicio/index');
+                exit();
+            }
+        } catch (\Exception $e) {
+            $_SESSION['errores'][] = 'Error al obtener información: ' . $e->getMessage();
+            ViewController::show('views/inicio/inicio.php');
+            exit();
         }
     }
+
 }

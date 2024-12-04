@@ -678,6 +678,34 @@ main {
     height: auto;
 }
 
+/* ----------------------- 
+   Info 
+----------------------- */
+
+.verInfo-section {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.flex-1-info {
+    width: 70%;
+}
+
+.flex-2-info {
+    width: 30%;
+}
+
+.puntuacion-Imdb {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.estrellas{
+    color: yellow;
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
 
 /* ----------------------- 
    Media Queries 
