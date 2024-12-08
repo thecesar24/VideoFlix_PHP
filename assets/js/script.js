@@ -81,6 +81,34 @@ if (document.getElementById('mostrar-comentarios')) {
     });    
 }
 
+// window.addEventListener('message', function(event) {
+//     // Asegurarse de que el mensaje provenga del iframe de OK.ru
+//     if (!event.data || typeof event.data !== 'object') return;
+
+//     // Verificar el tipo de mensaje
+//     if (event.data.type === 'player_state') {
+//         switch (event.data.state) {
+//             case 'playing':
+//                 console.log('El video está reproduciéndose.');
+//                 break;
+//             case 'paused':
+//                 console.log('El video está en pausa.');
+//                 break;
+//             case 'ended':
+//                 console.log('El video ha terminado.');
+//                 break;
+//             default:
+//                 console.log('Estado desconocido:', event.data.state);
+//         }
+//     }
+// });
+
+// // Enviar comandos al reproductor si lo necesitas
+// function sendCommandToPlayer(command) {
+//     const iframe = document.getElementById('youtube-iframe');
+//     iframe.contentWindow.postMessage({ method: command }, '*');
+// }
+
 
 
 window.onload = function() {

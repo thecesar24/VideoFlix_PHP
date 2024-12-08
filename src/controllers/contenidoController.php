@@ -7,6 +7,7 @@ use cesar\ProyectoTest\Models\ComentariosModel;
 use cesar\ProyectoTest\Models\ContenidoFavoritoModel;
 use cesar\ProyectoTest\Models\ContenidoModel;
 use cesar\ProyectoTest\Config\Parameters;
+use cesar\ProyectoTest\Controllers\TraduccionController;
 
 class ContenidoController {
     public function index(){
@@ -120,14 +121,18 @@ class ContenidoController {
             $omdbController = new OmdbApiController();
             $informacion = $omdbController->obtenerDatosOMDb($slug);
 
+            $traduccionController = new TraduccionController();
+            
             if ($informacion) {
                 $youtubeApiController = new YoutubeApiController();
                 $youtubeTrailer = $youtubeApiController->getTrailer($informacion['Title']);
+                $traduccion = $traduccionController->traducir($informacion['Plot'], 'ES');
 
                 ViewController::show('views/contenido/info.php', [
                     'informacion' => $informacion,
                     'slug' => $slug, 
-                    'youtubeTrailer' => $youtubeTrailer
+                    'youtubeTrailer' => $youtubeTrailer,
+                    'traduccion' => $traduccion
                 ]);
             } else {
                 $_SESSION['errores'][] = 'No se encontraron resultados para la película.';

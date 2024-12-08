@@ -2,50 +2,46 @@
 
 namespace cesar\ProyectoTest\Controllers;
 
-use cesar\ProyectoTest\Helpers\Authentication;
-use cesar\ProyectoTest\Config\Parameters;
-use cesar\ProyectoTest\Helpers\Validations;
-use cesar\ProyectoTest\Models\ComentariosModel;
-use cesar\ProyectoTest\Models\ContenidoModel;
+class TraduccionController
+{
+    private $auth_key = '24f92c75-f86b-4295-b1a1-97aa1ddcb471:fx';
 
-class TraduccionController {
-    public function index(){
-    }
+    // Método para traducir el texto
+    public function traducir($text, $target_lang)
+    {
+        $url = "https://api-free.deepl.com/v2/translate";
+        $data = array(
+            'auth_key' => $this->auth_key,
+            'text' => $text,
+            'target_lang' => strtoupper($target_lang) 
+        );
 
-    public function traducirTexto($texto, $idiomaDestino = 'es') {
-        $url = "https://libretranslate.com/translate";
-        $data = [
-            'q' => $texto,
-            'source' => 'auto',
-            'target' => $idiomaDestino,
-            'format' => 'text',
-            'api_key' => '' // Dejar en blanco si no se requiere
-        ];
-    
-        $ch = curl_init($url);
+        // Inicializa cURL
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data, JSON_UNESCAPED_UNICODE));
-    
-        $response = curl_exec($ch);
-        if ($response === false) {
-            die('Error en cURL: ' . curl_error($ch));
-        }
-    
-        $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        if ($responseCode !== 200) {
-            die("Error en la respuesta de la API. Código HTTP: $responseCode. Respuesta: " . $response);
-        }
-    
-        $responseData = json_decode($response, true);
-        if (!$responseData) {
-            die('Error al decodificar JSON: ' . json_last_error_msg());
-        }
-    
-        curl_close($ch);
-        return $responseData['translatedText'] ?? 'Error en la traducción.';
-    }
-    
 
+        // Ejecuta la solicitud
+        $response = curl_exec($ch);
+
+        // Verifica si hubo algún error con cURL
+        if(curl_errno($ch)) {
+            echo 'Error de cURL: ' . curl_error($ch);
+        }
+
+        // Cierra la conexión cURL
+        curl_close($ch);
+
+        // Decodifica la respuesta JSON
+        $response_data = json_decode($response, true);
+
+        // Si la respuesta contiene una traducción, devuelve el texto traducido
+        if (isset($response_data['translations'][0]['text'])) {
+            return $response_data['translations'][0]['text'];
+        } else {
+            return "Error al traducir el texto.";
+        }
+    }
 }

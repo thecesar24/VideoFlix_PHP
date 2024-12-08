@@ -4,6 +4,7 @@ use cesar\ProyectoTest\Config\Parameters;
 $contenido = $data["informacion"]??NULL;
 $slug = $data["slug"]??NULL;
 $youtubeTrailer = $data["youtubeTrailer"]??NULL;
+$traduccion = $data["traduccion"]??NULL;
 
 //var_dump($youtubeTrailer);
 
@@ -27,7 +28,7 @@ if (isset($_SESSION['mensaje'])) {
             <article class="flex-1-info">
                 <h1><?= $contenido['Title'] ?></h1>
                 <p><strong>Año:</strong> <?= $contenido['Released'] ?></p>
-                <p><strong>Sinopsis:</strong> <?= $contenido['Plot'] ?></p>
+                <p><strong>Sinopsis:</strong> <?= $traduccion ?></p>
                 <p><strong>Géneros:</strong> <?= $contenido['Genre'] ?></p>
                 <p><strong>Duración:</strong> <?= $contenido['Runtime'] ?></p>
                 <p><strong>Director:</strong> <?= $contenido['Director'] ?></p>
