@@ -21,7 +21,6 @@ $datos = $data['datos']??NULL;
                 <p><strong>Nombre:</strong> <?= $datos->nombre ?></p>
                 <p><strong>Apellidos:</strong> <?= $datos->apellidos ?></p>
                 <p><strong>Correo Electrónico:</strong> <?= $datos->email ?></p>
-                <p><strong>Teléfono:</strong> <?= $datos->telefono ?></p>
                 <p><strong>Nombre de Usuario:</strong> <?= $datos->username ?></p>
 
                 <h2>Opciones</h2>

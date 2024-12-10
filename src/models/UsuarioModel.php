@@ -13,12 +13,11 @@ class UsuarioModel extends Model{
     
     public function register(UserEntity $userEntity) {
         try {
-            $consulta = "INSERT INTO {$this->tabla}(nombre, apellidos, telefono, email, username, password) 
-                         VALUES(:nombre, :apellidos, :telefono, :email, :username, :password)";
+            $consulta = "INSERT INTO {$this->tabla}(nombre, apellidos, email, username, password) 
+                         VALUES(:nombre, :apellidos, :email, :username, :password)";
     
             $nombre = $userEntity->getNombre();
             $apellidos = $userEntity->getApellidos();
-            $telefono = $userEntity->getTelefono();
             $email = $userEntity->getEmail();
             $username = $userEntity->getUsername();
             $passwordSecure = password_hash($userEntity->getPassword(), PASSWORD_DEFAULT);
@@ -26,7 +25,6 @@ class UsuarioModel extends Model{
             $sentencia = $this->conn->prepare($consulta);
             $sentencia->bindParam(':nombre', $nombre);
             $sentencia->bindParam(':apellidos', $apellidos);
-            $sentencia->bindParam(':telefono', $telefono);
             $sentencia->bindParam(':email', $email);
             $sentencia->bindParam(':username', $username);
             $sentencia->bindParam(':password', $passwordSecure);
@@ -54,7 +52,7 @@ class UsuarioModel extends Model{
 
     public function update(UserEntity $userEntity) {
         try {
-            $consulta = "UPDATE {$this->tabla} SET nombre = :nombre, apellidos = :apellidos, telefono = :telefono, email = :email, username = :username
+            $consulta = "UPDATE {$this->tabla} SET nombre = :nombre, apellidos = :apellidos, email = :email, username = :username
                          WHERE id = :id";
             
             $sentencia = $this->conn->prepare($consulta);
@@ -62,14 +60,12 @@ class UsuarioModel extends Model{
             // Asigna los valores a variables antes de pasarlos a bindParam()
             $nombre = $userEntity->getNombre();
             $apellidos = $userEntity->getApellidos();
-            $telefono = $userEntity->getTelefono();
             $email = $userEntity->getEmail();
             $id = $userEntity->getId();
             $username = $userEntity->getUsername();
     
             $sentencia->bindParam(':nombre', $nombre);
             $sentencia->bindParam(':apellidos', $apellidos);
-            $sentencia->bindParam(':telefono', $telefono);
             $sentencia->bindParam(':email', $email);
             $sentencia->bindParam(':id', $id);
             $sentencia->bindParam(':username', $username);

@@ -10,4 +10,7 @@ class Parameters{
     public static $BASE_URL = "http://localhost/VideoFlix_PHP/";
     public static $COMENTARIO_MAX_LENGTH = 150;
     public static $EMAIL_PAGINA = "cesar.perpob.1@educa.jcyl.es";
+
+    public static $API_URL = "http://localhost/VideoFlix_PHP/DocumentalesApi/getDocumentales";
+    //public static $API_URL = self::$BASE_URL . "DocumentalesApi/getDocumentales";
 }

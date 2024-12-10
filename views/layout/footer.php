@@ -11,8 +11,8 @@
                     <h5>Enlaces Rápidos</h5>
                     <ul class="list-unstyled">
                         <li><a href="<?=Parameters::$BASE_URL . "Inicio/index" ?>" class="text-white">Inicio</a></li>
-                        <li><a href="#" class="text-white">Series</a></li>
-                        <li><a href="#" class="text-white">Películas</a></li>
+                        <li><a href="<?=Parameters::$BASE_URL . "Contenido/Series" ?>" class="text-white">Series</a></li>
+                        <li><a href="<?=Parameters::$BASE_URL . "Contenido/Peliculas" ?>" class="text-white">Películas</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">

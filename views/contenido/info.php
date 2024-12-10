@@ -6,8 +6,6 @@ $slug = $data["slug"]??NULL;
 $youtubeTrailer = $data["youtubeTrailer"]??NULL;
 $traduccion = $data["traduccion"]??NULL;
 
-//var_dump($youtubeTrailer);
-
 if (isset($_SESSION['errores'])) {
     foreach ($_SESSION['errores'] as $error) {
         echo "<p class='error'>$error</p>"; // Muestra cada mensaje de error
@@ -39,13 +37,18 @@ if (isset($_SESSION['mensaje'])) {
                     </span>
                     <span class="material-symbols-outlined estrellas">star</span>
                 </p>
-
-                <a href="<?=Parameters::$BASE_URL . "ver/" . $slug?>">
-                    <button>Ver</button>
-                </a>
+                <div class="trailer">
+                    <strong>Trailer:</strong>
+                    <div class="video-responsive">
+                        <div class="iframe-trailer-container">
+                            <iframe src="<?=$youtubeTrailer?>" frameborder="0"></iframe>
+                        </div>
+                    </div>
+                </div>
                 <p>
-                    <span>Trailer:</span>
-                    <iframe src="<?=$youtubeTrailer?>" frameborder="0"></iframe>
+                    <a href="<?=Parameters::$BASE_URL . "ver/" . $slug?>">
+                        <button>Ver Pelicula</button>
+                    </a>
                 </p>
             </article>
             <article class="flex-2-info">

@@ -36,10 +36,6 @@ if (isset($_SESSION['errores'])) {
                     <input type="email" name="email" id="" value="<?= $userEntity->getEmail() ?>">
                 </p>
                 <p>
-                    <strong>Teléfono:</strong>
-                    <input type="tel" name="telefono" id="" value="<?= $userEntity->getTelefono() ?>">
-                </p>
-                <p>
                     <strong>Nombre de Usuario:</strong>
                     <input type="text" name="username" id="" value="<?= $userEntity->getUsername() ?>">
                 </p>

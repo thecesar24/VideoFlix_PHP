@@ -57,6 +57,11 @@ main {
 /* ----------------------- 
    Navigation 
 ----------------------- */
+.active {
+    background-color: #666;
+
+}
+
 .navbar-content {
     width: 80%;
     margin: 0 auto;
@@ -79,7 +84,7 @@ main {
     transition: 0.3s;
 }
 
-.user-icon a {
+.user-icon {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -87,10 +92,53 @@ main {
     height: 100%;
 }
 
-.user-icon a div {
+.user-icon div:first-of-type {
     font-size: 2.2rem;
     text-decoration: none;
     color: #fff;
+}
+
+.tooltip-container {
+    position: relative;
+    display: flex;
+}
+
+.user-icon{
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip {
+    visibility: hidden;
+    position: absolute;
+    top: 65px;
+    left: 50%;
+    padding: 20px;
+    width: 180px;
+    transform: translateX(-50%);
+    background-color: #676767;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-align: center;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.tooltip::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    pointer-events: auto;
+}
+
+.tooltip-container:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
 }
 
 .login , .register {
@@ -683,12 +731,51 @@ main {
 ----------------------- */
 
 .verInfo-section {
+    margin-top: 50px;
+}
+
+.verInfo-section {
     display: flex;
     flex-direction: row-reverse;
 }
 
 .flex-1-info {
     width: 70%;
+}
+
+.flex-1-info button{
+    width: 20%;
+    border-radius: 20px;
+    padding: 10px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+}
+
+.flex-1-info button:hover{
+    transition: .5s;
+    background-color: #0056b3;
+}
+
+.flex-1-info .trailer{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin-bottom: 20px;
+}
+
+.iframe-trailer-container {
+    position: relative;
+    width: 100%;
+    padding-top: 56.26%;
+}
+.iframe-trailer-container iframe {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border: 0;
 }
 
 .flex-2-info {
@@ -865,6 +952,25 @@ main {
 }
 
 @media (width <= 1023px) {
+
+    .tooltip {
+        visibility: hidden;
+        position: absolute;
+        top: 0px;
+        left: 140px;
+        padding: 15px;
+        width: 200px;
+        background-color: #676767;
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        text-align: left;
+        z-index: 1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        font-size: 14px;
+    }
+
     /* ----------------------- 
        Video 
     ----------------------- */
@@ -950,7 +1056,6 @@ main {
         width: 100%;
         margin: 0;
     }
-
 }
 
 @media (min-width: 1024px) {

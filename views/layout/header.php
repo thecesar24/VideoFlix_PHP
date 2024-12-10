@@ -31,7 +31,7 @@
                     <span class="material-symbols-outlined">menu</span>
                 </button>
                 <div class="collapse navbar-collapse navbar-custom" id="navbarResponsive">
-                    <ul class="navbar-nav mr-auto">
+                    <ul class="navbar-nav mr-auto paginas-buttons">
                         <li class="nav-item">
                             <a class="nav-link" id="inicio" href="<?=Parameters::$BASE_URL . "Inicio/index" ?>">Inicio</a>
                         </li>
@@ -64,16 +64,15 @@
                         </li>
                         <?php }; ?>
                         <?php if (Authentication::isUserLogged()) { ?>
-                        <li class="nav-item">
-                            <a class="nav-link" id="iniciar-sesion" href="<?= Parameters::$BASE_URL . "Usuario/datos" ?>">Datos Usuario</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="iniciar-sesion" href="<?= Parameters::$BASE_URL . "SeguirViendo/miEspacio" ?>">Mi Espacio</a>
-                        </li>
                         <li class="nav-item user-icon">
-                            <a class="" href="">
+                            <div class="tooltip-container">
                                 <div class="material-symbols-outlined">account_circle</div>
-                            </a>
+                                <div class="tooltip">
+                                    <a class="nav-link" id="iniciar-sesion" href="<?= Parameters::$BASE_URL . "Usuario/datos" ?>">Datos Usuario</a>
+                                    <a class="nav-link" id="iniciar-sesion" href="<?= Parameters::$BASE_URL . "SeguirViendo/miEspacio" ?>">Mi Espacio</a>
+                                    <a class="nav-link" id="iniciar-sesion" href="<?= Parameters::$BASE_URL . "Usuario/closeSession" ?>">Cerrar Sesion</a>
+                                </div>
+                            </div>
                         </li>
                         <?php }; ?>
 

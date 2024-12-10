@@ -25,7 +25,6 @@ class UsuarioController {
             // Obtener los valores del formulario
             $nombre = $_POST['nombre'] ?? '';
             $apellidos = $_POST['apellidos'] ?? '';
-            $telefono = $_POST['telefono'] ?? '';
             $email = $_POST['email'] ?? '';
             $username = $_POST['username'] ?? '';
             $password = $_POST['password'] ?? '';
@@ -34,10 +33,6 @@ class UsuarioController {
             // Validaciones
             if (!Validations::validateName($nombre) || !Validations::validateName($apellidos)) {
                 $errores['nombre'] = "Formato incorrecto";
-            }
-    
-            if (!Validations::validateTelefono($telefono)) {
-                $errores['telefono'] = "Número de teléfono no válido.";
             }
 
             if (!Validations::validateEmail($email)) {
@@ -66,7 +61,6 @@ class UsuarioController {
                 $userEntity = new UserEntity();
                 $userEntity->setNombre($nombre)
                            ->setApellidos($apellidos)
-                           ->setTelefono($telefono)
                            ->setEmail($email)
                            ->setUsername($username)
                            ->setPassword($password);
@@ -118,7 +112,6 @@ class UsuarioController {
                     $userEntity->setId($usuario->id)
                                ->setEmail($usuario->email)
                                ->setApellidos($usuario->apellidos)
-                               ->setTelefono($usuario->telefono)
                                ->setNombre($usuario->nombre)
                                ->setUsername($usuario->username);
     
@@ -188,15 +181,11 @@ class UsuarioController {
             // Collect POST data
             $nombre = $_POST['nombre'] ?? '';
             $apellidos = $_POST['apellidos'] ?? '';
-            $telefono = $_POST['telefono'] ?? '';
             $email = $_POST['email'] ?? '';
             $username = $_POST['username'] ?? '';
 
             if (!Validations::validateName($nombre) || !Validations::validateName($apellidos)) {
                 $errores['nombre'] = "Formato incorrecto en el nombre o apellido.";
-            }
-            if (!Validations::validateTelefono($telefono)) {
-                $errores['telefono'] = "Número de teléfono no válido.";
             }
             if (!Validations::validateEmail($email)) {
                 $errores['email'] = "Correo electrónico no válido.";
@@ -209,7 +198,6 @@ class UsuarioController {
 
             $userEntity->setNombre($nombre)
                    ->setApellidos($apellidos)
-                   ->setTelefono($telefono)
                    ->setEmail($email)
                    ->setUsername($username);
 
@@ -235,30 +223,5 @@ class UsuarioController {
         
         header("Location: " . PARAMETERS::$BASE_URL);
         exit();
-    }
-
-    /*
-    public function dashboard() {
-        // Verificar si el usuario está logueado
-        if (!Authentication::isUserLogged()) {
-            header("Location: " . Parameters::$BASE_URL . "/login");
-            exit();
-        }
-
-        // Obtener el usuario logueado desde la sesión
-        $userEntity = $_SESSION['user'];
-
-        // Modelo de videos para obtener videos que el usuario ha estado viendo
-     //   $videoModel = new VideoModel();
-      //  $videosVistos = $videoModel->getVideosVistosByUser($userEntity->getId());
-
-        // Cargar la vista del dashboard con los datos del usuario y sus videos
-        ViewController::show('views/usuarios/dashboard.php', [
-            'usuario' => $userEntity
-      //      'videosVistos' => $videosVistos
-        ]);
-    }
-
-    */
-    
+    }    
 }

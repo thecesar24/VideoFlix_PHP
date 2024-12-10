@@ -35,10 +35,6 @@
                 <input type="email" name="email" id="idEmail" value="<?=$dataPOST["email"]??""?>" required/>
             </p>
             <p>
-                <label for="idTelefono">telefono:</label>
-                <input type="tel" name="telefono" id="idTelefono" value="<?=$dataPOST["telefono"]??""?>" required/>
-            </p>
-            <p>
                 <label for="idUsername">Nombre de Usuario:</label>
                 <input type="text" name="username" id="idUsername" value="<?=$dataPOST["username"]??""?>" required/>
             </p>

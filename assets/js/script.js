@@ -109,9 +109,36 @@ if (document.getElementById('mostrar-comentarios')) {
 //     iframe.contentWindow.postMessage({ method: command }, '*');
 // }
 
+// Detectar el enlace activo al cargar la página
+document.addEventListener('DOMContentLoaded', function () {
+    const currentPath = window.location.pathname; // Obtiene la ruta actual
+    const navLinks = document.querySelectorAll('.paginas-buttons .nav-link');
+
+    navLinks.forEach(link => {
+        // Compara el href del enlace con la ruta actual
+        if (link.href.includes(currentPath)) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+});
+
+// Agregar funcionalidad para que el clic cambie el estado (ya tienes esta parte)
+document.querySelectorAll('.paginas-buttons .nav-link').forEach(link => {
+    link.addEventListener('click', function () {
+        document.querySelectorAll('.paginas-buttons .nav-link').forEach(l => {
+            l.classList.remove('active');
+        });
+
+        link.classList.add('active');
+    });
+});
+
 
 
 window.onload = function() {
+
     document.querySelectorAll('.favorito').forEach(item => {
         item.addEventListener('click', function() {
             const isFavorite = this.classList.contains('clicked');
