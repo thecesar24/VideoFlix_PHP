@@ -13,4 +13,7 @@ class Parameters{
 
     public static $API_URL = "http://localhost/VideoFlix_PHP/DocumentalesApi/getDocumentales";
     //public static $API_URL = self::$BASE_URL . "DocumentalesApi/getDocumentales";
+
+    public static $ROL_ADMIN = "administrador";
+    public static $ROL_USUARIO = "usuario";
 }

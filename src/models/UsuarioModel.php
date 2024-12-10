@@ -77,4 +77,51 @@ class UsuarioModel extends Model{
         }
     }
 
+    public function mailExistente($email){
+        $consulta ="SELECT email FROM $this->tabla WHERE email = :email";
+        try{
+            $sentencia = $this->conn->prepare($consulta);
+            $sentencia->bindParam(':email', $email);
+            $sentencia->execute();
+            // Se retorna el objeto:
+            return $sentencia->fetch(\PDO::FETCH_OBJ);
+        }catch(\PDOException $e){
+            return NULL;
+        }
+    }
+
+    public function getAllMenosAdmin($username){
+
+        $consulta ="SELECT * FROM $this->tabla WHERE username != :username";
+        try{
+            $sentencia = $this->conn->prepare($consulta);
+            $sentencia->bindParam(':username', $username);
+            $sentencia->execute();
+
+            return $sentencia->fetchAll(\PDO::FETCH_OBJ);
+
+        }catch(\PDOException $e){
+            return NULL;
+        }
+    }
+
+    public function cambiarEstadoUsuario($idUsuario, $estado) {
+        try {
+            $consulta = "UPDATE {$this->tabla}
+                         SET estado = :estado
+                         WHERE id = :idUsuario";
+
+            $sentencia = $this->conn->prepare($consulta);
+            $sentencia->bindParam("idUsuario", $idUsuario, \PDO::PARAM_INT);
+            $sentencia->bindParam("estado", $estado, \PDO::PARAM_INT);
+            
+            return $sentencia->execute();
+
+        } catch (\PDOException $e) {
+            echo "<h1><br>Fichero: " . $e->getFile();
+            echo "<br>Linea: " . $e->getLine();
+            exit("<br>Error: " . $e->getMessage());
+        }
+    }
+
 }

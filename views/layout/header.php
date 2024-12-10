@@ -63,6 +63,14 @@
                             </a>
                         </li>
                         <?php }; ?>
+                        <?php if (Authentication::isAdminLogged()) { ?>
+                            <li class="nav-item">
+                                <a href="<?=Parameters::$BASE_URL . 'Usuario/GestionarUsers'?>" class="nav-link">Usuarios</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="<?=Parameters::$BASE_URL?>" class="nav-link">Contenido</a>
+                            </li>
+                        <?php }; ?>
                         <?php if (Authentication::isUserLogged()) { ?>
                         <li class="nav-item user-icon">
                             <div class="tooltip-container">

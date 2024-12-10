@@ -29,6 +29,7 @@ class UsuarioController {
             $username = $_POST['username'] ?? '';
             $password = $_POST['password'] ?? '';
             $password2 = $_POST['password2'] ?? '';
+            $rol = Parameters::$ROL_USUARIO;
             
             // Validaciones
             if (!Validations::validateName($nombre) || !Validations::validateName($apellidos)) {
@@ -47,30 +48,52 @@ class UsuarioController {
                 $errores['password2'] = "El campo 'Contraseña' y 'Confirmar Contraseña' deben coincidir";
             }
             
+            $usuarioModel = new UsuarioModel();
+            $existe = $usuarioModel->login($username);
+
+            $mailExistente = $usuarioModel->mailExistente($email);
+
+            if ($mailExistente) {
+                $errores['email'] = "El Email ya esta en uso.";
+            }
+
+            if ($existe) {
+                $errores['existe'] = "El Usuario ya existe, por favor Inicie Sesión.";
+            }
+
             if (!empty($errores)) {
                 $_SESSION['errores'] = $errores;
                 ViewController::show('views/usuarios/registrar.php', ['dataPOST' => $_POST]);
                 exit();
-            }  
-    
-            // Crear instancias de modelos
-            $usuarioModel = new UsuarioModel();
+            }
             
-            // Comprobar si hay errores antes de continuar
+            if ($username == Parameters::$ROL_ADMIN) {
+                $rol = Parameters::$ROL_ADMIN;
+            }
+            
             if (empty($errores)) {
                 $userEntity = new UserEntity();
                 $userEntity->setNombre($nombre)
                            ->setApellidos($apellidos)
                            ->setEmail($email)
                            ->setUsername($username)
-                           ->setPassword($password);
+                           ->setPassword($password)
+                           ->setRol($rol);
 
-                // Registrar usuario y verificar el estado
-                $statusRegister = $usuarioModel->register($userEntity);
-
+                $usuarioModel->register($userEntity);
                 $_SESSION['mensaje'] = "Usuario registrado correctamente.";
-                // Mostrar la vista con el resultado del registro
-                ViewController::show('views/usuarios/registrar.php', ['statusRegister' => $statusRegister]);
+
+                $usuario = $usuarioModel->login($username);
+                $_SESSION['user'] = $userEntity;
+                
+                if ($username == Parameters::$ROL_ADMIN) {
+                    $_SESSION['admin'] = $userEntity;
+                }
+
+                if (Authentication::isUserLogged()) {
+                    header("Location: " . Parameters::$BASE_URL . "SeguirViendo/miEspacio");
+                    exit();
+                }
             } else {
                 // Si hay errores, mostrar el formulario nuevamente con los errores
                 ViewController::show('views/usuarios/registrar.php', ['dataPOST' => $_POST]);
@@ -117,6 +140,10 @@ class UsuarioController {
     
                     // Almacenar usuario en sesión
                     $_SESSION['user'] = $userEntity;
+                    
+                    if ($username == Parameters::$ROL_ADMIN) {
+                        $_SESSION['admin'] = $userEntity;
+                    }
     
                     // Redirigir al dashboard si el login es exitoso
                     if (Authentication::isUserLogged()) {
@@ -220,8 +247,64 @@ class UsuarioController {
 
     public function closeSession() {
         if (Authentication::isUserLogged()) unset($_SESSION['user']);   
-        
-        header("Location: " . PARAMETERS::$BASE_URL);
+        if (Authentication::isAdminLogged()) unset($_SESSION['admin']);   
+        header("Location: " . PARAMETERS::$BASE_URL . 'Inicio/Index');
+
         exit();
+    }
+
+    public function GestionarUsers() {   
+        if (Authentication::isAdminLogged()) {
+            $userEntity = $_SESSION['admin'];
+            $username = $userEntity->getUsername();
+
+            $UsuarioModel = new UsuarioModel;
+            $todosUsuarios = $UsuarioModel->getAllMenosAdmin($username); 
+
+            ViewController::show('views/usuarios/gestionarUsuarios.php', ['todosUsuarios' => $todosUsuarios]);
+            exit();
+
+        } else {
+            ViewController::showError(403);
+            exit();
+        }
     }    
+
+    public function cambiarEstadoUsuario() {
+        if (Authentication::isAdminLogged()) {
+            $errores = [];
+    
+            $usuarioModel = new UsuarioModel();
+            $idUsuario = $_GET['idUsuario'];
+            $usuario = $usuarioModel->getOne($idUsuario);
+
+            if (!empty($errores)) {
+                $_SESSION['errores'] = $errores;
+                header("Location: " . Parameters::$BASE_URL . "Usuario/GestionarUsers");
+                exit();
+            }
+    
+            if ($usuario) {
+                if ($usuario->estado == 1) {
+                    $estado = 0;
+                    $usuarioModel->cambiarEstadoUsuario($idUsuario, $estado);
+                    $_SESSION['mensaje'] = "El usuario esta de baja";
+                    header("Location: " . Parameters::$BASE_URL . "Usuario/GestionarUsers");
+                    exit();
+                } if ($usuario->estado == 0) {
+                    $estado = 1;
+                    $usuarioModel->cambiarEstadoUsuario($idUsuario, $estado);
+                    $_SESSION['mensaje'] = "El usuario esta de alta";
+                    header("Location: " . Parameters::$BASE_URL . "Usuario/GestionarUsers");
+                    exit();
+                } else {
+                    $errores[] = 'Error al cambiar el estado';
+                }
+            } else {
+                $errores[] = 'El usuario no existe';
+            }
+        } else {
+            ViewController::showError(403);
+        }
+    }
 }
