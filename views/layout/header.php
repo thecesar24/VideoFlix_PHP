@@ -68,14 +68,14 @@
                                 <a href="<?=Parameters::$BASE_URL . 'Usuario/GestionarUsers'?>" class="nav-link">Usuarios</a>
                             </li>
                             <li class="nav-item">
-                                <a href="<?=Parameters::$BASE_URL?>" class="nav-link">Contenido</a>
+                                <a href="<?=Parameters::$BASE_URL . 'Contenido/GestionarContenido'?>" class="nav-link">Contenido</a>
                             </li>
                         <?php }; ?>
                         <?php if (Authentication::isUserLogged()) { ?>
                         <li class="nav-item user-icon">
-                            <div class="tooltip-container">
+                            <div class="tooltip-container" id="tooltip-container">
                                 <div class="material-symbols-outlined">account_circle</div>
-                                <div class="tooltip">
+                                <div class="tooltip" id="tooltip">
                                     <a class="nav-link" id="iniciar-sesion" href="<?= Parameters::$BASE_URL . "Usuario/datos" ?>">Datos Usuario</a>
                                     <a class="nav-link" id="iniciar-sesion" href="<?= Parameters::$BASE_URL . "SeguirViendo/miEspacio" ?>">Mi Espacio</a>
                                     <a class="nav-link" id="iniciar-sesion" href="<?= Parameters::$BASE_URL . "Usuario/closeSession" ?>">Cerrar Sesion</a>

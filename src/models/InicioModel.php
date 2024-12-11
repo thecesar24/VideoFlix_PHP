@@ -12,7 +12,7 @@ class InicioModel extends Model{
 
     public function get4RandByTipoContenido($tipoContenido) {
         try {
-            $consulta = "SELECT * FROM contenido WHERE tipo_contenido = :tipoContenido ORDER BY RAND() LIMIT 4";
+            $consulta = "SELECT * FROM contenido WHERE tipo_contenido = :tipoContenido AND estado != 0 ORDER BY RAND() LIMIT 4";
     
             $sentencia = $this->conn->prepare($consulta);
             $sentencia->bindParam(':tipoContenido', $tipoContenido, \PDO::PARAM_STR);

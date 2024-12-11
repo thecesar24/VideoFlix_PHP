@@ -118,9 +118,7 @@ class UsuarioModel extends Model{
             return $sentencia->execute();
 
         } catch (\PDOException $e) {
-            echo "<h1><br>Fichero: " . $e->getFile();
-            echo "<br>Linea: " . $e->getLine();
-            exit("<br>Error: " . $e->getMessage());
+            echo '<p>Fallo en la conexion: ' . $e->getMessage() . '</p>';
         }
     }
 

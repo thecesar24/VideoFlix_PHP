@@ -8,6 +8,9 @@ use cesar\ProyectoTest\Models\ContenidoFavoritoModel;
 use cesar\ProyectoTest\Models\ContenidoModel;
 use cesar\ProyectoTest\Config\Parameters;
 use cesar\ProyectoTest\Controllers\TraduccionController;
+use cesar\ProyectoTest\Models\DirectorModel;
+use cesar\ProyectoTest\Models\GeneroModel;
+use cesar\ProyectoTest\Models\IdiomaModel;
 
 class ContenidoController {
     public function index(){
@@ -143,6 +146,211 @@ class ContenidoController {
             $_SESSION['errores'][] = 'Error al obtener información: ' . $e->getMessage();
             ViewController::show('views/inicio/inicio.php');
             exit();
+        }
+    }
+
+    public function gestionarContenido(){
+        if (Authentication::isAdminLogged()) {
+            $contenidoModel = new ContenidoModel();
+            $contenidos = $contenidoModel->getAll();
+            
+            $generoModel = new GeneroModel();
+            $generos = $generoModel->getAll();
+            
+            $idiomaModel = new IdiomaModel();
+            $idiomas = $idiomaModel->getAll();
+            
+            $directorModel = new DirectorModel();
+            $directores = $directorModel->getAll();
+            
+            ViewController::show("views/contenido/gestionarContenido.php", 
+            ['contenidos' => $contenidos, 'generos' => $generos, 'idiomas' => $idiomas, 'directores' => $directores]);
+        } else {
+            ViewController::showError(403);
+        }
+
+    }
+
+    public function cambiarEstadoContenido() {
+        if (Authentication::isAdminLogged()) {
+            $errores = [];
+    
+            $contenidoModel = new ContenidoModel();
+            $idContenido = $_GET['idContenido'];
+            var_dump($_GET);
+            $contenido = $contenidoModel->getOne($idContenido);
+
+            if (!isset($_GET['idContenido']) || empty($_GET['idContenido'])) {
+                $errores = 'ID de contenido no proporcionado.';
+            }
+
+            if (!empty($errores)) {
+                $_SESSION['errores'] = $errores;
+                header("Location: " . Parameters::$BASE_URL . "Contenido/gestionarContenido");
+                exit();
+            }
+    
+            if ($contenido) {
+                if ($contenido->estado == 1) {
+                    $estado = 0;
+                    $contenidoModel->cambiarEstadoUsuario($idContenido, $estado);
+                    $_SESSION['mensaje'] = "El contenido esta de baja";
+                    header("Location: " . Parameters::$BASE_URL . "Contenido/gestionarContenido");
+                    exit();
+                } if ($contenido->estado == 0) {
+                    $estado = 1;
+                    $contenidoModel->cambiarEstadoUsuario($idContenido, $estado);
+                    $_SESSION['mensaje'] = "El contenido esta de alta";
+                    header("Location: " . Parameters::$BASE_URL . "Contenido/gestionarContenido");
+                    exit();
+                } else {
+                    $errores[] = 'Error al cambiar el estado';
+                }
+            } else {
+                $errores[] = 'El contenido no existe';
+            }
+        } else {
+            ViewController::showError(403);
+        }
+    }
+
+    public function addContenido(){
+        if (Authentication::isAdminLogged()) {
+            $contenidoModel = new ContenidoModel();
+            $contenidos = $contenidoModel->getAll();
+            
+            $contenidoModel = new ContenidoModel();
+            $tipos = $contenidoModel->getAllTipos();
+            
+            $idiomaModel = new IdiomaModel();
+            $idiomas = $idiomaModel->getAll();
+            
+            $directorModel = new DirectorModel();
+            $directores = $directorModel->getAll();
+            
+            ViewController::show("views/contenido/addContenido.php", 
+            ['contenidos' => $contenidos, 'tipos' => $tipos, 'idiomas' => $idiomas, 'directores' => $directores]);
+        } else {
+            ViewController::showError(403);
+        }
+    }
+
+    public function buscarNuevoContenido(){
+        if (Authentication::isAdminLogged()) {
+
+            $titulo = $_POST['titulo'];
+
+            $contenidoModel = new ContenidoModel();
+            $contenidos = $contenidoModel->getAll();
+
+            $contenidoModel = new ContenidoModel();
+            $tipos = $contenidoModel->getAllTipos();
+
+            try {
+                $omdbController = new OmdbApiController();
+                $informacion = $omdbController->obtenerDatosOMDb($titulo);
+
+                $traduccionController = new TraduccionController();
+
+                if ($informacion) {
+                    $traduccion = $traduccionController->traducir($informacion['Plot'], 'ES');
+
+                    ViewController::show('views/contenido/addContenido.php', [
+                        'informacion' => $informacion,
+                        'contenidos' => $contenidos, 
+                        'tipos' => $tipos,
+                        'traduccion' => $traduccion
+                    ]);
+                } else {
+                    $_SESSION['errores'][] = 'No se encontraron resultados para la película.';
+                    header("Location: " . Parameters::$BASE_URL . 'Contenido/addContenido');
+                    exit();
+                }
+            } catch (\Exception $e) {
+                $_SESSION['errores'][] = 'Error al obtener información: ' . $e->getMessage();
+                ViewController::show('views/inicio/inicio.php');
+                exit();
+            }
+        } else {
+            ViewController::showError(403);        
+        }
+    }
+
+    public function addContenidoSave()  {
+        if (Authentication::isAdminLogged()) {
+            $errores = [];
+            $contenidoModel = new ContenidoModel();
+            $generoModel = new GeneroModel();
+
+            var_dump($_POST);
+            $titulo = $_POST['titulo'] ?? NULL;
+            $año = $_POST['año'] ?? NULL;
+            $sinopsis = $_POST['sinopsis'] ?? NULL;
+            $generos = isset($_POST['generos']) ? explode(', ', $_POST['generos']) : [];
+            $duracion = $_POST['duracion'] ?? NULL;
+            $director = $_POST['director'] ?? NULL;
+            $puntuacion = $_POST['puntuacion'] ?? NULL;
+            $tipo_contenido = $_POST['tipo_contenido'] ?? NULL;
+
+            if (empty($titulo)) {
+                $errores['titulo'] = "Inserte un título por favor.";
+            }
+            if (empty($año) || !is_numeric($año)) {
+                $errores['año'] = "Inserte un año válido por favor.";
+            }
+            if (empty($sinopsis)) {
+                $errores['sinopsis'] = "Inserte una sinopsis por favor.";
+            }
+            if (empty($generos)) {
+                $errores['generos'] = "Seleccione al menos un género por favor.";
+            }
+            if (empty($duracion) || !is_numeric($duracion)) {
+                $errores['duracion'] = "Inserte una duración válida por favor.";
+            }
+            if (empty($director)) {
+                $errores['director'] = "Inserte un director por favor.";
+            }
+            if (empty($puntuacion) || !is_numeric($puntuacion) || $puntuacion < 0 || $puntuacion > 10) {
+                $errores['puntuacion'] = "Inserte una puntuación válida (0-10).";
+            }
+            if (empty($tipo_contenido)) {
+                $errores['tipo_contenido'] = "Seleccione un tipo de contenido por favor.";
+            }
+
+            if (!empty($errores)) {
+                $_SESSION['errores'] = $errores;
+                header('Location: ' . Parameters::$BASE_URL . "Contenido/addContenido");
+                exit();
+            }
+
+            if (empty($errores)) {
+                
+                $contenidoData = [
+                    'titulo' => $titulo,
+                    'año' => $año,
+                    'sinopsis' => $sinopsis,
+                    'generos' => $generos,
+                    'duracion' => $duracion,
+                    'director' => $director,
+                    'puntuacion' => $puntuacion,
+                    'tipo_contenido' => $tipo_contenido
+                ];
+
+                // Manejar géneros
+                $generoIds = [];
+                foreach ($generos as $nombreGenero) {
+                    $idGenero = $generoModel->obtenerOInsertarGenero($nombreGenero);
+                    $generoIds[] = $idGenero;
+                }
+
+                
+
+
+            }
+
+
+        } else {
+            ViewController::showError(403);
         }
     }
 

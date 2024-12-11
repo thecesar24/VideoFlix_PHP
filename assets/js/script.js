@@ -110,32 +110,46 @@ if (document.getElementById('mostrar-comentarios')) {
 // }
 
 // Detectar el enlace activo al cargar la página
-document.addEventListener('DOMContentLoaded', function () {
-    const currentPath = window.location.pathname; // Obtiene la ruta actual
-    const navLinks = document.querySelectorAll('.paginas-buttons .nav-link');
+document.addEventListener('DOMContentLoaded', () => {
+    const links = document.querySelectorAll('.paginas-buttons .nav-link');
+    
+    // Obtén el path actual de la URL (sin dominio)
+    const currentPath = window.location.pathname;
 
-    navLinks.forEach(link => {
-        // Compara el href del enlace con la ruta actual
-        if (link.href.includes(currentPath)) {
+    links.forEach(link => {
+        const linkPath = new URL(link.href).pathname;
+
+        // Si es la URL base, activa solo el enlace de inicio
+        if (currentPath === '/' || currentPath === '/VideoFlix_PHP/') {
+            if (link.id === 'inicio') {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        } 
+        // Para otras rutas, activa el enlace que coincida
+        else if (linkPath === currentPath) {
             link.classList.add('active');
         } else {
             link.classList.remove('active');
         }
-    });
-});
 
-// Agregar funcionalidad para que el clic cambie el estado (ya tienes esta parte)
-document.querySelectorAll('.paginas-buttons .nav-link').forEach(link => {
-    link.addEventListener('click', function () {
-        document.querySelectorAll('.paginas-buttons .nav-link').forEach(l => {
-            l.classList.remove('active');
+        // Cambia la clase activa al hacer clic
+        link.addEventListener('click', () => {
+            links.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
         });
-
-        link.classList.add('active');
     });
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    const añoInput = document.getElementById('año_nuevoContenido');
 
+    const valor = añoInput.value;
+    const partes = valor.split(' '); // Divide la cadena en partes usando espacios
+    const año = partes[2]; // La tercera parte es el año
+    añoInput.value = año;
+});
 
 window.onload = function() {
 
@@ -191,5 +205,16 @@ window.onload = function() {
         setTimeout(() => {
             ocultarMensaje(mensajeDiv);
         }, 2000);
-    }    
+    }
+
+    document.getElementById('tooltip-container').addEventListener('click', function(){
+        const tooltip = document.getElementById('tooltip');
+    
+        if (tooltip.classList.contains('tooltip-clicked')) {
+            tooltip.classList.remove('tooltip-clicked');
+        } else {
+            tooltip.classList.add('tooltip-clicked');
+        }
+    });
+    
 };

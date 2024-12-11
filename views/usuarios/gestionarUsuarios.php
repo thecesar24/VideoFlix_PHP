@@ -11,11 +11,32 @@ if (!Authentication::isAdminLogged()) {
 
 $usuarios = $data['todosUsuarios']??NULL;
 
+if (isset($_SESSION['errores'])) {
+    foreach ($_SESSION['errores'] as $error) {
+        echo "<p class='error'>$error</p>"; // Muestra cada mensaje de error
+    }
+    unset($_SESSION['errores']); // Limpiar los errores después de mostrarlos
+}
+
+
+if (isset($_SESSION['mensaje'])) {
+    echo "<div id='mensaje-temporal' >{$_SESSION['mensaje']}</div>";
+    unset($_SESSION['mensaje']);
+}
+
 ?>
 
-    <div class="container container-gestionUsers">
-    <article>
+    <div class="container container-gestion">
+    <article class="article-gestion">
         <h2>Todos los Usuarios:</h2>
+        <a href="">
+            <button class="gestion-buton-add">
+                <span class="material-symbols-outlined">add</span>
+                <span>
+                    Registrar Usuarios
+                </span>
+            </button>
+        </a>
     </article>
     <article class="tabla tabla-todosUsuarios">
         <div class="fila fila1">
@@ -28,7 +49,7 @@ $usuarios = $data['todosUsuarios']??NULL;
             <div class="celda">Acciones</div>
         </div> 
         <?php foreach ($usuarios as $usuario) { ?>
-            <div class="fila fila2">
+            <div class="fila fila2 <?php if($usuario->estado == 0){echo 'eliminado';} ?>">
                 <div class="celda"><?=$usuario->nombre?></div>
                 <div class="celda"><?=$usuario->apellidos?></div>
                 <div class="celda"><?=$usuario->email?></div>
