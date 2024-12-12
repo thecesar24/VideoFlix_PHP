@@ -7,6 +7,7 @@ $traduccion = $data["traduccion"]??NULL;
 $tipos = $data["tipos"]??NULL;
 $traduccion = $data["traduccion"]??NULL;
 $informacion = $data["informacion"]??NULL;
+$directores = $data["directores"]??NULL;
 
 if (isset($_SESSION['errores'])) {
     foreach ($_SESSION['errores'] as $error) {
@@ -31,20 +32,22 @@ if (isset($_SESSION['mensaje'])) {
                     <label for="">Buscar Contenido:</label>
                     <input type="text" name="titulo" placeholder="titulo del contenido">
                     <input type="submit" value="Buscar nuevo contenido">
+                    <input type="reset" id="reset-Button" value="Reiniciar contenido">
                 </form>
                 <?php if ($informacion) { ?>
-                    <form action="<?=Parameters::$BASE_URL . "Contenido/addContenidoSave"?>" method="post">
+                    <form id="formulario_nuevo_contenido" action="<?=Parameters::$BASE_URL . "Contenido/addContenidoSave"?>" method="post">
                         <p>
                             <label for="">Titulo:</label>
-                            <input type="text" name="titulo" id="" value="<?=$informacion['Title']?>" readonly/>
+                            <input type="text" name="titulo" id="titulo" value="<?=$informacion['Title']?>" readonly/>
                         </p>
                         <p>
-                            <label for="">Tipo:</label>
-                            <select name="tipo_contenido">
-                                <option value="" disabled selected>tipo del contenido</option>
-                                <?php foreach($tipos as $tipo) { ?>
-                                    <option value="<?=$tipo->tipo_contenido?>"><?=$tipo->tipo_contenido?></option>
-                                <?php } ?>
+                            <label for="tipo_contenido">Tipo:</label>
+                            <select name="tipo_contenido" id="tipo_contenido">
+                                <option value="" disabled selected>Selecciona el tipo de contenido</option>
+                                <option value="cortos">Cortos</option>
+                                <option value="series">Series</option>
+                                <option value="peliculas">Películas</option>
+                                <option value="documentales">Documentales</option>
                             </select>
                         </p>
                         <p>
@@ -53,23 +56,31 @@ if (isset($_SESSION['mensaje'])) {
                         </p>
                         <p>
                             <label for="">Sinopsis:</label>
-                            <input type="text" name="sinopsis" id="" value="<?=$traduccion ?>"/>
+                            <input type="text" name="sinopsis" id="sinopsis" value="<?=$traduccion ?>"/>
                         </p>
                         <p>
                             <label for="">Géneros:</label>
-                            <input type="text" name="generos" id="" value="<?=$informacion['Genre'] ?>" readonly/>
+                            <input type="text" name="generos" id="generos" value="<?=$informacion['Genre'] ?>" readonly/>
                         </p>
-                        <p>
+                        <p id="duracion-container">
                             <label for="">Duración:</label>
-                            <input type="number" name="duracion" id="" value="<?=$informacion['Runtime'] ?>"/>
+                            <input type="number" name="duracion" id="duracion" value="" placeholder="Duración en minutos"/>
+                        </p>
+                        <p id="temporadas-container" style="display: none;">
+                            <label for="temporadas">Temporadas:</label>
+                            <input type="number" name="temporadas" id="temporadas" value="" placeholder="Número de temporadas" />
+                        </p>
+                        <p id="capitulos-container" style="display: none;">
+                            <label for="capitulos">Capítulos:</label>
+                            <input type="number" name="capitulos" id="capitulos" value="" placeholder="Número de capítulos" />
                         </p>
                         <p>
                             <label for="">Director:</label>
-                            <input type="text" name="director" id="" value="<?=$informacion['Director'] ?>"/>
+                            <input type="text" name="nuevo_director" id="nuevo_director" value="<?=$informacion['Director'] ?>"/>
                         </p>
                         <p class="puntuacion-Imdb">
                             <label for="">Puntuación:</label>
-                            <input type="text" name="puntuacion" id="" value="<?=$informacion['imdbRating']?>" readonly/>
+                            <input type="text" name="puntuacion" id="puntuacion" value="<?=$informacion['imdbRating']?>" readonly/>
                             <span class="">/10</span>
                             <span class="material-symbols-outlined estrellas">star</span>
                         </p>
@@ -84,12 +95,13 @@ if (isset($_SESSION['mensaje'])) {
                             <input type="text" name="titulo" id="" value=""/>
                         </p>
                         <p>
-                            <label for="">Tipo:</label>
-                            <select name="tipo_contenido">
-                                <option value="" disabled selected>tipo del contenido</option>
-                                <?php foreach($tipos as $tipo) { ?>
-                                    <option value="<?=$tipo->tipo_contenido?>"><?=$tipo->tipo_contenido?></option>
-                                <?php } ?>
+                            <label for="tipo_contenido">Tipo:</label>
+                            <select name="tipo_contenido" id="tipo_contenido">
+                                <option value="" disabled selected>Selecciona el tipo de contenido</option>
+                                <option value="cortos">Cortos</option>
+                                <option value="series">Series</option>
+                                <option value="peliculas">Películas</option>
+                                <option value="documentales">Documentales</option>
                             </select>
                         </p>
                         <p>
@@ -104,17 +116,34 @@ if (isset($_SESSION['mensaje'])) {
                             <label for="">Géneros:</label>
                             <input type="text" name="generos" id="" value=""/>
                         </p>
-                        <p>
+                        <p id="duracion-container">
                             <label for="">Duración:</label>
-                            <input type="number" name="duracion" id="" value=""/>
+                            <input type="number" name="duracion" id="duracion" value="" placeholder="Duración en minutos"/>
+                        </p>
+                        <p id="temporadas-container" style="display: none;">
+                            <label for="temporadas">Temporadas:</label>
+                            <input type="number" name="temporadas" id="temporadas" value="" placeholder="Número de temporadas" />
+                        </p>
+                        <p id="capitulos-container" style="display: none;">
+                            <label for="capitulos">Capítulos:</label>
+                            <input type="number" name="capitulos" id="capitulos" value="" placeholder="Número de capítulos" />
                         </p>
                         <p>
-                            <label for="">Director:</label>
-                            <input type="text" name="director" id="" value=""/>
+                            <label for="director_existente">Seleccionar Director:</label>
+                            <select id="director_existente" name="director_existente">
+                                <option value="" selected disabled>-- Seleccione un Director --</option>
+                                <?php foreach ($directores as $director){ ?>
+                                    <option value="<?= $director['id'] ?>">
+                                        <?= $director['nombre'] . ' ' . $director['apellidos'] ?>
+                                    </option>
+                                <?php } ?>
+                            </select>
+                                <label for="nuevo_director">O añadir un nuevo director:</label>
+                                <input type="text" id="nuevo_director" name="nuevo_director" placeholder="Nombre Apellidos">
                         </p>
                         <p class="puntuacion-Imdb">
                             <label for="">Puntuación:</label>
-                            <input type="number" name="director" id="" value=""/>
+                            <input type="number" name="puntuacion" id="" value=""/>
                             <span class="">/10</span>
                             <span class="material-symbols-outlined estrellas">star</span>
                         </p>

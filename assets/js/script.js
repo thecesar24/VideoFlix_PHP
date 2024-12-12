@@ -151,6 +151,52 @@ document.addEventListener('DOMContentLoaded', function() {
     añoInput.value = año;
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    const tipoContenido = document.getElementById("tipo_contenido");
+    const duracionContainer = document.getElementById("duracion-container");
+    const temporadasContainer = document.getElementById("temporadas-container");
+    const capitulosContainer = document.getElementById("capitulos-container");
+
+    tipoContenido.addEventListener("change", function () {
+        const selectedValue = tipoContenido.value;
+
+        duracionContainer.style.display = "none";
+        temporadasContainer.style.display = "none";
+        capitulosContainer.style.display = "none";
+
+        if (selectedValue === "series") {
+            temporadasContainer.style.display = "block";
+            capitulosContainer.style.display = "block";
+        } else {
+            duracionContainer.style.display = "block";
+        }
+    });
+
+    document.getElementById('reset-Button').addEventListener('click', function() {
+        // Restablecer todos los valores de los campos del formulario
+        document.getElementById('formulario_nuevo_contenido').reset();
+
+        // Restablecer la visibilidad de los campos según el tipo de contenido
+        document.getElementById('duracion-container').style.display = 'block';
+        document.getElementById('temporadas-container').style.display = 'none';
+        document.getElementById('capitulos-container').style.display = 'none';
+
+        // Restablecer el valor del select a su opción predeterminada
+        document.getElementById('tipo_contenido').value = ''; // Cambiar a otro valor si lo prefieres
+
+        // Reiniciar todos los inputs y valores, incluyendo los valores vacíos de texto
+        document.getElementById('titulo').value = '';
+        document.getElementById('año_nuevoContenido').value = '';
+        document.getElementById('sinopsis').value = '';
+        document.getElementById('generos').value = '';
+        document.getElementById('duracion').value = '';
+        document.getElementById('temporadas').value = '';
+        document.getElementById('capitulos').value = '';
+        document.getElementById('nuevo_director').value = '';
+        document.getElementById('puntuacion').value = '';
+    });
+});
+
 window.onload = function() {
 
     document.querySelectorAll('.favorito').forEach(item => {

@@ -281,6 +281,7 @@ class ContenidoController {
             $errores = [];
             $contenidoModel = new ContenidoModel();
             $generoModel = new GeneroModel();
+            $directorModel = new DirectorModel();
 
             var_dump($_POST);
             $titulo = $_POST['titulo'] ?? NULL;
@@ -288,7 +289,8 @@ class ContenidoController {
             $sinopsis = $_POST['sinopsis'] ?? NULL;
             $generos = isset($_POST['generos']) ? explode(', ', $_POST['generos']) : [];
             $duracion = $_POST['duracion'] ?? NULL;
-            $director = $_POST['director'] ?? NULL;
+            $directorExistente = $_POST['director_existente'] ?? NULL;
+            $nuevoDirector = trim($_POST['nuevo_director'] ?? '');
             $puntuacion = $_POST['puntuacion'] ?? NULL;
             $tipo_contenido = $_POST['tipo_contenido'] ?? NULL;
 
@@ -307,8 +309,8 @@ class ContenidoController {
             if (empty($duracion) || !is_numeric($duracion)) {
                 $errores['duracion'] = "Inserte una duración válida por favor.";
             }
-            if (empty($director)) {
-                $errores['director'] = "Inserte un director por favor.";
+            if (empty($directorExistente) && empty($nuevoDirector)) {
+                $errores['director'] = "Seleccione un director o añada uno nuevo.";
             }
             if (empty($puntuacion) || !is_numeric($puntuacion) || $puntuacion < 0 || $puntuacion > 10) {
                 $errores['puntuacion'] = "Inserte una puntuación válida (0-10).";
@@ -323,6 +325,16 @@ class ContenidoController {
                 exit();
             }
 
+            if (!empty($nuevoDirector)) {
+                $nombreArray = explode(' ', $nuevoDirector);
+                $nombre = $nombreArray[0] ?? '';
+                $apellidos = isset($nombreArray[1]) ? implode(' ', array_slice($nombreArray, 1)) : '';
+    
+                $idDirector = $directorModel->nuevoDirector($nombre, $apellidos);
+            } else {
+                $idDirector = $directorExistente;
+            }
+
             if (empty($errores)) {
                 
                 $contenidoData = [
@@ -331,7 +343,7 @@ class ContenidoController {
                     'sinopsis' => $sinopsis,
                     'generos' => $generos,
                     'duracion' => $duracion,
-                    'director' => $director,
+                    'id_director' => $idDirector,
                     'puntuacion' => $puntuacion,
                     'tipo_contenido' => $tipo_contenido
                 ];
