@@ -8,6 +8,13 @@
         public static function validateName($nombre):bool{
             return (!empty($nombre) && preg_match("/^[a-zñáéíóú]+([ ][a-zñáéíóú]+)*$/", strtolower($nombre)));
         }
+
+        public static function validateUsername($username): bool {
+            return (!empty($username) && preg_match("/^[a-zA-Z0-9._]+$/", $username) && 
+                    strlen($username) >= 3 && strlen($username) <= 20 && 
+                    !preg_match("/^[_\.]|[_\.]$/", $username) && 
+                    preg_match("/[a-zA-Z]/", $username));
+        }
         
         public static function validateEmail($email):bool{
             return (!empty($email) && filter_var($email, FILTER_VALIDATE_EMAIL));

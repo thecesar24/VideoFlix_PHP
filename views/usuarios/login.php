@@ -8,10 +8,10 @@
     if (isset($_SESSION['errores'])) {
         echo "<div class='error-container'>";
             foreach ($_SESSION['errores'] as $error) {
-                echo "<p class='error'>$error</p>"; // Muestra cada mensaje de error
+                echo "<p class='error'>$error</p>"; 
             }
         echo "</div>";
-        unset($_SESSION['errores']); // Limpiar los errores después de mostrarlos
+        unset($_SESSION['errores']);
     }
 ?>
 
@@ -20,14 +20,25 @@
                 <h2>Iniciar Sesión</h2>
                 <p>
                     <label for="idLoginUsername">Nombre de Usuario:</label>
-                    <input type='text' name='username' id='idLoginUsername' required/>
+                    <input type='text' name='username' id='idLoginUsername' <?php if(isset($_SESSION['errores-span']) && isset($_SESSION['errores-span']['username'])){echo "class='error-input'";} ?>/>
+                    <span class="error-span">
+                    <?php if(isset($_SESSION['errores-span']) && isset($_SESSION['errores-span']['username'])) {
+                        echo $_SESSION['errores-span']['username'];
+                    } ?>
+                    </span>
                 </p>
                 <p>
                     <label for="idLoginPassword">Contraseña:</label>
-                    <input type='password' name='password' id='idLoginPassword' required/>
+                    <input type='password' name='password' id='idLoginPassword' <?php if(isset($_SESSION['errores-span']) && isset($_SESSION['errores-span']['password'])){echo "class='error-input'";} ?>/>
+                    <span class="error-span">
+                    <?php if(isset($_SESSION['errores-span']) && isset($_SESSION['errores-span']['password'])) {
+                        echo $_SESSION['errores-span']['password'];
+                    } ?>
+                    </span>
                 </p>
                 <button type="submit" name='btnLogin' value="Entrar">Iniciar Sesión</button>
             </form>      
 <?php
+        unset($_SESSION['errores-span']);
 		ErrorHelpers::clearAll();
 ?>

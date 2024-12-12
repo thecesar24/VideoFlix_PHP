@@ -21,6 +21,7 @@ class UsuarioController {
     public function registerSave(): void {
         if (isset($_POST['btnRegistro'])) {
             $errores = [];
+            $erroresSpan = [];
     
             // Obtener los valores del formulario
             $nombre = $_POST['nombre'] ?? '';
@@ -32,20 +33,28 @@ class UsuarioController {
             $rol = Parameters::$ROL_USUARIO;
             
             // Validaciones
-            if (!Validations::validateName($nombre) || !Validations::validateName($apellidos)) {
-                $errores['nombre'] = "Formato incorrecto";
+            if (!Validations::validateName($nombre)) {
+                $erroresSpan['nombre'] = "Nombre no valido";
+            }
+            
+            if (!Validations::validateName($apellidos)) {
+                $erroresSpan['apellidos'] = "Apellido no valido";
+            }
+
+            if (!Validations::validateUsername($username)) {
+                $erroresSpan['username'] = "Introduce un nombre de usuario valido.";
             }
 
             if (!Validations::validateEmail($email)) {
-                $errores['email'] = "Correo electrónico no válido.";
+                $erroresSpan['email'] = "Correo electrónico no válido.";
             }
 
             if (!Validations::validateFormatPassword($password)) {
-                $errores['password'] = "Formato Contraseña no válido. Debe ser una cadena de mínimo " . Parameters::$PASSWORD_MIN_LENGTH . " caracteres, Contener una letra Mayuscula y un caracter especial.";
+                $erroresSpan['contraseña'] = "Formato Contraseña no válido. Debe ser una cadena de mínimo " . Parameters::$PASSWORD_MIN_LENGTH . " caracteres, Contener una letra Mayuscula y un caracter especial.";
             }
     
             if ($password !== $password2) {
-                $errores['password2'] = "El campo 'Contraseña' y 'Confirmar Contraseña' deben coincidir";
+                $erroresSpan['contraseña'] = "Las contraseñas no coinciden";
             }
             
             $usuarioModel = new UsuarioModel();
@@ -61,9 +70,15 @@ class UsuarioController {
                 $errores['existe'] = "El Usuario ya existe, por favor Inicie Sesión.";
             }
 
+            if (!empty($erroresSpan)) {
+                $_SESSION['errores-span'] = $erroresSpan;
+                header("Location: " . Parameters::$BASE_URL . "Usuario/register");
+                exit();
+            }
+
             if (!empty($errores)) {
                 $_SESSION['errores'] = $errores;
-                ViewController::show('views/usuarios/registrar.php', ['dataPOST' => $_POST]);
+                header("Location: " . Parameters::$BASE_URL . "Usuario/register");
                 exit();
             }
             
@@ -107,16 +122,23 @@ class UsuarioController {
     }
    
     public function loginsave(): void {
-        // Verificar si el formulario ha sido enviado
         if (isset($_POST['btnLogin'])) {
-            // Recoger datos del formulario
+            $erroresSpan = [];
+
             $username = isset($_POST["username"]) ? trim($_POST["username"]) : "";
             $password = $_POST["password"] ?? "";
-    
-            // Validar que los campos no estén vacíos
-            if (empty($username) || empty($password)) {
-                $_SESSION['errores'][] = "Por favor, ingrese su nombre de usuario y contraseña.";
-                header("Location: " . Parameters::$BASE_URL . "/Usuario/login");
+
+            if (!Validations::validateUsername($username)) {
+                $erroresSpan['username'] = "Introduce un nombre de usuario valido.";
+            }
+
+            if (!Validations::validateFormatPassword($password)) {
+                $erroresSpan['password'] = "Contraseña incorrecta (Minimo 6 caracteres).";
+            }
+
+            if (!empty($erroresSpan)) {
+                $_SESSION['errores-span'] = $erroresSpan;
+                header("Location: " . Parameters::$BASE_URL . "Usuario/login");
                 exit();
             }
     
@@ -129,42 +151,43 @@ class UsuarioController {
                 // Comprobar la contraseña
                 $verify = password_verify($password, $usuario->password);
     
+                if ($usuario->estado == 0) {
+                    $_SESSION['errores'][] = "La cuenta esta bloqueada, contacta con un administrador.";
+                    header("Location: " . Parameters::$BASE_URL . "Usuario/login");
+                    exit();
+                }
+
                 if ($verify) {
-                    // Crear entidad de usuario
                     $userEntity = new UserEntity();
                     $userEntity->setId($usuario->id)
                                ->setEmail($usuario->email)
                                ->setApellidos($usuario->apellidos)
                                ->setNombre($usuario->nombre)
-                               ->setUsername($usuario->username);
+                               ->setUsername($usuario->username)
+                               ->setRol($usuario->rol);
     
-                    // Almacenar usuario en sesión
                     $_SESSION['user'] = $userEntity;
                     
                     if ($username == Parameters::$ROL_ADMIN) {
                         $_SESSION['admin'] = $userEntity;
                     }
     
-                    // Redirigir al dashboard si el login es exitoso
                     if (Authentication::isUserLogged()) {
                         header("Location: " . Parameters::$BASE_URL . "SeguirViendo/miEspacio");
                         exit();
                     } else {
-                        // Redirigir si hay un error inesperado
                         $_SESSION['errores'][] = "Hubo un problema iniciando sesión.";
-                        header("Location: " . Parameters::$BASE_URL . "/Usuario/login");
+                        header("Location: " . Parameters::$BASE_URL . "Usuario/login");
                         exit();
                     }
                 } else {
-                    // Contraseña incorrecta
-                    $_SESSION['errores'][] = "Login incorrecto!!";
-                    header("Location: " . Parameters::$BASE_URL . "/Usuario/login");
+                    $_SESSION['errores'][] = "Usuario o Contraseña incorrectos";
+                    header("Location: " . Parameters::$BASE_URL . "Usuario/login");
                     exit();
                 }
             } else {
-                // Usuario no encontrado
-                $_SESSION['errores'][] = "Usuario no encontrado!!";
-                header("Location: " . Parameters::$BASE_URL . "/Usuario/login");
+                $_SESSION['errores'][] = "Usuario no encontrado";
+                header("Location: " . Parameters::$BASE_URL . "Usuario/login");
                 exit();
             }
         }

@@ -43,8 +43,8 @@ class UsuarioModel extends Model{
             $sentencia = $this->conn->prepare($consulta);
             $sentencia->bindParam(':username', $username);
             $sentencia->execute();
-            // Se retorna el objeto:
             return $sentencia->fetch(\PDO::FETCH_OBJ);
+            
         }catch(\PDOException $e){
             return NULL;
         }

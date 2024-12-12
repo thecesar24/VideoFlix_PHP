@@ -13,9 +13,9 @@ $usuarios = $data['todosUsuarios']??NULL;
 
 if (isset($_SESSION['errores'])) {
     foreach ($_SESSION['errores'] as $error) {
-        echo "<p class='error'>$error</p>"; // Muestra cada mensaje de error
+        echo "<p class='error'>$error</p>";
     }
-    unset($_SESSION['errores']); // Limpiar los errores después de mostrarlos
+    unset($_SESSION['errores']);
 }
 
 
@@ -29,14 +29,6 @@ if (isset($_SESSION['mensaje'])) {
     <div class="container container-gestion">
     <article class="article-gestion">
         <h2>Todos los Usuarios:</h2>
-        <a href="">
-            <button class="gestion-buton-add">
-                <span class="material-symbols-outlined">add</span>
-                <span>
-                    Registrar Usuarios
-                </span>
-            </button>
-        </a>
     </article>
     <article class="tabla tabla-todosUsuarios">
         <div class="fila fila1">

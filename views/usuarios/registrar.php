@@ -24,34 +24,59 @@
             <h2>Registrar Usuario</h2>
             <p>
                 <label for="idNombre">Nombre:</label>
-                <input type="text" name="nombre" id="idNombre" value="<?=$dataPOST["nombre"]??""?>" required/>
+                <input type="text" name="nombre" id="idNombre" value="<?=$dataPOST["nombre"]??""?>" <?php if(isset($_SESSION['errores-span']) && isset($_SESSION['errores-span']['nombre'])){echo "class='error-input'";} ?>/>
+                <span class="error-span">
+                    <?php if(isset($_SESSION['errores-span']) && isset($_SESSION['errores-span']['nombre'])) {
+                        echo $_SESSION['errores-span']['nombre'];
+                    } ?>
+                </span>
             </p>
             <p>
                 <label for="idApellidos">Apellidos:</label>
-                <input type="text" name="apellidos" id="idApellidos" value="<?=$dataPOST["apellidos"]??""?>" required/>
+                <input type="text" name="apellidos" id="idApellidos" value="<?=$dataPOST["apellidos"]??""?>" <?php if(isset($_SESSION['errores-span']) && isset($_SESSION['errores-span']['apellidos'])){echo "class='error-input'";} ?>/>
+                <span class="error-span">
+                    <?php if(isset($_SESSION['errores-span']) && isset($_SESSION['errores-span']['apellidos'])) {
+                        echo $_SESSION['errores-span']['apellidos'];
+                    } ?>
+                </span>
             </p>
 			<p>
                 <label for="idEmail">email:</label>
-                <input type="email" name="email" id="idEmail" value="<?=$dataPOST["email"]??""?>" required/>
+                <input type="email" name="email" id="idEmail" value="<?=$dataPOST["email"]??""?>" <?php if(isset($_SESSION['errores-span']) && isset($_SESSION['errores-span']['email'])){echo "class='error-input'";} ?>/>
+                <span class="error-span">
+                    <?php if(isset($_SESSION['errores-span']) && isset($_SESSION['errores-span']['email'])) {
+                        echo $_SESSION['errores-span']['email'];
+                    } ?>
+                </span>
             </p>
             <p>
                 <label for="idUsername">Nombre de Usuario:</label>
-                <input type="text" name="username" id="idUsername" value="<?=$dataPOST["username"]??""?>" required/>
+                <input type="text" name="username" id="idUsername" value="<?=$dataPOST["username"]??""?>" <?php if(isset($_SESSION['errores-span']) && isset($_SESSION['errores-span']['username'])){echo "class='error-input'";} ?>/>
+                <span class="error-span">
+                    <?php if(isset($_SESSION['errores-span']) && isset($_SESSION['errores-span']['username'])) {
+                        echo $_SESSION['errores-span']['username'];
+                    } ?>
+                </span>
             </p>
             <p>
 				<label for='idPassword'>Contraseña</label>
-				<input type='password' name='password' id='idPassword' value='<?=$dataPOST["password"]??""?>' required autocomplete="new-password"/>
+				<input type='password' name='password' id='idPassword' value='<?=$dataPOST["password"]??""?>' autocomplete="new-password" <?php if(isset($_SESSION['errores-span']) && isset($_SESSION['errores-span']['contraseña'])){echo "class='error-input'";} ?>/>
 				<?=isset($validationsError['password']) ? ErrorHelpers::showError($validationsError, 'password') : '';?>
 
 			</p>
 			<p>
 				<label for='idPassword2'>Confirmar Contraseña</label>
-				<input type='password' name='password2' id='idPassword2' value='<?=$dataPOST["password2"]??""?>' required autocomplete="new-password"/>
+				<input type='password' name='password2' id='idPassword2' value='<?=$dataPOST["password2"]??""?>' autocomplete="new-password" <?php if(isset($_SESSION['errores-span']) && isset($_SESSION['errores-span']['contraseña'])){echo "class='error-input'";} ?>/>
 				<?=isset($validationsError['password2']) ? ErrorHelpers::showError($validationsError, 'password2') : '';?>
-			
+                <span class="error-span">
+                    <?php if(isset($_SESSION['errores-span']) && isset($_SESSION['errores-span']['contraseña'])) {
+                        echo $_SESSION['errores-span']['contraseña'];
+                    } ?>
+                </span>
 			</p>
             <button type='submit' name='btnRegistro' value='Registrar'>Registrar</button>
         	</form>    
 <?php
+        unset($_SESSION['errores-span']);
 		ErrorHelpers::clearAll();
 ?>

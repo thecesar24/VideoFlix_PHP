@@ -829,20 +829,6 @@ main .container {
     text-decoration: none;
 }
 
-.gestion-buton-add {
-    display: flex;
-    padding: 10px;
-    border-radius: 25px;
-    color: #fff;
-    background-color: #007bff;
-    border: 0px;
-}
-
-.gestion-buton-add:hover {
-    background-color: #0056b3;
-    transition: all .5s ease-out;
-}
-
 .tabla {
     box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     background-color: #fff;
@@ -1342,6 +1328,11 @@ footer {
     object-fit: cover;
 }
 
+
+/* ----------------------- 
+   Errores y Mensajes 
+----------------------- */
+
 .error {
     background-color: #c40c15; 
     color: #fff;
@@ -1355,6 +1346,14 @@ footer {
     z-index: 1001; 
 }
 
+.error-span {
+    color: #FF4D4D;
+}
+
+.error-input {
+    border:  1px solid #FF4D4D !important;
+    box-shadow: 0 0 5px #FF4D4D !important;
+}
 
 #mensaje-temporal {
     position: fixed; 

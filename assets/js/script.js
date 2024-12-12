@@ -142,8 +142,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    const añoInput = document.getElementById('año_nuevoContenido');
+if (document.getElementById('año_nuevoContenido')) {
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const añoInput = document.getElementById('año_nuevoContenido');
 
     const valor = añoInput.value;
     const partes = valor.split(' '); // Divide la cadena en partes usando espacios
@@ -159,7 +161,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     tipoContenido.addEventListener("change", function () {
         const selectedValue = tipoContenido.value;
-
+        
         duracionContainer.style.display = "none";
         temporadasContainer.style.display = "none";
         capitulosContainer.style.display = "none";
@@ -171,19 +173,19 @@ document.addEventListener("DOMContentLoaded", function () {
             duracionContainer.style.display = "block";
         }
     });
-
+    
     document.getElementById('reset-Button').addEventListener('click', function() {
         // Restablecer todos los valores de los campos del formulario
         document.getElementById('formulario_nuevo_contenido').reset();
-
+        
         // Restablecer la visibilidad de los campos según el tipo de contenido
         document.getElementById('duracion-container').style.display = 'block';
         document.getElementById('temporadas-container').style.display = 'none';
         document.getElementById('capitulos-container').style.display = 'none';
-
+        
         // Restablecer el valor del select a su opción predeterminada
         document.getElementById('tipo_contenido').value = ''; // Cambiar a otro valor si lo prefieres
-
+        
         // Reiniciar todos los inputs y valores, incluyendo los valores vacíos de texto
         document.getElementById('titulo').value = '';
         document.getElementById('año_nuevoContenido').value = '';
@@ -197,18 +199,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-window.onload = function() {
+}
 
+window.onload = function() {
+    
     document.querySelectorAll('.favorito').forEach(item => {
         item.addEventListener('click', function() {
             const isFavorite = this.classList.contains('clicked');
             
             this.classList.toggle('clicked');
-
+            
             const favorito = isFavorite ? 0 : 1; 
-
+            
             const idContenido = this.getAttribute('data-id');
-
+            
             const baseURL = 'http://localhost/VideoFlix_PHP/';
             const url = baseURL + 'ContenidoFavorito/AniadirFavorito';
 
@@ -253,14 +257,33 @@ window.onload = function() {
         }, 2000);
     }
 
-    document.getElementById('tooltip-container').addEventListener('click', function(){
-        const tooltip = document.getElementById('tooltip');
-    
-        if (tooltip.classList.contains('tooltip-clicked')) {
-            tooltip.classList.remove('tooltip-clicked');
-        } else {
-            tooltip.classList.add('tooltip-clicked');
-        }
-    });
-    
+    if (document.getElementById('tooltip')) {
+        document.getElementById('tooltip-container').addEventListener('click', function(){
+            const tooltip = document.getElementById('tooltip');
+
+            if (tooltip.classList.contains('tooltip-clicked')) {
+                tooltip.classList.remove('tooltip-clicked');
+            } else {
+                tooltip.classList.add('tooltip-clicked');
+            }
+        });
+    }
 };
+
+if (document.querySelectorAll('.formulario-iniciar-sesion input')) {
+    document.addEventListener('DOMContentLoaded', () => {
+        const inputs = document.querySelectorAll('.formulario-iniciar-sesion input');
+        inputs.forEach(input => {
+            input.addEventListener('input', function () {
+                if (this.classList.contains('error-input')) {
+                    this.classList.remove('error-input');
+                }
+
+                const errorSpan = this.nextElementSibling;
+                if (errorSpan && errorSpan.classList.contains('error-span')) {
+                    errorSpan.textContent = '';
+                }
+            });
+        });
+    });
+}
