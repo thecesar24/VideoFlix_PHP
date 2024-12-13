@@ -47,7 +47,7 @@ if (isset($_SESSION['mensaje'])) {
                 <?php foreach ($contenidos as $contenido) { ?>
                     <div class="fila fila2 <?php if($contenido['estado'] == 0){echo 'eliminado';} ?>">
                         <div class="celda"><?=$contenido['titulo']?></div>
-                        <div class="celda"><?=$contenido['año']?></div>
+                        <div class="celda"><?=$contenido['year']?></div>
                         <div class="celda"><?=$contenido['tipo_contenido']?></div>
                         <?php foreach($generos as $genero) { ?>
                             <?php if($contenido['id_genero'] == $genero['id']) { ?>

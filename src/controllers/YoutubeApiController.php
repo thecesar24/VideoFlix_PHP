@@ -53,6 +53,73 @@ class YoutubeApiController {
             return "https://www.youtube.com/embed/VIDEO_ID_PREDETERMINADO";
         }
     }
+
+    public function getContenidoCompleto($titulo) {
+        // Verificar si ya tenemos un trailer almacenado en caché
+        $cacheKey = 'fullcontenido_' . md5($titulo); // Genera una clave única basada en el título
+        $cachedContent = $this->getFromCache($cacheKey); // Obtener del caché (puede ser base de datos o archivos)
+    
+        if ($cachedContent) {
+            return $cachedContent;
+        }
+    
+        $query = urlencode($titulo . " pelicula completa castellano");
+        $url = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" . $query . "&type=video&key=" . $this->apikey . "&maxResults=1";
+    
+        try {
+            $response = @file_get_contents($url);
+    
+            if ($response === FALSE) {
+                throw new \Exception('Error al comunicarse con la API de YouTube.');
+            }
+    
+            $data = json_decode($response, true);
+            if (isset($data['items'][0]['id']['videoId'])) {
+                $contentUrl = "https://www.youtube.com/embed/" . $data['items'][0]['id']['videoId'];
+    
+                $this->storeInCache($cacheKey, $contentUrl);
+    
+                return $contentUrl;
+            } else {
+                return "https://www.youtube.com/embed/VIDEO_ID_PREDETERMINADO";
+            }
+        } catch (\Exception $e) {
+            return "https://www.youtube.com/embed/VIDEO_ID_PREDETERMINADO";
+        }
+    }
+    public function getCapituloCompleto($titulo) {
+        // Verificar si ya tenemos un trailer almacenado en caché
+        $cacheKey = 'capituloFull_' . md5($titulo); // Genera una clave única basada en el título
+        $cachedCapitulo = $this->getFromCache($cacheKey); // Obtener del caché (puede ser base de datos o archivos)
+    
+        if ($cachedCapitulo) {
+            return $cachedCapitulo;
+        }
+    
+        $query = urlencode($titulo . " capitulo 1 temporada 1 completo castellano");
+        $url = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" . $query . "&type=video&key=" . $this->apikey . "&maxResults=1";
+    
+        try {
+            $response = @file_get_contents($url);
+    
+            if ($response === FALSE) {
+                throw new \Exception('Error al comunicarse con la API de YouTube.');
+            }
+    
+            $data = json_decode($response, true);
+            if (isset($data['items'][0]['id']['videoId'])) {
+                $capituloUrl = "https://www.youtube.com/embed/" . $data['items'][0]['id']['videoId'];
+    
+                $this->storeInCache($cacheKey, $capituloUrl);
+    
+                return $capituloUrl;
+            } else {
+                return "https://www.youtube.com/embed/VIDEO_ID_PREDETERMINADO";
+            }
+        } catch (\Exception $e) {
+            return "https://www.youtube.com/embed/VIDEO_ID_PREDETERMINADO";
+        }
+    }
     
     // Métodos de caché simples
     private function getFromCache($key) {

@@ -13,6 +13,7 @@ class GeneroModel extends Model{
 
         $sentencia = $this->conn->prepare($consulta);
         $sentencia->execute([':nombre' => $nombreGenero]);
+
         $idGenero = $sentencia->fetchColumn();
     
         if ($idGenero) {
@@ -23,6 +24,19 @@ class GeneroModel extends Model{
             $sentencia->execute([':nombre' => $nombreGenero]);
             return $this->conn->lastInsertId();
         }
+    }
+
+    public function asociarContenidoGenero($idGenero, $idContenido) {
+        $consulta = "UPDATE contenido 
+                     SET id_genero = :idGenero
+                     WHERE id = :idContenido";
+
+        $sentencia = $this->conn->prepare($consulta);
+        $sentencia->bindParam(':idGenero', $idGenero, \PDO::PARAM_INT);
+        $sentencia->bindParam(':idContenido', $idContenido, \PDO::PARAM_INT);
+        $resultado = $sentencia->execute();
+
+        return $resultado;
     }
 
 }

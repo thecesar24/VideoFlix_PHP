@@ -11,9 +11,18 @@ use cesar\ProyectoTest\Controllers\TraduccionController;
 use cesar\ProyectoTest\Models\DirectorModel;
 use cesar\ProyectoTest\Models\GeneroModel;
 use cesar\ProyectoTest\Models\IdiomaModel;
+use cesar\ProyectoTest\Models\SeriesModel;
 
 class ContenidoController {
     public function index(){
+    }
+
+    private function generarSlug($titulo) {
+        $slug = strtolower($titulo);
+        $slug = iconv('UTF-8', 'ASCII//TRANSLIT', $slug);
+        $slug = preg_replace('/[^a-z0-9\s-]/', '', $slug);
+        $slug = preg_replace('/[\s-]+/', '-', $slug);
+        return trim($slug, '-');
     }
 
     public function Peliculas(){
@@ -237,9 +246,8 @@ class ContenidoController {
 
     public function buscarNuevoContenido(){
         if (Authentication::isAdminLogged()) {
-
             $titulo = $_POST['titulo'];
-
+            
             $contenidoModel = new ContenidoModel();
             $contenidos = $contenidoModel->getAll();
 
@@ -252,14 +260,32 @@ class ContenidoController {
 
                 $traduccionController = new TraduccionController();
 
+                if (isset($_POST['btnReset'])) {
+                    $informacion = '';
+                    header("Location: " . Parameters::$BASE_URL . 'Contenido/addContenido');
+                    exit();
+                }
+
                 if ($informacion) {
                     $traduccion = $traduccionController->traducir($informacion['Plot'], 'ES');
 
+                    $youtubeApiController = new YoutubeApiController();
+                    $tipoContenido = $informacion['Type']; // 'movie' o 'series'
+    
+                    if ($tipoContenido === 'movie') {
+                        $youtubeUrl = $youtubeApiController->getContenidoCompleto(trim($informacion['Title']));
+                    } elseif ($tipoContenido === 'series') {
+                        $youtubeUrl = $youtubeApiController->getCapituloCompleto(trim($informacion['Title']));
+                    } else {
+                        $youtubeUrl = ''; // Manejar otros tipos si es necesario
+                    }
+                    
                     ViewController::show('views/contenido/addContenido.php', [
                         'informacion' => $informacion,
                         'contenidos' => $contenidos, 
                         'tipos' => $tipos,
-                        'traduccion' => $traduccion
+                        'traduccion' => $traduccion,
+                        'youtubeUrl' => $youtubeUrl
                     ]);
                 } else {
                     $_SESSION['errores'][] = 'No se encontraron resultados para la película.';
@@ -282,13 +308,15 @@ class ContenidoController {
             $contenidoModel = new ContenidoModel();
             $generoModel = new GeneroModel();
             $directorModel = new DirectorModel();
+            $seriesModel = new SeriesModel();
 
-            var_dump($_POST);
             $titulo = $_POST['titulo'] ?? NULL;
             $año = $_POST['año'] ?? NULL;
             $sinopsis = $_POST['sinopsis'] ?? NULL;
             $generos = isset($_POST['generos']) ? explode(', ', $_POST['generos']) : [];
             $duracion = $_POST['duracion'] ?? NULL;
+            $temporadas = $_POST['temporadas'] ?? NULL;
+            $capitulos = $_POST['capitulos'] ?? NULL;
             $directorExistente = $_POST['director_existente'] ?? NULL;
             $nuevoDirector = trim($_POST['nuevo_director'] ?? '');
             $puntuacion = $_POST['puntuacion'] ?? NULL;
@@ -306,9 +334,28 @@ class ContenidoController {
             if (empty($generos)) {
                 $errores['generos'] = "Seleccione al menos un género por favor.";
             }
-            if (empty($duracion) || !is_numeric($duracion)) {
-                $errores['duracion'] = "Inserte una duración válida por favor.";
+            if (!empty($temporadas)) {
+                if (!is_numeric($temporadas) || $temporadas <= 0) {
+                    $errores['temporadas'] = "Inserte un número válido de temporadas.";
+                }
+            } if (!empty($capitulos)) {
+                if (!is_numeric($capitulos) || $capitulos <= 0) {
+                    $errores['capitulos'] = "Inserte un número válido de capítulos.";
+                }
+            } else {
+                if (empty($duracion) || !is_numeric($duracion) || $duracion <= 0) {
+                    $errores['duracion'] = "Inserte una duración válida por favor.";
+                }
             }
+
+            $slugExiste = $this->generarSlug($titulo);
+            $contenidoExiste = $contenidoModel->getContenidoUrlAmigable($slugExiste);
+
+            if (!empty($contenidoExiste)) {
+                $errores['contenido'] = "El contenido ya exsite.";
+            }
+
+            
             if (empty($directorExistente) && empty($nuevoDirector)) {
                 $errores['director'] = "Seleccione un director o añada uno nuevo.";
             }
@@ -325,39 +372,77 @@ class ContenidoController {
                 exit();
             }
 
-            if (!empty($nuevoDirector)) {
-                $nombreArray = explode(' ', $nuevoDirector);
-                $nombre = $nombreArray[0] ?? '';
-                $apellidos = isset($nombreArray[1]) ? implode(' ', array_slice($nombreArray, 1)) : '';
-    
-                $idDirector = $directorModel->nuevoDirector($nombre, $apellidos);
-            } else {
-                $idDirector = $directorExistente;
-            }
-
             if (empty($errores)) {
+                if (!empty($nuevoDirector)) {
+                    $nombreArray = explode(' ', trim($nuevoDirector));
+
+                    $nombre = $nombreArray[0] ?? '';
+                    $apellidos = isset($nombreArray[1]) ? implode(' ', array_slice($nombreArray, 1)) : '';
                 
+                    if (!empty($nombre)) {
+                        $directorEncontrado = $directorModel->getDirector($nombre, $apellidos);
+                
+                        if ($directorEncontrado) {
+                            $idDirector = $directorEncontrado->id;
+                        } else {
+                            $idDirector = $directorModel->nuevoDirector($nombre, $apellidos);
+                        }
+                    } else {
+                        $idDirector = $directorModel->nuevoDirector($nombre, $apellidos);
+                    }
+                
+                } else {
+                    $idDirector = $directorExistente;
+                }
+                
+                $slug = $this->generarSlug($titulo);
+
                 $contenidoData = [
                     'titulo' => $titulo,
+                    'slug' => $slug,
                     'año' => $año,
-                    'sinopsis' => $sinopsis,
-                    'generos' => $generos,
-                    'duracion' => $duracion,
+                   'sinopsis' => $sinopsis,
+                   'duracion' => !empty($duracion) ? $duracion : null,
+                   'temporadas' => !empty($temporadas) ? $temporadas : null,
+                   'capitulos' => !empty($capitulos) ? $capitulos : null,
                     'id_director' => $idDirector,
-                    'puntuacion' => $puntuacion,
+                   'puntuacion' => $puntuacion,
                     'tipo_contenido' => $tipo_contenido
                 ];
-
+                
+                $idContenido = $contenidoModel->insertarContenido($contenidoData['titulo'], $contenidoData['slug'], $contenidoData['año'], $contenidoData['id_director'], $contenidoData['tipo_contenido']);
+                
+                $ultimoContenido = $contenidoModel->getOne($idContenido);
                 // Manejar géneros
                 $generoIds = [];
                 foreach ($generos as $nombreGenero) {
+                    $nombreGenero = strtolower(trim($nombreGenero));
+
                     $idGenero = $generoModel->obtenerOInsertarGenero($nombreGenero);
                     $generoIds[] = $idGenero;
                 }
 
+                $generoModel->asociarContenidoGenero($idGenero, $idContenido);
+
+                var_dump($ultimoContenido->tipo_contenido);
                 
+                switch ($ultimoContenido->tipo_contenido) {
+                    case 'peliculas':
+                        $contenidoModel->insertarDetallesPeliculas($idContenido, $contenidoData['duracion'], $contenidoData['sinopsis']);
+                        break;
+                    case 'cortos':
+                        $contenidoModel->insertarDetallesCortos($idContenido, $contenidoData['duracion']);
+                        break;
+                    case 'documentales':
+                        $contenidoModel->insertarDetallesDocumentales($idContenido, $contenidoData['duracion']);
+                        break;
+                    case 'series':
+                        $seriesModel->insertarDetallesSeries($idContenido, $contenidoData['sinopsis'], $contenidoData['temporadas'], $contenidoData['capitulos']);
+                        break;
+                }
 
-
+                header("Location: " . Parameters::$BASE_URL . "Contenido/gestionarContenido");
+                exit();
             }
 
 

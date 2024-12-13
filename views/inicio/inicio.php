@@ -64,7 +64,7 @@ if (isset($_SESSION['errores'])) {
                             <img class="card-img-top" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/' . $serie->portada ?>" alt="<?=$serie->titulo ?>">
                             <div class="card-body">
                                 <h5 class="card-title"><?=$serie->titulo ?></h5>
-                                <a href="<?=Parameters::$BASE_URL . 'ver/' . $serie->slug?>"  class="btn btn-primary">Ver detalles</a>
+                                <a href="<?=Parameters::$BASE_URL . 'Contenido/verInfo?slug=' . $serie->slug?>"  class="btn btn-primary">Ver detalles</a>
                             </div>
                         </div>
                     <?php } ?>

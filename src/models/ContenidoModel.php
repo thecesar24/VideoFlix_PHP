@@ -126,6 +126,71 @@ class ContenidoModel extends Model{
             echo '<p>Fallo en la conexion: ' . $e->getMessage() . '</p>';
         }        
     }
+    public function insertarContenido($titulo, $slug ,$año, $id_director, $tipo_contenido) {
+        try {    
+            $consultaContenido = "INSERT INTO $this->tabla (titulo, slug, year, tipo_contenido, id_idioma, id_director, estado) 
+                                  VALUES (:titulo, :slug, :ano, :tipo_contenido, '1', :id_director, '1')";
+    
+            $sentenciaContenido = $this->conn->prepare($consultaContenido);
+    
+            $sentenciaContenido->bindParam("titulo", $titulo, \PDO::PARAM_STR);
+            $sentenciaContenido->bindParam("slug", $slug, \PDO::PARAM_STR);
+            $sentenciaContenido->bindParam("ano", $año, \PDO::PARAM_INT);
+            $sentenciaContenido->bindParam("id_director", $id_director, \PDO::PARAM_INT);
+            $sentenciaContenido->bindParam("tipo_contenido", $tipo_contenido, \PDO::PARAM_STR);
+    
+            $sentenciaContenido->execute();
+            return $this->conn->lastInsertId(); 
+    
+        } catch (\Exception $e) {
+            error_log("Error in insertarContenido: " . $e->getMessage());
+            return false;
+        }
+    }
 
+    public function insertarDetallesPeliculas($idContenido, $duracion, $sinopsis) {
+        try {
+            $sqlPeliculas = "INSERT INTO peliculas (id_contenido, duracion, sinopsis)
+                             VALUES (:id_contenido, :duracion, :sinopsis)";
+            $stmtPeliculas = $this->conn->prepare($sqlPeliculas);
+            $stmtPeliculas->execute([
+                'id_contenido' => $idContenido,
+                'duracion' => (int)$duracion,
+                'sinopsis' => $sinopsis,
+            ]);
+        } catch (\Exception $e) {
+            echo "Error en insertarDetallesPeliculas: " . $e->getMessage();
+        }
+    }
+
+    // Función para insertar detalles de cortos
+    public function insertarDetallesCortos($idContenido, $duracion) {
+        try {
+            $sqlCortos = "INSERT INTO cortos (id_contenido, duracion)
+                          VALUES (:id_contenido, :duracion)";
+            $stmtCortos = $this->conn->prepare($sqlCortos);
+            $stmtCortos->execute([
+                'id_contenido' => $idContenido,
+                'duracion' => (int)$duracion,
+            ]);
+        } catch (\Exception $e) {
+            echo "Error en insertarDetallesCortos: " . $e->getMessage();
+        }
+    }
+
+    // Función para insertar detalles de documentales
+    public function insertarDetallesDocumentales($idContenido, $duracion) {
+        try {
+            $sqlDocumentales = "INSERT INTO documentales (id_contenido, duracion)
+                                VALUES (:id_contenido, :duracion)";
+            $stmtDocumentales = $this->conn->prepare($sqlDocumentales);
+            $stmtDocumentales->execute([
+                'id_contenido' => $idContenido,
+                'duracion' => (int)$duracion,
+            ]);
+        } catch (\Exception $e) {
+            echo "Error en insertarDetallesDocumentales: " . $e->getMessage();
+        }
+    }
 
 }

@@ -174,29 +174,29 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
     
-    document.getElementById('reset-Button').addEventListener('click', function() {
-        // Restablecer todos los valores de los campos del formulario
-        document.getElementById('formulario_nuevo_contenido').reset();
-        
-        // Restablecer la visibilidad de los campos según el tipo de contenido
-        document.getElementById('duracion-container').style.display = 'block';
-        document.getElementById('temporadas-container').style.display = 'none';
-        document.getElementById('capitulos-container').style.display = 'none';
-        
-        // Restablecer el valor del select a su opción predeterminada
-        document.getElementById('tipo_contenido').value = ''; // Cambiar a otro valor si lo prefieres
-        
-        // Reiniciar todos los inputs y valores, incluyendo los valores vacíos de texto
-        document.getElementById('titulo').value = '';
-        document.getElementById('año_nuevoContenido').value = '';
-        document.getElementById('sinopsis').value = '';
-        document.getElementById('generos').value = '';
-        document.getElementById('duracion').value = '';
-        document.getElementById('temporadas').value = '';
-        document.getElementById('capitulos').value = '';
-        document.getElementById('nuevo_director').value = '';
-        document.getElementById('puntuacion').value = '';
-    });
+    if (document.getElementById('reset-Button')) {
+        document.getElementById('reset-Button').addEventListener('click', function() {
+            
+            document.getElementById('formulario_nuevo_contenido').reset();
+
+            document.getElementById('duracion-container').style.display = 'block';
+            document.getElementById('temporadas-container').style.display = 'none';
+            document.getElementById('capitulos-container').style.display = 'none';
+
+            document.getElementById('tipo_contenido').value = '';
+
+            document.getElementById('titulo').value = '';
+            document.getElementById('año_nuevoContenido').value = '';
+            document.getElementById('sinopsis').value = '';
+            document.getElementById('generos').value = '';
+            document.getElementById('duracion').value = '';
+            document.getElementById('temporadas').value = '';
+            document.getElementById('capitulos').value = '';
+            document.getElementById('nuevo_director').value = '';
+            document.getElementById('puntuacion').value = '';
+            document.getElementById('Poster').style.display = 'none';
+        });
+    }
 });
 
 }

@@ -3,6 +3,7 @@ use cesar\ProyectoTest\Config\Parameters;
 use cesar\ProyectoTest\Helpers\Authentication;
 
 $series = $data["series"]??NULL;
+$favoritos = $data["favoritos"]??NULL;
 ?>
 
 <div class="container container-lista-series">

@@ -8,6 +8,8 @@ $tipos = $data["tipos"]??NULL;
 $traduccion = $data["traduccion"]??NULL;
 $informacion = $data["informacion"]??NULL;
 $directores = $data["directores"]??NULL;
+$youtubeUrl = $data["youtubeUrl"]??NULL;
+
 
 if (isset($_SESSION['errores'])) {
     foreach ($_SESSION['errores'] as $error) {
@@ -32,7 +34,7 @@ if (isset($_SESSION['mensaje'])) {
                     <label for="">Buscar Contenido:</label>
                     <input type="text" name="titulo" placeholder="titulo del contenido">
                     <input type="submit" value="Buscar nuevo contenido">
-                    <input type="reset" id="reset-Button" value="Reiniciar contenido">
+                    <input type="submit" id="reset-Button" name='btnReset' value="Reiniciar contenido">
                 </form>
                 <?php if ($informacion) { ?>
                     <form id="formulario_nuevo_contenido" action="<?=Parameters::$BASE_URL . "Contenido/addContenidoSave"?>" method="post">
@@ -68,7 +70,7 @@ if (isset($_SESSION['mensaje'])) {
                         </p>
                         <p id="temporadas-container" style="display: none;">
                             <label for="temporadas">Temporadas:</label>
-                            <input type="number" name="temporadas" id="temporadas" value="" placeholder="Número de temporadas" />
+                            <input type="number" name="temporadas" id="temporadas" value="<?=$informacion['totalSeasons']?>" placeholder="Número de temporadas" />
                         </p>
                         <p id="capitulos-container" style="display: none;">
                             <label for="capitulos">Capítulos:</label>
@@ -85,11 +87,15 @@ if (isset($_SESSION['mensaje'])) {
                             <span class="material-symbols-outlined estrellas">star</span>
                         </p>
                         <p>
+                            <label for="">Url:</label>
+                            <input type="text" name="url" id="url" value="<?=$youtubeUrl ?>" readonly/>
+                        </p>
+                        <p>
                             <input type="submit" value="Añadir">
                         </p>
                     </form>
                 <?php } else { ?>
-                    <form action="<?=Parameters::$BASE_URL . "Contenido/addContenidoSave"?>" method="post">
+                    <form id="formulario_nuevo_contenido" action="<?=Parameters::$BASE_URL . "Contenido/addContenidoSave"?>" method="post">
                         <p>
                             <label for="">Titulo:</label>
                             <input type="text" name="titulo" id="" value=""/>
@@ -148,6 +154,10 @@ if (isset($_SESSION['mensaje'])) {
                             <span class="material-symbols-outlined estrellas">star</span>
                         </p>
                         <p>
+                            <label for="">Url:</label>
+                            <input type="text" name="url" id="url" value=""/>
+                        </p>
+                        <p>
                             <input type="submit" value="Añadir">
                         </p>
                     </form>
@@ -155,7 +165,7 @@ if (isset($_SESSION['mensaje'])) {
             </article>
             <article class="flex-2-info">
                 <?php if (isset($informacion['Poster'])) { ?>
-                    <img src="<?= $informacion['Poster'] ?>" alt="Poster" />
+                    <img src="<?= $informacion['Poster'] ?>" id="Poster" alt="Poster" />
                 <?php } else { ?>
                     <span></span>
                 <?php } ?>
