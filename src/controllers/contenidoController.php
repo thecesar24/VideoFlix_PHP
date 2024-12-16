@@ -3,6 +3,7 @@
 namespace cesar\ProyectoTest\Controllers;
 
 use cesar\ProyectoTest\Helpers\Authentication;
+use cesar\ProyectoTest\Helpers\Validations;
 use cesar\ProyectoTest\Models\ComentariosModel;
 use cesar\ProyectoTest\Models\ContenidoFavoritoModel;
 use cesar\ProyectoTest\Models\ContenidoModel;
@@ -12,6 +13,9 @@ use cesar\ProyectoTest\Models\DirectorModel;
 use cesar\ProyectoTest\Models\GeneroModel;
 use cesar\ProyectoTest\Models\IdiomaModel;
 use cesar\ProyectoTest\Models\SeriesModel;
+use cesar\ProyectoTest\Models\PeliculasModel;
+use cesar\ProyectoTest\Models\CortosModel;
+use cesar\ProyectoTest\Models\DocumentalesModel;
 
 class ContenidoController {
     public function index(){
@@ -83,7 +87,9 @@ class ContenidoController {
             $comentarios = $comentariosModel->getAllByIdContenido($idContenido);
             
             if ($contenido) {
-                $recomendadas = $contenidoModel->get4RandByTipoContenido($tipoContenido);
+                $idGenero = $contenido->id_genero;
+                
+                $recomendadas = $contenidoModel->getRecomendadasPorGenero($idGenero, $idContenido);
 
                 if (Authentication::isUserLogged()) {
                     $userEntity = $_SESSION['user'];
@@ -133,18 +139,39 @@ class ContenidoController {
             $omdbController = new OmdbApiController();
             $informacion = $omdbController->obtenerDatosOMDb($slug);
 
-            $traduccionController = new TraduccionController();
+            $peliculasModel = new PeliculasModel();
+            $seriesModel = new SeriesModel();
+            $generoModel = new GeneroModel();
+            $directorModel = new DirectorModel();
+            $idiomaModel = new IdiomaModel();
             
             if ($informacion) {
                 $youtubeApiController = new YoutubeApiController();
                 $youtubeTrailer = $youtubeApiController->getTrailer($informacion['Title']);
-                $traduccion = $traduccionController->traducir($informacion['Plot'], 'ES');
+                
+                $contenidoInfo = $resultado;
+                $genero = $generoModel->getOne($contenidoInfo->id_genero);
+                $director = $directorModel->getOne($contenidoInfo->id_director);
+                $idioma = $idiomaModel->getOne($contenidoInfo->id_idioma);
 
+                if ($contenidoInfo->tipo_contenido == "peliculas") {
+                    $tipo = $peliculasModel->getPelicula($contenidoInfo->id);
+                } elseif($contenidoInfo->tipo_contenido == "series") {
+                    $tipo = $seriesModel->getSerie($contenidoInfo->id);
+                } else {
+                    $tipo = '-';
+                }
+
+                
                 ViewController::show('views/contenido/info.php', [
                     'informacion' => $informacion,
                     'slug' => $slug, 
                     'youtubeTrailer' => $youtubeTrailer,
-                    'traduccion' => $traduccion
+                    'tipo' => $tipo,
+                    'contenidoInfo' => $contenidoInfo,
+                    'genero' => $genero,
+                    'director' => $director,
+                    'idioma' => $idioma
                 ]);
             } else {
                 $_SESSION['errores'][] = 'No se encontraron resultados para la película.';
@@ -321,6 +348,7 @@ class ContenidoController {
             $nuevoDirector = trim($_POST['nuevo_director'] ?? '');
             $puntuacion = $_POST['puntuacion'] ?? NULL;
             $tipo_contenido = $_POST['tipo_contenido'] ?? NULL;
+            $video = $_POST['url'] ?? NULL;
 
             if (empty($titulo)) {
                 $errores['titulo'] = "Inserte un título por favor.";
@@ -407,13 +435,14 @@ class ContenidoController {
                    'capitulos' => !empty($capitulos) ? $capitulos : null,
                     'id_director' => $idDirector,
                    'puntuacion' => $puntuacion,
-                    'tipo_contenido' => $tipo_contenido
+                    'tipo_contenido' => $tipo_contenido,
+                    'video' => $video
                 ];
                 
-                $idContenido = $contenidoModel->insertarContenido($contenidoData['titulo'], $contenidoData['slug'], $contenidoData['año'], $contenidoData['id_director'], $contenidoData['tipo_contenido']);
+                $idContenido = $contenidoModel->insertarContenido($contenidoData['titulo'], $contenidoData['slug'], $contenidoData['año'], $contenidoData['id_director'], $contenidoData['tipo_contenido'], $contenidoData['video']);
                 
                 $ultimoContenido = $contenidoModel->getOne($idContenido);
-                // Manejar géneros
+                
                 $generoIds = [];
                 foreach ($generos as $nombreGenero) {
                     $nombreGenero = strtolower(trim($nombreGenero));
@@ -423,12 +452,10 @@ class ContenidoController {
                 }
 
                 $generoModel->asociarContenidoGenero($idGenero, $idContenido);
-
-                var_dump($ultimoContenido->tipo_contenido);
                 
                 switch ($ultimoContenido->tipo_contenido) {
                     case 'peliculas':
-                        $contenidoModel->insertarDetallesPeliculas($idContenido, $contenidoData['duracion'], $contenidoData['sinopsis']);
+                        $contenidoModel->insertarDetallesPeliculas($idContenido, $contenidoData['duracion'], $contenidoData['sinopsis'], $contenidoData['puntuacion']);
                         break;
                     case 'cortos':
                         $contenidoModel->insertarDetallesCortos($idContenido, $contenidoData['duracion']);
@@ -437,10 +464,11 @@ class ContenidoController {
                         $contenidoModel->insertarDetallesDocumentales($idContenido, $contenidoData['duracion']);
                         break;
                     case 'series':
-                        $seriesModel->insertarDetallesSeries($idContenido, $contenidoData['sinopsis'], $contenidoData['temporadas'], $contenidoData['capitulos']);
+                        $seriesModel->insertarDetallesSeries($idContenido, $contenidoData['sinopsis'], $contenidoData['temporadas'], $contenidoData['capitulos'], $contenidoData['puntuacion']);
                         break;
                 }
 
+                $_SESSION['mensaje'] = 'Contenido tipo ' . $ultimoContenido->tipo_contenido . ' agregado correctamente.';
                 header("Location: " . Parameters::$BASE_URL . "Contenido/gestionarContenido");
                 exit();
             }
@@ -450,5 +478,203 @@ class ContenidoController {
             ViewController::showError(403);
         }
     }
+
+    public function editarContenido(){
+        if (Authentication::isAdminLogged()) {
+            if (isset($_GET['idContenido']) && !empty($_GET['idContenido'])) {
+                $idContenido = $_GET['idContenido'];
+
+                $contenidoModel = new ContenidoModel();
+                $contenido = $contenidoModel->getOne($idContenido);
+                
+                $generoModel = new GeneroModel;
+                $generos = $generoModel->getAll();
+                
+                switch ($contenido->tipo_contenido) {
+                    case 'peliculas':
+                        $peliculasModel = new PeliculasModel;
+                        $tipo_contenido = $peliculasModel->getPelicula($idContenido);
+                        break;
+                    case 'series':
+                        $seriesModel = new SeriesModel;
+                        $tipo_contenido = $seriesModel->getSerie($idContenido);
+                        break;
+                    case 'cortos':
+                        $cortosModel = new CortosModel;
+                        $tipo_contenido = $cortosModel->getOne($idContenido);
+                        break;
+                    case 'documentales':
+                        $documentalesModel = new DocumentalesModel;
+                        $tipo_contenido = $documentalesModel->getOne($idContenido);
+                        break;
+                    default:
+                        break;
+                }
+
+                $contenidoModel = new ContenidoModel();
+                $tipos = $contenidoModel->getAllTipos();
+
+                $idiomaModel = new IdiomaModel();
+                $idiomas = $idiomaModel->getAll();
+
+                $directorModel = new DirectorModel();
+                $directores = $directorModel->getAll();
+
+                ViewController::show("views/contenido/editarContenido.php", 
+                ['contenido' => $contenido, 
+                       'tipos' => $tipos, 
+                       'idiomas' => $idiomas, 
+                       'directores' => $directores,
+                       'tipo_contenido' => $tipo_contenido,
+                       'generos' => $generos]);
+            } else {
+                $_SESSION['errores'][] = 'ID de contenido no proporcionado.';
+                header("Location: " . Parameters::$BASE_URL . "Contenido/gestionarContenido");
+                exit();
+            }
+        } else {
+            ViewController::showError(403);
+        }
+    }
+
+    public function editarContenidoSave() {
+        $idContenido = $_GET['idContenido'] ?? null;
+    
+        if (!$idContenido) {
+            $_SESSION['errores'] = "El contenido no existe.";
+            header("Location: " . Parameters::$BASE_URL . "Contenido/lista");
+            exit();
+        }
+
+        $contenidoModel = new ContenidoModel();
+        $contenido = $contenidoModel->getOne($idContenido);
+    
+        $titulo = $_POST['titulo'] ?? null;
+        $year = $_POST['año'] ?? null;
+        $sinopsis = $_POST['sinopsis'] ?? null;
+        $genero = $_POST['genero'] ?? null;
+        $director = $_POST['director'] ?? null;
+        $puntuacion = $_POST['puntuacion'] ?? null;
+        $url = $_POST['url'] ?? null;
+        $portada = $_POST['portada'] ?? null;
+        
+        if ($contenido->tipo_contenido == 'series') {
+            $temporadas = $_POST['temporadas'] ?? null;
+            $capitulos = $_POST['capitulos'] ?? null;
+        } else {
+            $duracion = $_POST['duracion'] ?? null;
+        }
+    
+        $erroresSpan = [];
+      
+        if (!Validations::validateName($titulo)) {
+            $erroresSpan['titulo'] = "El título es obligatorio.";
+        }
+        if (!$year || !is_numeric($year)) {
+            $erroresSpan['year'] = "El año es obligatorio y debe ser un número.";
+        }
+        if (!Validations::validateSinopsis($sinopsis)) {
+            $erroresSpan['sinopsis'] = "La sinopsis es obligatoria y debe contener entre 1 y 400 caracteres. Solo se permiten letras, números y signos de puntuación básicos.";
+        }
+        if ($genero === null) {
+            $erroresSpan['genero'] = "El género es obligatorio.";
+        }
+        if ($contenido->tipo_contenido == 'series') {
+            if (!$temporadas || !is_numeric($temporadas)) {
+                $erroresSpan['temporadas'] = "El nº de temporadas es obligatorio.";
+            }
+            if (!$capitulos || !is_numeric($capitulos)) {
+                $erroresSpan['capitulos'] = "El nº de capitulos es obligatorio.";
+            }
+        }else {
+            if (!$duracion || !is_numeric($duracion)) {
+                $erroresSpan['duracion'] = "La duración es obligatoria.";
+            }
+        }
+        if ($director === null) {
+            $erroresSpan['director'] = "El director es obligatorio.";
+        }
+        if (!$puntuacion || !is_numeric($puntuacion)) {
+            $erroresSpan['puntuacion'] = "La puntuación debe ser un número.";
+        }
+        if (!Validations::validateYouTubeEmbedUrl($url)) {
+            $erroresSpan['url'] = "La URL no tiene el formato correcto de YouTube Embed.";
+        }
+        if (!Validations::validateFile($_FILES['portada'])) {
+            $erroresSpan['portada'] = "El archivo debe ser .jpg, .png, .jpeg y no superar los 2MB.";
+        }
+
+        if (!empty($erroresSpan)) {
+            $_SESSION['errores-span'] = $erroresSpan;
+            header("Location: " . Parameters::$BASE_URL . "Contenido/editarContenido?idContenido=" . $idContenido);
+            exit();
+        }
+
+        $slug = $this->generarSlug($titulo);
+    
+        if ($contenido->tipo_contenido == 'series') {
+            $datosActualizados = [
+                'titulo' => $titulo,
+                'year' => $year,
+                'slug' => $slug,
+                'sinopsis' => $sinopsis,
+                'id_genero' => $genero,
+                'temporadas' => $temporadas,
+                'capitulos' => $capitulos,
+                'id_director' => $director,
+                'puntuacion' => $puntuacion,
+                'video' => $url,
+                'portada' => $portada
+            ];
+        }else {
+            $datosActualizados = [
+                'titulo' => $titulo,
+                'year' => $year,
+                'slug' => $slug,
+                'sinopsis' => $sinopsis,
+                'id_genero' => $genero,
+                'duracion' => $duracion,
+                'id_director' => $director,
+                'puntuacion' => $puntuacion,
+                'video' => $url,
+                'portada' => $portada
+            ];
+        }
+
+        if (isset($_FILES['portada']) && $_FILES['portada']['error'] === UPLOAD_ERR_OK) {
+            $nombreArchivo = $_FILES['portada']['name'];
+            $tmpName = $_FILES['portada']['tmp_name'];
+            $directorioDestino = 'assets/img/Portadas/';
+            $rutaDestino = $directorioDestino . $nombreArchivo;
+        
+            if (move_uploaded_file($tmpName, $rutaDestino)) {
+                $_SESSION['mensaje'] = "Archivo subido con éxito: $nombreArchivo.";
+            } else {
+                $_SESSION['errores'][] = "Error al mover el archivo.";
+                header("Location: " . Parameters::$BASE_URL . "Contenido/editarContenido?idContenido=" . $idContenido);
+                exit();
+            }
+        } else {
+            $_SESSION['errores'][] = "Error en la carga del archivo.";
+            header("Location: " . Parameters::$BASE_URL . "Contenido/editarContenido?idContenido=" . $idContenido);
+            exit();
+        }        
+    
+        if (empty($erroresSpan)) {
+            // Llamar al modelo para actualizar los datos
+            $contenidoModel = new ContenidoModel();
+            $resultado = $contenidoModel->updateContenido($idContenido, $datosActualizados['titulo'], $datosActualizados['slug'], $datosActualizados['year'], $datosActualizados['id_genero'], $datosActualizados['portada'], $datosActualizados['video'], $datosActualizados['id_director']);
+
+            if ($resultado) {
+                $_SESSION['mensaje'] = "El contenido se actualizó correctamente.";
+            } else {
+                $_SESSION['errores'][] = "Error al actualizar el contenido.";
+            }
+            
+            // Redirigir a la lista o a la página de edición
+            header("Location: " . Parameters::$BASE_URL . "Contenido/lista");
+        }
+    }
+    
 
 }

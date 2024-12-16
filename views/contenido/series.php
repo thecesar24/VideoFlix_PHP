@@ -32,8 +32,11 @@ $favoritos = $data["favoritos"]??NULL;
                         <?php } ?>
                         
                         <a href="<?= htmlspecialchars(Parameters::$BASE_URL . "ver/" . $serie->slug) ?>" class="card-link">
-                            <img class="card-img" src="<?= htmlspecialchars(Parameters::$BASE_URL . 'assets/img/Portadas/' . $serie->portada) ?>" 
-                                 alt="<?= htmlspecialchars($serie->titulo) ?>">
+                        <?php if (isset($serie->portada)) { ?>
+                            <img class="card-img" src="<?= htmlspecialchars(Parameters::$BASE_URL . 'assets/img/Portadas/' . $serie->portada) ?>" alt="<?= htmlspecialchars($serie->titulo) ?>">
+                        <?php }else { ?>
+                            <img class="card-img" src="<?= htmlspecialchars(Parameters::$BASE_URL . 'assets/img/Portadas/Default_Portada.png') ?>" alt="<?= htmlspecialchars($serie->titulo) ?>">
+                        <?php } ?>
                             <div class="card-overlay">
                                 <div class="card-title-lista">
                                     <?= htmlspecialchars($serie->titulo) ?>

@@ -126,10 +126,29 @@ class ContenidoModel extends Model{
             echo '<p>Fallo en la conexion: ' . $e->getMessage() . '</p>';
         }        
     }
-    public function insertarContenido($titulo, $slug ,$año, $id_director, $tipo_contenido) {
+
+    public function getRecomendadasPorGenero($idGenero, $idContenido) {
+        try {
+            $consulta = "SELECT * FROM $this->tabla WHERE id_genero = :idGenero AND id != :idContenido";
+    
+            $sentencia = $this->conn->prepare($consulta);
+            $sentencia->bindParam(':idGenero', $idGenero, \PDO::PARAM_INT);
+            $sentencia->bindParam(':idContenido', $idContenido, \PDO::PARAM_INT);
+            $sentencia->execute();
+            
+            $resultado = $sentencia->fetchAll(\PDO::FETCH_OBJ);
+    
+            return $resultado; 
+    
+        } catch (\PDOException $e) {
+            echo '<p>Fallo en la conexion: ' . $e->getMessage() . '</p>';
+        }        
+    }
+
+    public function insertarContenido($titulo, $slug ,$año, $id_director, $tipo_contenido, $video) {
         try {    
-            $consultaContenido = "INSERT INTO $this->tabla (titulo, slug, year, tipo_contenido, id_idioma, id_director, estado) 
-                                  VALUES (:titulo, :slug, :ano, :tipo_contenido, '1', :id_director, '1')";
+            $consultaContenido = "INSERT INTO $this->tabla (titulo, slug, year, tipo_contenido, id_idioma, id_director, estado, video) 
+                                  VALUES (:titulo, :slug, :ano, :tipo_contenido, '1', :id_director, '2', :video)";
     
             $sentenciaContenido = $this->conn->prepare($consultaContenido);
     
@@ -138,6 +157,7 @@ class ContenidoModel extends Model{
             $sentenciaContenido->bindParam("ano", $año, \PDO::PARAM_INT);
             $sentenciaContenido->bindParam("id_director", $id_director, \PDO::PARAM_INT);
             $sentenciaContenido->bindParam("tipo_contenido", $tipo_contenido, \PDO::PARAM_STR);
+            $sentenciaContenido->bindParam("video", $video, \PDO::PARAM_STR);
     
             $sentenciaContenido->execute();
             return $this->conn->lastInsertId(); 
@@ -148,15 +168,16 @@ class ContenidoModel extends Model{
         }
     }
 
-    public function insertarDetallesPeliculas($idContenido, $duracion, $sinopsis) {
+    public function insertarDetallesPeliculas($idContenido, $duracion, $sinopsis, $puntuacion) {
         try {
-            $sqlPeliculas = "INSERT INTO peliculas (id_contenido, duracion, sinopsis)
-                             VALUES (:id_contenido, :duracion, :sinopsis)";
+            $sqlPeliculas = "INSERT INTO peliculas (id_contenido, duracion, sinopsis, puntuacion)
+                             VALUES (:id_contenido, :duracion, :sinopsis, :puntuacion)";
             $stmtPeliculas = $this->conn->prepare($sqlPeliculas);
             $stmtPeliculas->execute([
                 'id_contenido' => $idContenido,
                 'duracion' => (int)$duracion,
                 'sinopsis' => $sinopsis,
+                'puntuacion' => $puntuacion
             ]);
         } catch (\Exception $e) {
             echo "Error en insertarDetallesPeliculas: " . $e->getMessage();
@@ -190,6 +211,32 @@ class ContenidoModel extends Model{
             ]);
         } catch (\Exception $e) {
             echo "Error en insertarDetallesDocumentales: " . $e->getMessage();
+        }
+    }
+
+    public function updateContenido($idContenido, $titulo, $slug ,$year, $id_genero, $id_idioma, $portada, $video, $id_director) {
+        try {    
+            $consulta = "INSERT INTO $this->tabla (titulo, slug, year, tipo_contenido, id_idioma, id_director, portada, video) 
+                                  VALUES (:titulo, :slug, :year, :tipo_contenido, :id_idioma, :id_director, :portada, :video)
+                                  WHERE id = :idContenido";
+    
+            $sentencia = $this->conn->prepare($consulta);
+    
+            $sentencia->bindParam("idContenido", $idContenido, \PDO::PARAM_INT);
+            $sentencia->bindParam("titulo", $titulo, \PDO::PARAM_STR);
+            $sentencia->bindParam("slug", $slug, \PDO::PARAM_STR);
+            $sentencia->bindParam("year", $year, \PDO::PARAM_INT);
+            $sentencia->bindParam("id_director", $id_director, \PDO::PARAM_INT);
+            $sentencia->bindParam("video", $video, \PDO::PARAM_STR);
+            $sentencia->bindParam("id_idioma", $id_idioma, \PDO::PARAM_INT);
+            $sentencia->bindParam("portada", $portada, \PDO::PARAM_STR);
+            $sentencia->bindParam("id_genero", $id_genero, \PDO::PARAM_INT);
+    
+            return $sentencia->execute();
+    
+        } catch (\Exception $e) {
+            error_log("Error in insertarContenido: " . $e->getMessage());
+            return false;
         }
     }
 

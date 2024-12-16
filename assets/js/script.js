@@ -4,7 +4,7 @@ $(document).ready(function(){
         slidesToShow: 3,  // Número de tarjetas visibles
         slidesToScroll: 1,
         autoplay: true,
-        autoplaySpeed: 3000,  // Velocidad del desplazamiento
+        autoplaySpeed: 2000,  // Velocidad del desplazamiento
         responsive: [
             {
                 breakpoint: 769,
@@ -110,95 +110,95 @@ if (document.getElementById('mostrar-comentarios')) {
 // }
 
 // Detectar el enlace activo al cargar la página
-document.addEventListener('DOMContentLoaded', () => {
-    const links = document.querySelectorAll('.paginas-buttons .nav-link');
-    
-    // Obtén el path actual de la URL (sin dominio)
-    const currentPath = window.location.pathname;
+    document.addEventListener('DOMContentLoaded', () => {
+        const links = document.querySelectorAll('.paginas-buttons .nav-link');
 
-    links.forEach(link => {
-        const linkPath = new URL(link.href).pathname;
+        // Obtén el path actual de la URL (sin dominio)
+        const currentPath = window.location.pathname;
 
-        // Si es la URL base, activa solo el enlace de inicio
-        if (currentPath === '/' || currentPath === '/VideoFlix_PHP/') {
-            if (link.id === 'inicio') {
+        links.forEach(link => {
+            const linkPath = new URL(link.href).pathname;
+
+            // Si es la URL base, activa solo el enlace de inicio
+            if (currentPath === '/' || currentPath === '/VideoFlix_PHP/') {
+                if (link.id === 'inicio') {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            } 
+            // Para otras rutas, activa el enlace que coincida
+            else if (linkPath === currentPath) {
                 link.classList.add('active');
             } else {
                 link.classList.remove('active');
             }
-        } 
-        // Para otras rutas, activa el enlace que coincida
-        else if (linkPath === currentPath) {
-            link.classList.add('active');
-        } else {
-            link.classList.remove('active');
-        }
 
-        // Cambia la clase activa al hacer clic
-        link.addEventListener('click', () => {
-            links.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
+            // Cambia la clase activa al hacer clic
+            link.addEventListener('click', () => {
+                links.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
         });
     });
-});
 
 if (document.getElementById('año_nuevoContenido')) {
     
     document.addEventListener('DOMContentLoaded', function() {
         const añoInput = document.getElementById('año_nuevoContenido');
 
-    const valor = añoInput.value;
-    const partes = valor.split(' '); // Divide la cadena en partes usando espacios
-    const año = partes[2]; // La tercera parte es el año
-    añoInput.value = año;
-});
+        const valor = añoInput.value;
+        const partes = valor.split(' ');
+        const año = partes[2]; 
+        añoInput.value = año;
+        añoInput.setAttribute('value', año);
+    });
 
-document.addEventListener("DOMContentLoaded", function () {
-    const tipoContenido = document.getElementById("tipo_contenido");
-    const duracionContainer = document.getElementById("duracion-container");
-    const temporadasContainer = document.getElementById("temporadas-container");
-    const capitulosContainer = document.getElementById("capitulos-container");
+    document.addEventListener("DOMContentLoaded", function () {
+        const tipoContenido = document.getElementById("tipo_contenido");
+        const duracionContainer = document.getElementById("duracion-container");
+        const temporadasContainer = document.getElementById("temporadas-container");
+        const capitulosContainer = document.getElementById("capitulos-container");
 
-    tipoContenido.addEventListener("change", function () {
-        const selectedValue = tipoContenido.value;
-        
-        duracionContainer.style.display = "none";
-        temporadasContainer.style.display = "none";
-        capitulosContainer.style.display = "none";
+        tipoContenido.addEventListener("change", function () {
+            const selectedValue = tipoContenido.value;
 
-        if (selectedValue === "series") {
-            temporadasContainer.style.display = "block";
-            capitulosContainer.style.display = "block";
-        } else {
-            duracionContainer.style.display = "block";
+            duracionContainer.style.display = "none";
+            temporadasContainer.style.display = "none";
+            capitulosContainer.style.display = "none";
+
+            if (selectedValue === "series") {
+                temporadasContainer.style.display = "block";
+                capitulosContainer.style.display = "block";
+            } else {
+                duracionContainer.style.display = "block";
+            }
+        });
+
+        if (document.getElementById('reset-Button')) {
+            document.getElementById('reset-Button').addEventListener('click', function() {
+
+                document.getElementById('formulario_nuevo_contenido').reset();
+
+                document.getElementById('duracion-container').style.display = 'block';
+                document.getElementById('temporadas-container').style.display = 'none';
+                document.getElementById('capitulos-container').style.display = 'none';
+
+                document.getElementById('tipo_contenido').value = '';
+
+                document.getElementById('titulo').value = '';
+                document.getElementById('año_nuevoContenido').value = '';
+                document.getElementById('sinopsis').value = '';
+                document.getElementById('generos').value = '';
+                document.getElementById('duracion').value = '';
+                document.getElementById('temporadas').value = '';
+                document.getElementById('capitulos').value = '';
+                document.getElementById('nuevo_director').value = '';
+                document.getElementById('puntuacion').value = '';
+                document.getElementById('Poster').style.display = 'none';
+            });
         }
     });
-    
-    if (document.getElementById('reset-Button')) {
-        document.getElementById('reset-Button').addEventListener('click', function() {
-            
-            document.getElementById('formulario_nuevo_contenido').reset();
-
-            document.getElementById('duracion-container').style.display = 'block';
-            document.getElementById('temporadas-container').style.display = 'none';
-            document.getElementById('capitulos-container').style.display = 'none';
-
-            document.getElementById('tipo_contenido').value = '';
-
-            document.getElementById('titulo').value = '';
-            document.getElementById('año_nuevoContenido').value = '';
-            document.getElementById('sinopsis').value = '';
-            document.getElementById('generos').value = '';
-            document.getElementById('duracion').value = '';
-            document.getElementById('temporadas').value = '';
-            document.getElementById('capitulos').value = '';
-            document.getElementById('nuevo_director').value = '';
-            document.getElementById('puntuacion').value = '';
-            document.getElementById('Poster').style.display = 'none';
-        });
-    }
-});
-
 }
 
 window.onload = function() {
@@ -287,3 +287,22 @@ if (document.querySelectorAll('.formulario-iniciar-sesion input')) {
         });
     });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const inputFile = document.getElementById('inputGroupFile01');
+    const imagePreview = document.getElementById('imagePreview');
+
+    inputFile.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        if (file) {
+            reader.readAsDataURL(file); // Mover esta línea aquí
+        }
+
+        reader.onload = function() {
+            imagePreview.src = '';
+            imagePreview.src = reader.result;
+        }
+    });
+});

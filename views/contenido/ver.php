@@ -68,20 +68,24 @@ if (isset($_SESSION['mensaje'])) {
         </div>
         <div class="flex-2">
             <div class="recomendadas">
+            <?php if ($contenido->tipo_contenido == 'peliculas') { ?>
+                <h2>Peliculas Recomendadas</h2>
+            <?php }elseif($contenido->tipo_contenido == 'series') { ?>
                 <h2>Series Recomendadas</h2>
+            <?php }elseif($contenido->tipo_contenido == 'cortos') { ?>
+                <h2>Cortos Recomendados</h2>
+            <?php }elseif($contenido->tipo_contenido == 'documentales') { ?>
+                <h2>Documentales Recomendados</h2>
+            <?php } ?>
                 <div class="recomendadas-cards">
                     <?php foreach($recomendadas as $recomendada) { ?>
                     <div class="card">
                         <a href="<?=Parameters::$BASE_URL . 'ver/' . $recomendada->slug?>" class="card-link">
+                        <?php if (isset($recomendada->portada)) { ?>
                             <img class="card-img" src="<?=Parameters::$BASE_URL . 'assets/img/Portadas/' . $recomendada->portada ?>" alt="Card image">
-                            <div class="card-overlay">
-                                <div class="card-title"><?=$recomendada->titulo?></div>
-                            </div>
-                        </a>
-                    </div> 
-                    <div class="card">
-                        <a href="<?=Parameters::$BASE_URL . 'ver/' . $recomendada->slug?>" class="card-link">
-                            <img class="card-img" src="<?=Parameters::$BASE_URL . 'assets/img/Portadas/' . $recomendada->portada ?>" alt="Card image">
+                        <?php }else { ?>
+                            <img class="card-img" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/Default_Portada.png' ?>" alt="<?=$recomendada->titulo ?>">
+                        <?php } ?>
                             <div class="card-overlay">
                                 <div class="card-title"><?=$recomendada->titulo?></div>
                             </div>

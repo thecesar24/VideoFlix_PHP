@@ -45,7 +45,7 @@ if (isset($_SESSION['mensaje'])) {
         </div>
             <?php if (!empty($contenidos)){ ?>
                 <?php foreach ($contenidos as $contenido) { ?>
-                    <div class="fila fila2 <?php if($contenido['estado'] == 0){echo 'eliminado';} ?>">
+                    <div class="fila fila2 <?php if($contenido['estado'] == Parameters::$ESTADO_BAJA){echo 'eliminado';} if ($contenido['estado'] == Parameters::$ESTADO_PENDIENTE){echo 'pendiente';}?>">
                         <div class="celda"><?=$contenido['titulo']?></div>
                         <div class="celda"><?=$contenido['year']?></div>
                         <div class="celda"><?=$contenido['tipo_contenido']?></div>
@@ -70,15 +70,15 @@ if (isset($_SESSION['mensaje'])) {
                             <div class="celda">-</div>
                         <?php } ?>    
                         <div class="celda acciones">
-                            <a href="<?=Parameters::$BASE_URL . "Contenido/cambiarEstadoContenido?idContenido=" . $contenido['id']?>">
+                            <a href="<?=Parameters::$BASE_URL . "Contenido/editarContenido?idContenido=" . $contenido['id']?>">
                                 <span class="material-symbols-outlined">edit</span>
                             </a>
-                            <?php if ($contenido['estado'] == 1) { ?>
+                            <?php if ($contenido['estado'] == Parameters::$ESTADO_ALTA) { ?>
                                 <a href="<?=Parameters::$BASE_URL . "Contenido/cambiarEstadoContenido?idContenido=" . $contenido['id']?>">
                                     <span class="material-symbols-outlined activo">toggle_on</span>
                                 </a>
                             <?php } ?>
-                            <?php if ($contenido['estado'] == 0) { ?>
+                            <?php if ($contenido['estado'] == Parameters::$ESTADO_BAJA) { ?>
                                 <a href="<?=Parameters::$BASE_URL . "Contenido/cambiarEstadoContenido?idContenido=" . $contenido['id']?>">
                                     <span class="material-symbols-outlined baja">toggle_off</span>
                                 </a>
@@ -91,4 +91,10 @@ if (isset($_SESSION['mensaje'])) {
                         <p>No hay contenidos disponibles en este momento.</p>
                     </div>
             <?php }; ?>
+    </article>
+    <article class="leyenda">
+        <p>Pendiente:</p>
+        <span class="leyenda-pendiente material-symbols-outlined">radio_button_unchecked</span>
+        <p>Baja:</p>
+        <span class="leyenda-baja material-symbols-outlined">radio_button_unchecked</span>
     </article>

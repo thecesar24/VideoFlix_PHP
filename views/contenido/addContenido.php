@@ -22,7 +22,6 @@ if (isset($_SESSION['mensaje'])) {
     echo "<div id='mensaje-temporal' >{$_SESSION['mensaje']}</div>";
     unset($_SESSION['mensaje']);
 }
-
 ?>
 
 <div class="container container-verInfo">
@@ -54,7 +53,7 @@ if (isset($_SESSION['mensaje'])) {
                         </p>
                         <p>
                             <label for="">Año:</label>
-                            <input type="text" name="año" id="año_nuevoContenido" value="<?=$informacion['Released']?>" readonly/>
+                            <input type="text" name="año" id="año_nuevoContenido" value="<?=$informacion['Released']?>" readonly></input>
                         </p>
                         <p>
                             <label for="">Sinopsis:</label>

@@ -29,6 +29,19 @@
                    (!empty($comentario) &&
                     preg_match("/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,!?():'\"-]*$/", $comentario));
         }
+
+        public static function validateSinopsis($sinopsis): bool {
+            if (empty($sinopsis) || strlen($sinopsis) > Parameters::$SINOPSIS_MAX_LENGTH) {
+                return false;
+            }
+          
+            $patron = "/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,!?():'\"-]+$/";
+            if (!preg_match($patron, $sinopsis)) {
+                return false;
+            }
+        
+            return true;
+        }        
         
         public static function validateFormatPassword($password): bool {
             // Verificar si la contraseña está vacía
@@ -58,6 +71,29 @@
         
             return true;
         }
+
+        public static function validateYouTubeEmbedUrl($url): bool {
+            $pattern = '/^https:\/\/www\.youtube\.com\/embed\/[a-zA-Z0-9_-]+$/';
+            return preg_match($pattern, $url);
+        }
         
+        public static function validateFile($file): bool {
+            $allowedExtensions = ['jpg', 'jpeg', 'png'];
+            $maxSize = 2 * 1024 * 1024; // Máximo 2 MB
         
+            if ($file['error'] !== UPLOAD_ERR_OK) {
+                return false;
+            }
+        
+            if ($file['size'] > $maxSize) {
+                return false;
+            }
+        
+            $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+            if (!in_array($fileExtension, $allowedExtensions)) {
+                return false;
+            }
+        
+            return true;
+        }        
     }

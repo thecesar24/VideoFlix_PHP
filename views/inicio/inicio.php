@@ -14,7 +14,7 @@ if (isset($_SESSION['errores'])) {
 }
 
 ?>
-<div id="carouselExample" class="carousel slide" data-ride="carousel" data-interval="3000">
+<div id="carouselExample" class="carousel slide" data-ride="carousel" data-interval="4000">
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <img src="<?= Parameters::$BASE_URL . 'assets/img/pelis-españolas.jpeg' ?>" class="d-block w-100" alt="Películas Españolas">
@@ -40,7 +40,11 @@ if (isset($_SESSION['errores'])) {
                 <?php if (!empty($peliculas)){ ?>
                     <?php foreach ($peliculas as $pelicula){ ?>
                         <div class="card">
-                            <img class="card-img-top" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/' . $pelicula->portada ?>" alt="<?=$pelicula->titulo ?>">
+                            <?php if (isset($pelicula->portada)) { ?>
+                                <img class="card-img-top" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/' . $pelicula->portada ?>" alt="<?=$pelicula->titulo ?>">
+                            <?php }else { ?>
+                                <img class="card-img-top" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/Default_Portada.png' ?>" alt="<?=$pelicula->titulo ?>">
+                            <?php } ?>
                             <div class="card-body">
                                 <h5 class="card-title"><?=$pelicula->titulo ?></h5>
                                 <a href="<?=Parameters::$BASE_URL . 'Contenido/verInfo?slug=' . $pelicula->slug?>" class="btn btn-primary">Ver detalles</a>
@@ -61,7 +65,11 @@ if (isset($_SESSION['errores'])) {
                 <?php if (!empty($series)){ ?>
                     <?php foreach ($series as $serie){ ?>
                         <div class="card">
+                        <?php if (isset($serie->portada)) { ?>
                             <img class="card-img-top" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/' . $serie->portada ?>" alt="<?=$serie->titulo ?>">
+                        <?php }else { ?>
+                            <img class="card-img-top" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/Default_Portada.png' ?>" alt="<?=$serie->titulo ?>">
+                        <?php } ?>
                             <div class="card-body">
                                 <h5 class="card-title"><?=$serie->titulo ?></h5>
                                 <a href="<?=Parameters::$BASE_URL . 'Contenido/verInfo?slug=' . $serie->slug?>"  class="btn btn-primary">Ver detalles</a>

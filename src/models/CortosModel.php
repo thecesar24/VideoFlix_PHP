@@ -1,35 +1,17 @@
 <?php
 namespace cesar\ProyectoTest\Models;
-use cesar\ProyectoTest\Entities\UserEntity;
 
 
-class SeriesModel extends Model{
+class CortosModel extends Model{
 
     public function __construct(){
         parent::__construct();
-        $this->tabla = "series";
+        $this->tabla = "peliculas";
     }
 
-    public function insertarDetallesSeries($idContenido, $sinopsis, $temporadas, $capitulos, $puntuacion) {
+    public function insertarDetallesSeries($idContenido, $sinopsis, $temporadas, $capitulos) {
         try {
-            $sqlSeries = "INSERT INTO series (id_contenido, sinopsis, temporadas, capitulos, puntuacion)
-                          VALUES (:id_contenido, :sinopsis, :temporadas, :capitulos, :puntuacion)";
-            $stmtSeries = $this->conn->prepare($sqlSeries);
-            $stmtSeries->execute([
-                'id_contenido' => $idContenido,
-                'sinopsis' => $sinopsis,
-                'temporadas' => (int)$temporadas,
-                'capitulos' => (int)$capitulos,
-                'puntuacion' => $puntuacion
-            ]);
-        } catch (\Exception $e) {
-            echo "Error en insertarDetallesSeries: " . $e->getMessage();
-        }
-    }
-
-    public function insertarCapitulo($idContenido, $sinopsis, $temporadas, $capitulos) {
-        try {
-            $sqlSeries = "INSERT INTO capitulos (id_contenido, sinopsis, temporadas, capitulos)
+            $sqlSeries = "INSERT INTO series (id_contenido, sinopsis, temporadas, capitulos)
                           VALUES (:id_contenido, :sinopsis, :temporadas, :capitulos)";
             $stmtSeries = $this->conn->prepare($sqlSeries);
             $stmtSeries->execute([
@@ -43,7 +25,7 @@ class SeriesModel extends Model{
         }
     }
 
-    public function getSerie($id){
+    public function getCorto($id){
         try {
             $consulta = "select * from {$this->tabla} where id_contenido = :id";
 

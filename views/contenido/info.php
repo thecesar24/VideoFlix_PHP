@@ -4,7 +4,11 @@ use cesar\ProyectoTest\Config\Parameters;
 $contenido = $data["informacion"]??NULL;
 $slug = $data["slug"]??NULL;
 $youtubeTrailer = $data["youtubeTrailer"]??NULL;
-$traduccion = $data["traduccion"]??NULL;
+$tipo = $data["tipo"]??NULL;
+$contenidoInfo = $data["contenidoInfo"]??NULL;
+$genero = $data["genero"]??NULL;
+$director = $data["director"]??NULL;
+$idioma = $data["idioma"]??NULL;
 
 if (isset($_SESSION['errores'])) {
     foreach ($_SESSION['errores'] as $error) {
@@ -25,29 +29,45 @@ if (isset($_SESSION['mensaje'])) {
         <?php if ($contenido){ ?>
             <article class="flex-1-info">
                 <h1><?= $contenido['Title'] ?></h1>
-                <p><strong>Año:</strong> <?= $contenido['Released'] ?></p>
-                <p><strong>Sinopsis:</strong> <?= $traduccion ?></p>
-                <p><strong>Géneros:</strong> <?= $contenido['Genre'] ?></p>
+                <p><strong>Año:</strong> <?= $contenidoInfo->year ?></p>
+                <?php if($tipo == '-') { ?>
+                    <p><strong>Sinopsis:</strong> <?= $tipo ?></p>
+                <?php }else{ ?>
+                    <p><strong>Sinopsis:</strong> <?= $tipo->sinopsis ?></p>
+                <?php } ?>
+                <p><strong>Género:</strong> <?= $genero->nombre ?></p>
                 <p><strong>Duración:</strong> <?= $contenido['Runtime'] ?></p>
-                <p><strong>Director:</strong> <?= $contenido['Director'] ?></p>
-                <p class="puntuacion-Imdb">
-                    <strong>Puntuación:</strong> 
-                    <span>
-                        <?= $contenido['imdbRating'] ?>/10
-                    </span>
-                    <span class="material-symbols-outlined estrellas">star</span>
-                </p>
-                <div class="trailer">
-                    <strong>Trailer:</strong>
-                    <div class="video-responsive">
-                        <div class="iframe-trailer-container">
-                            <iframe src="<?=$youtubeTrailer?>" frameborder="0"></iframe>
+                <p><strong>Director:</strong> <?= $director->nombre . ' ' . $director->apellidos ?></p>
+                <?php if ($contenidoInfo->tipo_contenido == 'peliculas' || $contenidoInfo->tipo_contenido == 'series') { ?>
+                    <p><strong>Reparto:</strong> <?= $contenido['Actors'] . '...' ?></p>
+                    <p><strong>Idioma:</strong> <?= $idioma->nombre . ' ' ?><span class="fi fi-es"></span></p>
+                    <p class="puntuacion-Imdb">
+                        <strong>Puntuación:</strong> 
+                        <span>
+                            <?= $contenido['imdbRating'] ?>/10
+                        </span>
+                        <span class="material-symbols-outlined estrellas">star</span>
+                    </p>
+                    <div class="trailer">
+                        <strong>Trailer:</strong>
+                        <div class="video-responsive">
+                            <div class="iframe-trailer-container">
+                                <iframe src="<?=$youtubeTrailer?>" frameborder="0"></iframe>
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php } ?>
                 <p>
                     <a href="<?=Parameters::$BASE_URL . "ver/" . $slug?>">
-                        <button>Ver Pelicula</button>
+                        <?php if ($contenidoInfo->tipo_contenido == 'peliculas') { ?>
+                            <button>Ver Pelicula</button>
+                        <?php } if ($contenidoInfo->tipo_contenido == 'series') { ?>
+                            <button>Ver Serie</button>
+                        <?php } if ($contenidoInfo->tipo_contenido == 'documentales') { ?>
+                            <button>Ver Documental</button>
+                        <?php } if ($contenidoInfo->tipo_contenido == 'cortos') { ?>
+                            <button>Ver Corto</button>
+                        <?php } ?>
                     </a>
                 </p>
             </article>
