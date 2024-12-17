@@ -83,6 +83,14 @@ if (isset($_SESSION['mensaje'])) {
                                     <span class="material-symbols-outlined baja">toggle_off</span>
                                 </a>
                             <?php } ?>
+                            <?php if ($contenido['estado'] == Parameters::$ESTADO_PENDIENTE) { ?>
+                                <a href="<?=Parameters::$BASE_URL . "Contenido/aprobarContenido?idContenido=" . $contenido['id']?>">
+                                    <span class="material-symbols-outlined pendiente-check">check_circle</span>
+                                </a>
+                                <a href="<?=Parameters::$BASE_URL . "Contenido/cancelarContenido?idContenido=" . $contenido['id']?>">
+                                    <span class="material-symbols-outlined pendiente-cancel">cancel</span>
+                                </a>
+                            <?php } ?>
                         </div>   
                     </div>
                 <?php } ?>

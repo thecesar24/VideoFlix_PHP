@@ -53,7 +53,7 @@ if (isset($_SESSION['mensaje'])) {
                         </p>
                         <p>
                             <label for="">Año:</label>
-                            <input type="text" name="año" id="año_nuevoContenido" value="<?=$informacion['Released']?>" readonly></input>
+                            <input type="text" name="year" id="año_nuevoContenido" value="<?=$informacion['Released']?>" readonly></input>
                         </p>
                         <p>
                             <label for="">Sinopsis:</label>
@@ -111,7 +111,7 @@ if (isset($_SESSION['mensaje'])) {
                         </p>
                         <p>
                             <label for="">Año:</label>
-                            <input type="number" name="año" id="año_nuevoContenido" value=""/>
+                            <input type="number" name="year" id="año_nuevoContenido" value=""/>
                         </p>
                         <p>
                             <label for="">Sinopsis:</label>

@@ -36,7 +36,12 @@ if (isset($_SESSION['mensaje'])) {
                     <p><strong>Sinopsis:</strong> <?= $tipo->sinopsis ?></p>
                 <?php } ?>
                 <p><strong>Género:</strong> <?= $genero->nombre ?></p>
-                <p><strong>Duración:</strong> <?= $contenido['Runtime'] ?></p>
+                <?php if ($contenidoInfo->tipo_contenido == 'series') { ?>
+                    <p><strong>Temporadas:</strong> <?= $tipo->temporadas?></p>
+                    <p><strong>Capítulos:</strong> <?= $tipo->capitulos?></p>
+                <?php }else{ ?>
+                    <p><strong>Duración:</strong> <?= $tipo->duracion . ' minutos' ?></p>
+                <?php } ?>
                 <p><strong>Director:</strong> <?= $director->nombre . ' ' . $director->apellidos ?></p>
                 <?php if ($contenidoInfo->tipo_contenido == 'peliculas' || $contenidoInfo->tipo_contenido == 'series') { ?>
                     <p><strong>Reparto:</strong> <?= $contenido['Actors'] . '...' ?></p>

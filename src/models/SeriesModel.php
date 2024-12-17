@@ -62,4 +62,19 @@ class SeriesModel extends Model{
             return NULL;
         }
     }
+
+    public function eliminarSerie($idContenido) {
+        try {
+            $consulta = "DELETE FROM {$this->tabla}
+                         WHERE id_contenido = :idContenido";
+
+            $sentencia = $this->conn->prepare($consulta);
+            $sentencia->bindParam("idContenido", $idContenido, \PDO::PARAM_INT);
+
+            return $sentencia->execute();
+
+        } catch (\PDOException $e) {
+            echo '<p>Fallo en la conexion: ' . $e->getMessage() . '</p>';
+        }
+    }
 }

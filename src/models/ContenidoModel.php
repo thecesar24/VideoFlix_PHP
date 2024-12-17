@@ -145,22 +145,23 @@ class ContenidoModel extends Model{
         }        
     }
 
-    public function insertarContenido($titulo, $slug ,$año, $id_director, $tipo_contenido, $video) {
+    public function insertarContenido($titulo, $slug ,$year, $id_director, $tipo_contenido, $video) {
         try {    
             $consultaContenido = "INSERT INTO $this->tabla (titulo, slug, year, tipo_contenido, id_idioma, id_director, estado, video) 
-                                  VALUES (:titulo, :slug, :ano, :tipo_contenido, '1', :id_director, '2', :video)";
+                                  VALUES (:titulo, :slug, :year, :tipo_contenido, '1', :id_director, '2', :video)";
     
             $sentenciaContenido = $this->conn->prepare($consultaContenido);
     
             $sentenciaContenido->bindParam("titulo", $titulo, \PDO::PARAM_STR);
             $sentenciaContenido->bindParam("slug", $slug, \PDO::PARAM_STR);
-            $sentenciaContenido->bindParam("ano", $año, \PDO::PARAM_INT);
+            $sentenciaContenido->bindParam("year", $year, \PDO::PARAM_STR);
             $sentenciaContenido->bindParam("id_director", $id_director, \PDO::PARAM_INT);
             $sentenciaContenido->bindParam("tipo_contenido", $tipo_contenido, \PDO::PARAM_STR);
             $sentenciaContenido->bindParam("video", $video, \PDO::PARAM_STR);
-    
+
             $sentenciaContenido->execute();
-            return $this->conn->lastInsertId(); 
+
+            return $this->conn->lastInsertId();     
     
         } catch (\Exception $e) {
             error_log("Error in insertarContenido: " . $e->getMessage());
@@ -217,8 +218,8 @@ class ContenidoModel extends Model{
     public function updateContenido($idContenido, $titulo, $slug ,$year, $id_genero, $id_idioma, $portada, $video, $id_director) {
         try {    
             $consulta = "INSERT INTO $this->tabla (titulo, slug, year, tipo_contenido, id_idioma, id_director, portada, video) 
-                                  VALUES (:titulo, :slug, :year, :tipo_contenido, :id_idioma, :id_director, :portada, :video)
-                                  WHERE id = :idContenido";
+                                VALUES (:titulo, :slug, :year, :tipo_contenido, :id_idioma, :id_director, :portada, :video)
+                                WHERE id = :idContenido";
     
             $sentencia = $this->conn->prepare($consulta);
     
@@ -237,6 +238,22 @@ class ContenidoModel extends Model{
         } catch (\Exception $e) {
             error_log("Error in insertarContenido: " . $e->getMessage());
             return false;
+        }
+    }
+
+    public function eliminarContenido($idContenido, $estado) {
+        try {
+            $consulta = "DELETE FROM {$this->tabla}
+                         WHERE id = :idContenido AND estado = :estado";
+
+            $sentencia = $this->conn->prepare($consulta);
+            $sentencia->bindParam("idContenido", $idContenido, \PDO::PARAM_INT);
+            $sentencia->bindParam("estado", $estado, \PDO::PARAM_INT);
+            
+            return $sentencia->execute();
+
+        } catch (\PDOException $e) {
+            echo '<p>Fallo en la conexion: ' . $e->getMessage() . '</p>';
         }
     }
 

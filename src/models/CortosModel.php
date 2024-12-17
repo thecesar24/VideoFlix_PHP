@@ -6,7 +6,7 @@ class CortosModel extends Model{
 
     public function __construct(){
         parent::__construct();
-        $this->tabla = "peliculas";
+        $this->tabla = "cortos";
     }
 
     public function insertarDetallesSeries($idContenido, $sinopsis, $temporadas, $capitulos) {
@@ -42,6 +42,21 @@ class CortosModel extends Model{
             echo '<p>Fallo en la conexion:' . $e->getMessage() . '</p>';
             // Registrar en un sistema de Log
             return NULL;
+        }
+    }
+
+    public function eliminarCorto($idContenido) {
+        try {
+            $consulta = "DELETE FROM {$this->tabla}
+                         WHERE id_contenido = :idContenido";
+
+            $sentencia = $this->conn->prepare($consulta);
+            $sentencia->bindParam("idContenido", $idContenido, \PDO::PARAM_INT);
+            
+            return $sentencia->execute();
+
+        } catch (\PDOException $e) {
+            echo '<p>Fallo en la conexion: ' . $e->getMessage() . '</p>';
         }
     }
 }

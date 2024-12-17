@@ -934,6 +934,16 @@ main .container {
     background-color: #fffd7e;  
 }
 
+.pendiente-check {
+    color: #00ac28;
+}
+.pendiente-check:hover {
+    color: #155724 !important;
+}
+.pendiente-cancel {
+    color: #c40c15;
+}
+
 .leyenda {
     margin-top: 10px;
     display: flex;
