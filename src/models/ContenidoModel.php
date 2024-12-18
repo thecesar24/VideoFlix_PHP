@@ -10,7 +10,7 @@ class ContenidoModel extends Model{
 
     public function get4RandByTipoContenido($tipoContenido) {
         try {
-            $consulta = "SELECT * FROM contenido WHERE estado != 0 AND tipo_contenido = :tipoContenido ORDER BY RAND() LIMIT 4";
+            $consulta = "SELECT * FROM contenido WHERE estado != 0 AND estado != 2 AND tipo_contenido = :tipoContenido ORDER BY RAND() LIMIT 4";
     
             $sentencia = $this->conn->prepare($consulta);
             $sentencia->bindParam(':tipoContenido', $tipoContenido, \PDO::PARAM_STR);
@@ -27,7 +27,7 @@ class ContenidoModel extends Model{
 
     public function getAllByTipoContenido($tipoContenido) {
         try {
-            $consulta = "SELECT * FROM contenido WHERE estado != 0 AND tipo_contenido = :tipoContenido";
+            $consulta = "SELECT * FROM contenido WHERE estado != 0 AND estado != 2 AND tipo_contenido = :tipoContenido";
     
             $sentencia = $this->conn->prepare($consulta);
             $sentencia->bindParam(':tipoContenido', $tipoContenido, \PDO::PARAM_STR);
@@ -79,7 +79,7 @@ class ContenidoModel extends Model{
 
     public function buscarContenido($busqueda) {
         try {
-            $consulta = "SELECT * FROM contenido WHERE titulo LIKE :busqueda AND estado != 0";
+            $consulta = "SELECT * FROM contenido WHERE titulo LIKE :busqueda AND estado != 0 AND estado != 2";
     
             $sentencia = $this->conn->prepare($consulta);
             $sentencia->bindParam(':busqueda', $busqueda, \PDO::PARAM_STR);
@@ -215,28 +215,34 @@ class ContenidoModel extends Model{
         }
     }
 
-    public function updateContenido($idContenido, $titulo, $slug ,$year, $id_genero, $id_idioma, $portada, $video, $id_director) {
-        try {    
-            $consulta = "INSERT INTO $this->tabla (titulo, slug, year, tipo_contenido, id_idioma, id_director, portada, video) 
-                                VALUES (:titulo, :slug, :year, :tipo_contenido, :id_idioma, :id_director, :portada, :video)
-                                WHERE id = :idContenido";
+    public function updateContenido($idContenido, $titulo, $slug ,$year, $id_genero, $portada, $video, $id_director) {
+        try {   
+            $consulta = "UPDATE $this->tabla 
+                     SET titulo = :titulo, 
+                         slug = :slug, 
+                         year = :year, 
+                         id_idioma = '1', 
+                         id_genero = :id_genero, 
+                         id_director = :id_director, 
+                         portada = :portada, 
+                         video = :video 
+                     WHERE id = :idContenido";
     
             $sentencia = $this->conn->prepare($consulta);
     
-            $sentencia->bindParam("idContenido", $idContenido, \PDO::PARAM_INT);
-            $sentencia->bindParam("titulo", $titulo, \PDO::PARAM_STR);
-            $sentencia->bindParam("slug", $slug, \PDO::PARAM_STR);
-            $sentencia->bindParam("year", $year, \PDO::PARAM_INT);
-            $sentencia->bindParam("id_director", $id_director, \PDO::PARAM_INT);
-            $sentencia->bindParam("video", $video, \PDO::PARAM_STR);
-            $sentencia->bindParam("id_idioma", $id_idioma, \PDO::PARAM_INT);
-            $sentencia->bindParam("portada", $portada, \PDO::PARAM_STR);
-            $sentencia->bindParam("id_genero", $id_genero, \PDO::PARAM_INT);
-    
+            $sentencia->bindParam(":idContenido", $idContenido, \PDO::PARAM_INT);
+            $sentencia->bindParam(":titulo", $titulo, \PDO::PARAM_STR);
+            $sentencia->bindParam(":slug", $slug, \PDO::PARAM_STR);
+            $sentencia->bindParam(":year", $year, \PDO::PARAM_INT);
+            $sentencia->bindParam(":id_director", $id_director, \PDO::PARAM_INT);
+            $sentencia->bindParam(":video", $video, \PDO::PARAM_STR);
+            $sentencia->bindParam(":portada", $portada, \PDO::PARAM_STR);
+            $sentencia->bindParam(":id_genero", $id_genero, \PDO::PARAM_INT);
+
             return $sentencia->execute();
     
         } catch (\Exception $e) {
-            error_log("Error in insertarContenido: " . $e->getMessage());
+            var_dump("Error in insertarContenido: " . $e->getMessage());
             return false;
         }
     }

@@ -20,14 +20,24 @@
             return (!empty($email) && filter_var($email, FILTER_VALIDATE_EMAIL));
         }
 
-        public static function validateTelefono($telefono):bool{
-            return (!empty($telefono) && preg_match("/^[0-9]{9}$/", $telefono));
-        }
-
         public static function validateComentario($comentario): bool {
             return (strlen($comentario) <= Parameters::$COMENTARIO_MAX_LENGTH) &&
                    (!empty($comentario) &&
                     preg_match("/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,!?():'\"-]*$/", $comentario));
+        }
+
+        public static function validateTitulo($titulo): bool {
+            if (empty($titulo)) {
+                return false;
+            }
+        
+            $patron = "/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\s.,!?():'\"-]+$/";
+        
+            if (strlen($titulo) > Parameters::$TITULO_MAX_LENGTH) {
+                return false;
+            }
+        
+            return preg_match($patron, $titulo);
         }
 
         public static function validateSinopsis($sinopsis): bool {
@@ -54,20 +64,20 @@
                 return false;
             }
         
-            // Verificar que contenga al menos un carácter alfabético
-           // if (!preg_match('/[a-zA-Z]/', $password)) {
-         //       return false;
-          //  }
+            // //Verificar que contenga al menos un carácter alfabético
+            // if (!preg_match('/[a-zA-Z]/', $password)) {
+            //     return false;
+            // }
         
-            // Verificar que contenga al menos una letra mayúscula
-          //  if (!preg_match('/[A-Z]/', $password)) {
-          //      return false;
-         //   }
+            // //Verificar que contenga al menos una letra mayúscula
+            // if (!preg_match('/[A-Z]/', $password)) {
+            //     return false;
+            // }
         
-            // Verificar que contenga al menos un carácter especial
-          //  if (!preg_match('/[!@#$%^&*(),.?":{}|<>]/', $password)) {
-          //      return false;
-         //   }
+            // //Verificar que contenga al menos un carácter especial
+            // if (!preg_match('/[!@#$%^&*(),.?":{}|<>]/', $password)) {
+            //     return false;
+            // }
         
             return true;
         }

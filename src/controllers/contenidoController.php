@@ -213,7 +213,6 @@ class ContenidoController {
     
             $contenidoModel = new ContenidoModel();
             $idContenido = $_GET['idContenido'];
-            var_dump($_GET);
             $contenido = $contenidoModel->getOne($idContenido);
 
             if (!isset($_GET['idContenido']) || empty($_GET['idContenido'])) {
@@ -237,6 +236,42 @@ class ContenidoController {
                     $estado = 1;
                     $contenidoModel->cambiarEstadoUsuario($idContenido, $estado);
                     $_SESSION['mensaje'] = "El contenido esta de alta";
+                    header("Location: " . Parameters::$BASE_URL . "Contenido/gestionarContenido");
+                    exit();
+                } else {
+                    $errores[] = 'Error al cambiar el estado';
+                }
+            } else {
+                $errores[] = 'El contenido no existe';
+            }
+        } else {
+            ViewController::showError(403);
+        }
+    }
+
+    public function cambiarEstadoAPendiente() {
+        if (Authentication::isAdminLogged()) {
+            $errores = [];
+    
+            $contenidoModel = new ContenidoModel();
+            $idContenido = $_GET['idContenido'];
+            $contenido = $contenidoModel->getOne($idContenido);
+
+            if (!isset($_GET['idContenido']) || empty($_GET['idContenido'])) {
+                $errores = 'ID de contenido no proporcionado.';
+            }
+
+            if (!empty($errores)) {
+                $_SESSION['errores'] = $errores;
+                header("Location: " . Parameters::$BASE_URL . "Contenido/gestionarContenido");
+                exit();
+            }
+    
+            if ($contenido) {
+                if ($contenido->estado == 1) {
+                    $estado = 2;
+                    $contenidoModel->cambiarEstadoUsuario($idContenido, $estado);
+                    $_SESSION['mensaje'] = "El contenido esta pendiente de confirmación";
                     header("Location: " . Parameters::$BASE_URL . "Contenido/gestionarContenido");
                     exit();
                 } else {
@@ -565,7 +600,6 @@ class ContenidoController {
         $director = $_POST['director'] ?? null;
         $puntuacion = $_POST['puntuacion'] ?? null;
         $url = $_POST['url'] ?? null;
-        $portada = $_POST['portada'] ?? null;
         
         if ($contenido->tipo_contenido == 'series') {
             $temporadas = $_POST['temporadas'] ?? null;
@@ -576,7 +610,7 @@ class ContenidoController {
     
         $erroresSpan = [];
       
-        if (!Validations::validateName($titulo)) {
+        if (!Validations::validateTitulo($titulo)) {
             $erroresSpan['titulo'] = "El título es obligatorio.";
         }
         if (!$year || !is_numeric($year)) {
@@ -611,15 +645,20 @@ class ContenidoController {
         }
         if (!Validations::validateFile($_FILES['portada'])) {
             $erroresSpan['portada'] = "El archivo debe ser .jpg, .png, .jpeg y no superar los 2MB.";
+            if ($_FILES['portada']['name'] != 'Default_Portada.png') {
+                unset($erroresSpan['portada']);
+            }
         }
 
         if (!empty($erroresSpan)) {
             $_SESSION['errores-span'] = $erroresSpan;
+
             header("Location: " . Parameters::$BASE_URL . "Contenido/editarContenido?idContenido=" . $idContenido);
             exit();
         }
 
         $slug = $this->generarSlug($titulo);
+
     
         if ($contenido->tipo_contenido == 'series') {
             $datosActualizados = [
@@ -632,8 +671,7 @@ class ContenidoController {
                 'capitulos' => $capitulos,
                 'id_director' => $director,
                 'puntuacion' => $puntuacion,
-                'video' => $url,
-                'portada' => $portada
+                'video' => $url
             ];
         }else {
             $datosActualizados = [
@@ -645,34 +683,51 @@ class ContenidoController {
                 'duracion' => $duracion,
                 'id_director' => $director,
                 'puntuacion' => $puntuacion,
-                'video' => $url,
-                'portada' => $portada
+                'video' => $url
             ];
         }
 
-        if (isset($_FILES['portada']) && $_FILES['portada']['error'] === UPLOAD_ERR_OK) {
-            $nombreArchivo = $_FILES['portada']['name'];
-            $tmpName = $_FILES['portada']['tmp_name'];
-            $directorioDestino = 'assets/img/Portadas/';
-            $rutaDestino = $directorioDestino . $nombreArchivo;
-        
-            if (move_uploaded_file($tmpName, $rutaDestino)) {
-                $_SESSION['mensaje'] = "Archivo subido con éxito: $nombreArchivo.";
+
+        if (($contenido->portada === 'Default_Portada.png') || empty($contenido->portada)) {
+            if (isset($_FILES['portada']) && $_FILES['portada']['error'] === UPLOAD_ERR_OK) {
+                $nombreArchivo = $_FILES['portada']['name'];
+                $tmpName = $_FILES['portada']['tmp_name'];
+                $directorioDestino = 'assets/img/Portadas/';
+                $rutaDestino = $directorioDestino . $nombreArchivo;
+            
+                if (move_uploaded_file($tmpName, $rutaDestino)) {
+                    $_SESSION['mensaje'] = "Archivo subido con éxito: $nombreArchivo.";
+                } else {
+                    $_SESSION['errores'][] = "Error al mover el archivo.";
+                    header("Location: " . Parameters::$BASE_URL . "Contenido/editarContenido?idContenido=" . $idContenido);
+                    exit();
+                }
             } else {
-                $_SESSION['errores'][] = "Error al mover el archivo.";
+                $_SESSION['errores'][] = "Error en la carga del archivo.";
                 header("Location: " . Parameters::$BASE_URL . "Contenido/editarContenido?idContenido=" . $idContenido);
-                exit();
             }
         } else {
-            $_SESSION['errores'][] = "Error en la carga del archivo.";
-            header("Location: " . Parameters::$BASE_URL . "Contenido/editarContenido?idContenido=" . $idContenido);
-            exit();
-        }        
-    
+            $nombreArchivo = $contenido->portada;
+        }
+        
         if (empty($erroresSpan)) {
-            // Llamar al modelo para actualizar los datos
             $contenidoModel = new ContenidoModel();
-            $resultado = $contenidoModel->updateContenido($idContenido, $datosActualizados['titulo'], $datosActualizados['slug'], $datosActualizados['year'], $datosActualizados['id_genero'], $datosActualizados['portada'], $datosActualizados['video'], $datosActualizados['id_director']);
+
+            $idContenido = (int)$idContenido;
+            $year = (int)$datosActualizados['year'];
+            $id_genero = (int)$datosActualizados['id_genero'];
+            $id_director = (int)$datosActualizados['id_director'];
+
+            $resultado = $contenidoModel->updateContenido(
+                $idContenido,
+                $datosActualizados['titulo'],
+                $datosActualizados['slug'],
+                $year,
+                $id_genero,
+                $nombreArchivo,
+                $datosActualizados['video'],
+                $id_director
+            );
 
             if ($resultado) {
                 $_SESSION['mensaje'] = "El contenido se actualizó correctamente.";
@@ -680,11 +735,10 @@ class ContenidoController {
                 $_SESSION['errores'][] = "Error al actualizar el contenido.";
             }
             
-            // Redirigir a la lista o a la página de edición
-            header("Location: " . Parameters::$BASE_URL . "Contenido/lista");
+            header("Location: " . Parameters::$BASE_URL . "Contenido/gestionarContenido");
+            exit();
         }
     }
-
 
     public function aprobarContenido() {
         if (Authentication::isAdminLogged()) {

@@ -77,6 +77,9 @@ if (isset($_SESSION['mensaje'])) {
                                 <a href="<?=Parameters::$BASE_URL . "Contenido/cambiarEstadoContenido?idContenido=" . $contenido['id']?>">
                                     <span class="material-symbols-outlined activo">toggle_on</span>
                                 </a>
+                                <a href="<?=Parameters::$BASE_URL . "Contenido/cambiarEstadoAPendiente?idContenido=" . $contenido['id']?>">
+                                    <span class="material-symbols-outlined">release_alert</span>
+                                </a>
                             <?php } ?>
                             <?php if ($contenido['estado'] == Parameters::$ESTADO_BAJA) { ?>
                                 <a href="<?=Parameters::$BASE_URL . "Contenido/cambiarEstadoContenido?idContenido=" . $contenido['id']?>">
