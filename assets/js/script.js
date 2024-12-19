@@ -288,21 +288,34 @@ if (document.querySelectorAll('.formulario-iniciar-sesion input')) {
     });
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    const inputFile = document.getElementById('inputGroupFile01');
-    const imagePreview = document.getElementById('imagePreview');
+if (document.getElementById('inputGroupFile01')) {
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        const inputFile = document.getElementById('inputGroupFile01');
+        const imagePreview = document.getElementById('imagePreview');
+        
+        inputFile.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            
+            if (file) {
+                reader.readAsDataURL(file); // Mover esta línea aquí
+            }
+            
+            reader.onload = function() {
+                imagePreview.src = '';
+                imagePreview.src = reader.result;
+            }
+        });
+    });
+}
 
-    inputFile.addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        const reader = new FileReader();
-
-        if (file) {
-            reader.readAsDataURL(file); // Mover esta línea aquí
-        }
-
-        reader.onload = function() {
-            imagePreview.src = '';
-            imagePreview.src = reader.result;
+if (document.getElementById('eliminarContenido')) {
+    document.getElementById('eliminarContenido').addEventListener('click', function(event) {
+        if (!confirm('¿Estás seguro de que deseas eliminar el contenido?')) {
+            // Si el usuario selecciona "No", prevenir la acción predeterminada
+            event.preventDefault();
+            return; // Salir de la función
         }
     });
-});
+}

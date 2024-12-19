@@ -592,7 +592,6 @@ class ContenidoController {
 
         $contenidoModel = new ContenidoModel();
         $contenido = $contenidoModel->getOne($idContenido);
-    
         $titulo = $_POST['titulo'] ?? null;
         $year = $_POST['año'] ?? null;
         $sinopsis = $_POST['sinopsis'] ?? null;
@@ -687,10 +686,10 @@ class ContenidoController {
             ];
         }
 
-
-        if (($contenido->portada === 'Default_Portada.png') || empty($contenido->portada)) {
+        $nombreArchivo = $contenido->portada;
+       
             if (isset($_FILES['portada']) && $_FILES['portada']['error'] === UPLOAD_ERR_OK) {
-                $nombreArchivo = $_FILES['portada']['name'];
+                $nombreArchivo = $_FILES['portada']['name'] ?? $contenido->portada;
                 $tmpName = $_FILES['portada']['tmp_name'];
                 $directorioDestino = 'assets/img/Portadas/';
                 $rutaDestino = $directorioDestino . $nombreArchivo;
@@ -703,12 +702,10 @@ class ContenidoController {
                     exit();
                 }
             } else {
-                $_SESSION['errores'][] = "Error en la carga del archivo.";
+              //  $_SESSION['errores'][] = "Error en la carga del archivo.";
                 header("Location: " . Parameters::$BASE_URL . "Contenido/editarContenido?idContenido=" . $idContenido);
             }
-        } else {
-            $nombreArchivo = $contenido->portada;
-        }
+       
         
         if (empty($erroresSpan)) {
             $contenidoModel = new ContenidoModel();
