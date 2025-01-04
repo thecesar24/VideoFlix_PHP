@@ -651,7 +651,6 @@ class ContenidoController {
 
         if (!empty($erroresSpan)) {
             $_SESSION['errores-span'] = $erroresSpan;
-
             header("Location: " . Parameters::$BASE_URL . "Contenido/editarContenido?idContenido=" . $idContenido);
             exit();
         }
@@ -702,11 +701,9 @@ class ContenidoController {
                     exit();
                 }
             } else {
-              //  $_SESSION['errores'][] = "Error en la carga del archivo.";
-                header("Location: " . Parameters::$BASE_URL . "Contenido/editarContenido?idContenido=" . $idContenido);
+                //$_SESSION['errores'][] = "Error en la carga del archivo.";
             }
-       
-        
+
         if (empty($erroresSpan)) {
             $contenidoModel = new ContenidoModel();
 
@@ -726,12 +723,35 @@ class ContenidoController {
                 $id_director
             );
 
-            if ($resultado) {
+            switch ($contenido->tipo_contenido) {
+                case 'peliculas':
+                    $peliculasModel = new PeliculasModel();
+                    $resultado2 = $peliculasModel->updateDetallesPeliculas($idContenido, $duracion, $sinopsis, $puntuacion);
+                    break;
+                case 'cortos':
+                    $resultado2 = $contenidoModel->insertarDetallesCortos($idContenido, $duracion);
+                    break;
+                case 'documentales':
+                    $resultado2 = $contenidoModel->insertarDetallesDocumentales($idContenido, $duracion);
+                    break;
+                case 'series':
+                    $seriesModel = new SeriesModel();
+                    $resultado2 = $seriesModel->updateDetallesSeries($idContenido, $sinopsis, $temporadas, $capitulos, $puntuacion);
+                    break;
+            };
+
+
+            if ($resultado && $resultado2) {
                 $_SESSION['mensaje'] = "El contenido se actualizó correctamente.";
+                header("Location: " . Parameters::$BASE_URL . "Contenido/gestionarContenido");
+                exit();
             } else {
                 $_SESSION['errores'][] = "Error al actualizar el contenido.";
+                header("Location: " . Parameters::$BASE_URL . "Contenido/gestionarContenido");
+                exit();
             }
-            
+        }else {
+            $_SESSION['errores'][] = "Error al actualizar el contenido.";
             header("Location: " . Parameters::$BASE_URL . "Contenido/gestionarContenido");
             exit();
         }

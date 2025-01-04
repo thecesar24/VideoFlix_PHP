@@ -140,7 +140,7 @@ if (is_null($contenido->portada)) {
                         <div class="puntuacion-Imdb-edit">
                             <label for="puntuacion">Puntuación:</label>
                             <div>
-                                <input type="text" name="puntuacion" id="puntuacion" value="<?=$tipo_contenido->puntuacion?>" readonly/>
+                                <input type="decimal" name="puntuacion" id="puntuacion" value="<?=$tipo_contenido->puntuacion?>"/>
                                 <span class="">/10</span>
                                 <span class="material-symbols-outlined estrellas">star</span>
                             </div>

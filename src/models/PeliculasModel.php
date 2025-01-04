@@ -25,6 +25,32 @@ class PeliculasModel extends Model{
         }
     }
 
+    public function updateDetallesPeliculas($idContenido, $duracion, $sinopsis, $puntuacion) {
+        try {   
+
+            $puntuacion = (float)$puntuacion;
+
+            $consulta = "UPDATE $this->tabla 
+                         SET sinopsis = :sinopsis,
+                             duracion = :duracion, 
+                             puntuacion = :puntuacion
+                         WHERE id_contenido = :id_contenido";
+    
+            $sentencia = $this->conn->prepare($consulta);
+    
+            $sentencia->bindParam(":id_contenido", $idContenido, \PDO::PARAM_INT);
+            $sentencia->bindParam(":sinopsis", $sinopsis, \PDO::PARAM_STR);
+            $sentencia->bindParam(":duracion", $duracion, \PDO::PARAM_INT);
+            $sentencia->bindParam(":puntuacion", $puntuacion, \PDO::PARAM_STR);
+
+            return $sentencia->execute();
+    
+        } catch (\Exception $e) {
+            var_dump("Error en updateDetallesPeliculas: " . $e->getMessage());
+            return false;
+        }
+    }
+
     public function getPelicula($id){
         try {
             $consulta = "select * from {$this->tabla} where id_contenido = :id";
