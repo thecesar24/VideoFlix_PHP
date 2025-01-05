@@ -72,7 +72,7 @@ if (is_null($contenido->portada)) {
                                 <?php foreach ($generos as $genero) { ?>
                                     <?php if ($contenido->tipo_contenido == 'documentales') { ?>
                                         <?php if ($genero['id'] == $contenido->id_genero) { ?>
-                                            <option value="<?=$genero['id'] ?>" selected disabled><?=$genero['nombre']?></option>
+                                            <option value="<?=$genero['id'] ?>" selected ><?=$genero['nombre']?></option>
                                         <?php } ?>    
                                     <?php } else { ?>
                                         <?php if ($genero['id'] == $contenido->id_genero) { ?>
@@ -136,6 +136,7 @@ if (is_null($contenido->portada)) {
                                     echo $_SESSION['errores-span']['director'];
                                 } ?>
                             </span>
+                        <?php if($contenido->tipo_contenido == 'peliculas' || $contenido->tipo_contenido == 'series') { ?>
                         </p>
                         <div class="puntuacion-Imdb-edit">
                             <label for="puntuacion">Puntuación:</label>
@@ -150,6 +151,7 @@ if (is_null($contenido->portada)) {
                                 } ?>
                             </span>
                         </div>
+                        <?php } ?>
                         <p>
                             <label for="">Url:</label>
                             <input type="text" name="url" id="url" value="<?=$contenido->video ?>"/>

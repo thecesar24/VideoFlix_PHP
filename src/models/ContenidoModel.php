@@ -145,10 +145,10 @@ class ContenidoModel extends Model{
         }        
     }
 
-    public function insertarContenido($titulo, $slug ,$year, $id_director, $tipo_contenido, $video) {
+    public function insertarContenido($titulo, $slug ,$year, $id_director, $tipo_contenido, $video, $portada) {
         try {    
-            $consultaContenido = "INSERT INTO $this->tabla (titulo, slug, year, tipo_contenido, id_idioma, id_director, estado, video) 
-                                  VALUES (:titulo, :slug, :year, :tipo_contenido, '1', :id_director, '2', :video)";
+            $consultaContenido = "INSERT INTO $this->tabla (titulo, slug, year, tipo_contenido, id_idioma, id_director, estado, video, portada) 
+                                  VALUES (:titulo, :slug, :year, :tipo_contenido, '1', :id_director, '2', :video, :portada)";
     
             $sentenciaContenido = $this->conn->prepare($consultaContenido);
     
@@ -158,6 +158,7 @@ class ContenidoModel extends Model{
             $sentenciaContenido->bindParam("id_director", $id_director, \PDO::PARAM_INT);
             $sentenciaContenido->bindParam("tipo_contenido", $tipo_contenido, \PDO::PARAM_STR);
             $sentenciaContenido->bindParam("video", $video, \PDO::PARAM_STR);
+            $sentenciaContenido->bindParam("portada", $portada, \PDO::PARAM_STR);
 
             $sentenciaContenido->execute();
 

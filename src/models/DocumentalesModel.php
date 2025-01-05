@@ -25,6 +25,26 @@ class DocumentalesModel extends Model{
         }
     }
 
+    public function updateDetallesDocumentales($idContenido, $duracion) {
+        try {   
+
+            $consulta = "UPDATE $this->tabla 
+                         SET duracion = :duracion
+                         WHERE id_contenido = :id_contenido";
+    
+            $sentencia = $this->conn->prepare($consulta);
+    
+            $sentencia->bindParam(":id_contenido", $idContenido, \PDO::PARAM_INT);
+            $sentencia->bindParam(":duracion", $duracion, \PDO::PARAM_INT);
+
+            return $sentencia->execute();
+    
+        } catch (\Exception $e) {
+            var_dump("Error en updateDetallesDocumentales: " . $e->getMessage());
+            return false;
+        }
+    }
+
     public function getDocumental($id){
         try {
             $consulta = "select * from {$this->tabla} where id_contenido = :id";

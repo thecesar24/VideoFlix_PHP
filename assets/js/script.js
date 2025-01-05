@@ -22,6 +22,17 @@ $(document).ready(function(){
     });
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    if (document.getElementById('eliminarContenido')) {
+        document.getElementById('eliminarContenido').addEventListener('click', function(event) {
+            console.log("Botón de eliminar contenido clickeado"); // Depuración
+            if (!confirm('¿Estás seguro de que deseas eliminar el contenido?')) {
+                event.preventDefault(); // Prevenir la acción predeterminada si el usuario cancela
+            }
+        });
+    }
+});
+
 function ocultarMensaje(elemento) {
     if (!elemento) return;
     elemento.style.opacity = "0"; // Reduce opacidad a 0
@@ -159,6 +170,8 @@ if (document.getElementById('año_nuevoContenido')) {
         const duracionContainer = document.getElementById("duracion-container");
         const temporadasContainer = document.getElementById("temporadas-container");
         const capitulosContainer = document.getElementById("capitulos-container");
+        const sinopsisContainer = document.getElementById("sinopsis-container");
+        const puntuacionContainer = document.getElementById("puntuacion-container");
 
         tipoContenido.addEventListener("change", function () {
             const selectedValue = tipoContenido.value;
@@ -166,12 +179,22 @@ if (document.getElementById('año_nuevoContenido')) {
             duracionContainer.style.display = "none";
             temporadasContainer.style.display = "none";
             capitulosContainer.style.display = "none";
+            sinopsisContainer.style.display = "block";
+            puntuacionContainer.style.display = "block";
 
             if (selectedValue === "series") {
                 temporadasContainer.style.display = "block";
                 capitulosContainer.style.display = "block";
             } else {
                 duracionContainer.style.display = "block";
+            }
+
+            if (selectedValue === "cortos" || selectedValue === "documentales") {
+                sinopsisContainer.style.display = "none";
+                puntuacionContainer.style.display = "none";
+            }else {
+                sinopsisContainer.style.display = "block";
+                puntuacionContainer.style.display = "block";
             }
         });
 
@@ -239,13 +262,11 @@ window.onload = function() {
     });
 
     function mostrarMensaje(mensaje) {
-        // Verificar si ya hay un mensaje temporal y eliminarlo
         let mensajeDiv = document.getElementById('mensaje-temporal');
         if (mensajeDiv) {
             mensajeDiv.remove();
         }
     
-        // Crear un nuevo div para el mensaje
         mensajeDiv = document.createElement('div');
         mensajeDiv.id = 'mensaje-temporal';
         mensajeDiv.textContent = mensaje;
@@ -299,7 +320,7 @@ if (document.getElementById('inputGroupFile01')) {
             const reader = new FileReader();
             
             if (file) {
-                reader.readAsDataURL(file); // Mover esta línea aquí
+                reader.readAsDataURL(file);
             }
             
             reader.onload = function() {
@@ -307,15 +328,5 @@ if (document.getElementById('inputGroupFile01')) {
                 imagePreview.src = reader.result;
             }
         });
-    });
-}
-
-if (document.getElementById('eliminarContenido')) {
-    document.getElementById('eliminarContenido').addEventListener('click', function(event) {
-        if (!confirm('¿Estás seguro de que deseas eliminar el contenido?')) {
-            // Si el usuario selecciona "No", prevenir la acción predeterminada
-            event.preventDefault();
-            return; // Salir de la función
-        }
     });
 }

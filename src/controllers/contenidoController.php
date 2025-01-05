@@ -51,7 +51,7 @@ class ContenidoController {
     }
     public function Cortos(){
         $contenidoModel = new ContenidoModel();
-        $cortos = $contenidoModel->getAllByTipoContenido('corto');
+        $cortos = $contenidoModel->getAllByTipoContenido('cortos');
         
         $contenidoFavoritoModel = new ContenidoFavoritoModel();
         $favoritos = $contenidoFavoritoModel->getAll();
@@ -298,9 +298,12 @@ class ContenidoController {
             
             $directorModel = new DirectorModel();
             $directores = $directorModel->getAll();
+
+            $generoModel = new GeneroModel();
+            $generos = $generoModel->getAll();
             
             ViewController::show("views/contenido/addContenido.php", 
-            ['contenidos' => $contenidos, 'tipos' => $tipos, 'idiomas' => $idiomas, 'directores' => $directores]);
+            ['contenidos' => $contenidos, 'tipos' => $tipos, 'idiomas' => $idiomas, 'directores' => $directores, 'generos' => $generos]);
         } else {
             ViewController::showError(403);
         }
@@ -332,14 +335,14 @@ class ContenidoController {
                     $traduccion = $traduccionController->traducir($informacion['Plot'], 'ES');
 
                     $youtubeApiController = new YoutubeApiController();
-                    $tipoContenido = $informacion['Type']; // 'movie' o 'series'
+                    $tipoContenido = $informacion['Type'];
     
                     if ($tipoContenido === 'movie') {
                         $youtubeUrl = $youtubeApiController->getContenidoCompleto(trim($informacion['Title']));
                     } elseif ($tipoContenido === 'series') {
                         $youtubeUrl = $youtubeApiController->getCapituloCompleto(trim($informacion['Title']));
                     } else {
-                        $youtubeUrl = ''; // Manejar otros tipos si es necesario
+                        $youtubeUrl = '';
                     }
                     
                     ViewController::show('views/contenido/addContenido.php', [
@@ -375,7 +378,8 @@ class ContenidoController {
             $titulo = $_POST['titulo'] ?? NULL;
             $year = $_POST['year'] ?? NULL;
             $sinopsis = $_POST['sinopsis'] ?? NULL;
-            $generos = isset($_POST['generos']) ? explode(', ', $_POST['generos']) : [];
+            $generoExistente = isset($_POST['genero_existente']) ?? NULL;
+            $nuevoGenero = trim($_POST['nuevo_genero'] ?? '');
             $duracion = $_POST['duracion'] ?? NULL;
             $temporadas = $_POST['temporadas'] ?? NULL;
             $capitulos = $_POST['capitulos'] ?? NULL;
@@ -384,6 +388,8 @@ class ContenidoController {
             $puntuacion = $_POST['puntuacion'] ?? NULL;
             $tipo_contenido = $_POST['tipo_contenido'] ?? NULL;
             $video = $_POST['url'] ?? NULL;
+            $posterUrl = $_POST['poster_url'] ?? NULL;
+            $posterFile = $_FILES['poster_file'] ?? NULL;
 
             if (empty($titulo)) {
                 $errores['titulo'] = "Inserte un título por favor.";
@@ -391,11 +397,18 @@ class ContenidoController {
             if (empty($year) || !is_numeric($year)) {
                 $errores['año'] = "Inserte un año válido por favor.";
             }
-            if (empty($sinopsis)) {
-                $errores['sinopsis'] = "Inserte una sinopsis por favor.";
+            if ($tipo_contenido != 'cortos' && $tipo_contenido != 'documentales') {
+                if (empty($sinopsis)) {
+                    $errores['sinopsis'] = "Inserte una sinopsis por favor.";
+                }
+
+                if (empty($puntuacion) || !is_numeric($puntuacion) || $puntuacion < 0 || $puntuacion > 10) {
+                    $errores['puntuacion'] = "Inserte una puntuación válida (0-10).";
+                }
             }
-            if (empty($generos)) {
-                $errores['generos'] = "Seleccione al menos un género por favor.";
+
+            if (empty($generoExistente && empty($nuevoGenero))) {
+                $errores['generos'] = "Seleccione un genero o añada uno nuevo.";
             }
             if (!empty($temporadas)) {
                 if (!is_numeric($temporadas) || $temporadas <= 0) {
@@ -415,16 +428,14 @@ class ContenidoController {
             $contenidoExiste = $contenidoModel->getContenidoUrlAmigable($slugExiste);
 
             if (!empty($contenidoExiste)) {
-                $errores['contenido'] = "El contenido ya exsite.";
+                $errores['contenido'] = "El contenido ya existe.";
             }
 
             
             if (empty($directorExistente) && empty($nuevoDirector)) {
                 $errores['director'] = "Seleccione un director o añada uno nuevo.";
             }
-            if (empty($puntuacion) || !is_numeric($puntuacion) || $puntuacion < 0 || $puntuacion > 10) {
-                $errores['puntuacion'] = "Inserte una puntuación válida (0-10).";
-            }
+
             if (empty($tipo_contenido)) {
                 $errores['tipo_contenido'] = "Seleccione un tipo de contenido por favor.";
             }
@@ -457,7 +468,39 @@ class ContenidoController {
                 } else {
                     $idDirector = $directorExistente;
                 }
+
+                $defaultPoster = 'Default_Portada.png'; // Solo el nombre del archivo
+                $rutaPoster = $defaultPoster;
+
+                if ($posterFile['error'] === UPLOAD_ERR_OK) {
+                    $uploadDir = Parameters::$BASE_URL . 'assets/img/Portadas/';
+                    $imageName = uniqid('poster_') . '.jpg';
+                    $uploadFile = $uploadDir . $imageName;
                 
+                    if (move_uploaded_file($posterFile['tmp_name'], $uploadFile)) {
+                        $rutaPoster = basename($uploadFile); // Solo el nombre del archivo
+                    } else {
+                        $_SESSION['errores'][] = "Error al subir el poster.";
+                        header("Location: " . Parameters::$BASE_URL . "Contenido/addContenido");
+                        exit();
+                    }
+                }
+                elseif (!empty($posterUrl)) {
+                    $uploadDir = Parameters::$BASE_URL . 'assets/img/Portadas/';
+                    $imageName = uniqid('poster_') . '.jpg';
+                    $uploadFile = $uploadDir . $imageName;
+                
+                    $imageData = file_get_contents($posterUrl);
+                    if ($imageData !== false) {
+                        file_put_contents($uploadFile, $imageData);
+                        $rutaPoster = basename($uploadFile); // Solo el nombre del archivo
+                    } else {
+                        $_SESSION['errores'][] = "Error al descargar el poster desde OMDB.";
+                        header("Location: " . Parameters::$BASE_URL . "Contenido/addContenido");
+                        exit();
+                    }
+                }
+
                 $slug = $this->generarSlug($titulo);
 
                 $contenidoData = [
@@ -471,23 +514,30 @@ class ContenidoController {
                     'id_director' => $idDirector,
                    'puntuacion' => $puntuacion,
                     'tipo_contenido' => $tipo_contenido,
-                    'video' => $video
+                    'video' => $video,
+                    'poster' => $rutaPoster
                 ];
 
                 
-                $idContenido = $contenidoModel->insertarContenido($contenidoData['titulo'], $contenidoData['slug'], $contenidoData['year'], $contenidoData['id_director'], $contenidoData['tipo_contenido'], $contenidoData['video']);
+                $idContenido = $contenidoModel->insertarContenido($contenidoData['titulo'], $contenidoData['slug'], $contenidoData['year'], $contenidoData['id_director'], $contenidoData['tipo_contenido'], $contenidoData['video'], $contenidoData['poster']);
                 
                 if ($idContenido) {
                     $ultimoContenido = $contenidoModel->getOne($idContenido);
                     
-                    $generoIds = [];
-                    foreach ($generos as $nombreGenero) {
-                        $nombreGenero = strtolower(trim($nombreGenero));
-
-                        $idGenero = $generoModel->obtenerOInsertarGenero($nombreGenero);
-                        $generoIds[] = $idGenero;
+                    $generoExistenteId = $_POST['genero_existente'];
+                
+                    $nuevoGeneroNombre = trim($_POST['nuevo_genero']);
+                
+                    if (!empty($generoExistenteId)) {
+                        $idGenero = $generoExistenteId;
+                    } elseif (!empty($nuevoGeneroNombre)) {
+                        $idGenero = $generoModel->obtenerOInsertarGenero($nuevoGeneroNombre);
+                    } else {
+                        $_SESSION['errores'][] = "Debes seleccionar un género existente o ingresar uno nuevo.";
+                        header('Location: ' . Parameters::$BASE_URL . "Contenido/addContenido");
+                        exit();
                     }
-
+                
                     $generoModel->asociarContenidoGenero($idGenero, $idContenido);
 
                     switch ($ultimoContenido->tipo_contenido) {
@@ -545,11 +595,11 @@ class ContenidoController {
                         break;
                     case 'cortos':
                         $cortosModel = new CortosModel;
-                        $tipo_contenido = $cortosModel->getOne($idContenido);
+                        $tipo_contenido = $cortosModel->getCorto($idContenido);
                         break;
                     case 'documentales':
                         $documentalesModel = new DocumentalesModel;
-                        $tipo_contenido = $documentalesModel->getOne($idContenido);
+                        $tipo_contenido = $documentalesModel->getDocumental($idContenido);
                         break;
                     default:
                         break;
@@ -729,10 +779,12 @@ class ContenidoController {
                     $resultado2 = $peliculasModel->updateDetallesPeliculas($idContenido, $duracion, $sinopsis, $puntuacion);
                     break;
                 case 'cortos':
-                    $resultado2 = $contenidoModel->insertarDetallesCortos($idContenido, $duracion);
+                    $cortosModel = new CortosModel();
+                    $resultado2 = $cortosModel->updateDetallesCortos($idContenido, $duracion);
                     break;
                 case 'documentales':
-                    $resultado2 = $contenidoModel->insertarDetallesDocumentales($idContenido, $duracion);
+                    $documentalesModel = new DocumentalesModel;
+                    $resultado2 = $documentalesModel->updateDetallesDocumentales($idContenido, $duracion);
                     break;
                 case 'series':
                     $seriesModel = new SeriesModel();
