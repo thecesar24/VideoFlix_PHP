@@ -9,7 +9,7 @@
     RewriteRule ^ver/([a-zA-Z0-9-]+)$ index.php?controller=contenido&action=verContenido&slug=$1 [QSA,L]    
     
     # Regla para verSerie/slug/temporada/capitulo
-    RewriteRule ^verSerie/([a-zA-Z0-9-]+)/([0-9]+)/([0-9]+)$index.php?controller=Series&action=verSeriePorCapitulos&slug=$1&temporada=$2&capitulo=$3 [QSA,L]
+    RewriteRule ^verSerie/([a-zA-Z0-9-]+)/([0-9]+)/([0-9]+)$ index.php?controller=series&action=verSeriePorCapitulos&slug=$1&temporada=$2&capitulo=$3 [QSA,L]
     
     # Regla index
     RewriteRule ^([^/]+)/([^/]+)$ index.php?controller=$1&action=$2 [QSA,L]

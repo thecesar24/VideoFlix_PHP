@@ -42,7 +42,7 @@ if (isset($_SESSION['mensaje'])) {
                 <div class="iframe-container">
                     <iframe id="youtube-iframe" src="<?=$contenido->video . '?enablejsapi=1'?>" frameborder="0" sandbox="allow-scripts allow-same-origin" allowfullscreen></iframe>
                 </div>    
-                <a href="<?=Parameters::$BASE_URL?>SeguirViendo/Add?slug=<?=$contenido->slug?>">HOLAAAAAAAAA</a>   
+                <!-- <a href="<?=Parameters::$BASE_URL?>SeguirViendo/Add?slug=<?=$contenido->slug?>">HOLAAAAAAAAA</a>-->
             </div>     
             <?php if ($contenido->tipo_contenido == 'series') { ?>
             <div class="seccion-episodios">
@@ -124,6 +124,5 @@ if (isset($_SESSION['mensaje'])) {
     </div>
 
 <script>
-    // PHP evalúa y pasa el valor de slug a una variable de JavaScript
     const slug = "<?php echo $contenido->slug; ?>";
 </script>
