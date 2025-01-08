@@ -27,21 +27,16 @@ class TraduccionController
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-        // Ejecuta la solicitud
         $response = curl_exec($ch);
 
-        // Verifica si hubo algún error con cURL
         if(curl_errno($ch)) {
             echo 'Error de cURL: ' . curl_error($ch);
         }
 
-        // Cierra la conexión cURL
         curl_close($ch);
 
-        // Decodifica la respuesta JSON
         $response_data = json_decode($response, true);
 
-        // Si la respuesta contiene una traducción, devuelve el texto traducido
         if (isset($response_data['translations'][0]['text'])) {
             $translatedText = $response_data['translations'][0]['text'];
 
@@ -63,3 +58,10 @@ class TraduccionController
 }
 
 ?>
+
+
+
+
+
+
+

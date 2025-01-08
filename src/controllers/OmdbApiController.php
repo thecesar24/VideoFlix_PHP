@@ -1,6 +1,7 @@
 <?php
 
 namespace cesar\ProyectoTest\Controllers;
+use cesar\ProyectoTest\Config\Parameters;
 
 class OmdbApiController {
     public function index(){
@@ -19,6 +20,8 @@ class OmdbApiController {
 
         if (!$response) {
             throw new \Exception('No se pudo conectar a la API de OMDb.');
+            header("Location: " . Parameters::$BASE_URL . "Inicio/Index");
+            exit();
         }
 
         $data = json_decode($response, true);
@@ -30,3 +33,8 @@ class OmdbApiController {
         return $data['Response'] === 'True' ? $data : null;
     }
 }
+
+
+
+
+

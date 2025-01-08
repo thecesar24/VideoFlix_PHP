@@ -44,4 +44,30 @@ class SeguirViendoController {
             exit();
         }
     }  
+
+    public function Add() {
+        if (isset($_GET['slug'])) {
+            $slug = $_GET['slug'];
+            $userEntity = $_SESSION['user'];
+            $idUsuario = $userEntity->getId();
+            $contenidoModel = new ContenidoModel;
+            $idContenido = $contenidoModel->getContenidoUrlAmigable($slug)->id;
+
+            $seguirViendoModel = new SeguirViendoModel;
+
+            $comprobar = $seguirViendoModel->getContenidosByUser($idUsuario);
+
+            if (!$comprobar) {
+                $resultado = $seguirViendoModel->nuevoContenidoVisto($idUsuario, $idContenido);
+            }
+
+
+            if ($resultado) {
+                echo "Añadido a 'Seguir viendo'";
+            } else {
+                echo "Error al añadir a 'Seguir viendo'";
+            }
+        }
+    }
+
 }

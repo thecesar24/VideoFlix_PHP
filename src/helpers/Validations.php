@@ -82,7 +82,7 @@
             return true;
         }
 
-        public static function validateYouTubeEmbedUrl($url): bool {
+        public static function  validateYouTubeEmbedUrl($url): bool {
             $pattern = '/^https:\/\/www\.youtube\.com\/embed\/[a-zA-Z0-9_-]+$/';
             return preg_match($pattern, $url);
         }

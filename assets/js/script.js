@@ -3,7 +3,7 @@ $(document).ready(function(){
         infinite: true,
         slidesToShow: 3,  // Número de tarjetas visibles
         slidesToScroll: 1,
-        autoplay: true,
+        autoplay: false,
         autoplaySpeed: 2000,  // Velocidad del desplazamiento
         responsive: [
             {
@@ -92,35 +92,43 @@ if (document.getElementById('mostrar-comentarios')) {
     });    
 }
 
-// window.addEventListener('message', function(event) {
-//     // Asegurarse de que el mensaje provenga del iframe de OK.ru
-//     if (!event.data || typeof event.data !== 'object') return;
+if (document.getElementById('youtube-iframe')) {
+    let player;
 
-//     // Verificar el tipo de mensaje
-//     if (event.data.type === 'player_state') {
-//         switch (event.data.state) {
-//             case 'playing':
-//                 console.log('El video está reproduciéndose.');
-//                 break;
-//             case 'paused':
-//                 console.log('El video está en pausa.');
-//                 break;
-//             case 'ended':
-//                 console.log('El video ha terminado.');
-//                 break;
-//             default:
-//                 console.log('Estado desconocido:', event.data.state);
-//         }
-//     }
-// });
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('youtube-iframe', {
+            events: {
+                onStateChange: onPlayerStateChange
+            }
+        });
+    }
 
-// // Enviar comandos al reproductor si lo necesitas
-// function sendCommandToPlayer(command) {
-//     const iframe = document.getElementById('youtube-iframe');
-//     iframe.contentWindow.postMessage({ method: command }, '*');
-// }
+    function onPlayerStateChange(event) {
+        if (event.data === YT.PlayerState.PLAYING) {
+            addToSeguirViendo();
+        }
+    }
 
-// Detectar el enlace activo al cargar la página
+    function addToSeguirViendo() {
+        const xhr = new XMLHttpRequest();
+        const baseURL = 'http://localhost/VideoFlix_PHP/';
+        const url = baseURL + 'SeguirViendo/Add?slug=' + slug;
+        
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        xhr.send();
+
+        // xhr.onreadystatechange = function () {
+        //     if (xhr.readyState === 4 && xhr.status === 200) {
+        //         console.log("Añadido a 'Seguir viendo'");
+        //     } else if (xhr.readyState === 4) {
+        //         console.error("Error al añadir a 'Seguir viendo'");
+        //     }
+        // };
+    }
+}
+
     document.addEventListener('DOMContentLoaded', () => {
         const links = document.querySelectorAll('.paginas-buttons .nav-link');
 
@@ -330,3 +338,24 @@ if (document.getElementById('inputGroupFile01')) {
         });
     });
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const buttons = document.querySelectorAll('.temporadas button');
+
+    buttons.forEach(button => {
+        button.addEventListener('click', function() {
+            const temporada = this.getAttribute('data-temporada');
+            mostrarCapitulos(temporada);
+        });
+    });
+
+    function mostrarCapitulos(temporada) {
+        const capitulos = document.querySelectorAll('.capitulos');
+        capitulos.forEach(cap => cap.style.display = 'none'); 
+
+        const capitulosTemporada = document.getElementById(`capitulos-temporada-${temporada}`);
+        if (capitulosTemporada) {
+            capitulosTemporada.style.display = 'block'; 
+        }
+    }
+});

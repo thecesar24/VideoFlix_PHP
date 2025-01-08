@@ -2,13 +2,6 @@
 
 namespace cesar\ProyectoTest\Controllers;
 
-use cesar\ProyectoTest\Config\Parameters;
-use cesar\ProyectoTest\Helpers\Authentication;
-use cesar\ProyectoTest\Models\ComentariosModel;
-use cesar\ProyectoTest\Models\ContenidoFavoritoModel;
-use cesar\ProyectoTest\Models\ContenidoModel;
-use cesar\ProyectoTest\Controllers\ViewController;
-
 class YoutubeApiController {
     public function index(){
     }
@@ -19,15 +12,13 @@ class YoutubeApiController {
         $this->apikey = 'AIzaSyCxfqghJJzAL7zoJRXmVDoKjHep6cwr28g';
     }
     public function getTrailer($titulo) {
-        // Verificar si ya tenemos un trailer almacenado en caché
-        $cacheKey = 'trailer_' . md5($titulo); // Genera una clave única basada en el título
-        $cachedTrailer = $this->getFromCache($cacheKey); // Obtener del caché (puede ser base de datos o archivos)
+        $cacheKey = 'trailer_' . md5($titulo); 
+        $cachedTrailer = $this->getFromCache($cacheKey); 
     
         if ($cachedTrailer) {
-            return $cachedTrailer; // Devuelve el trailer almacenado en caché
+            return $cachedTrailer; 
         }
     
-        // Si no está en caché, hacemos la solicitud a la API
         $query = urlencode($titulo . " trailer");
         $url = "https://www.googleapis.com/youtube/v3/search?part=snippet&q=" . $query . "&type=video&key=" . $this->apikey . "&maxResults=1";
     
@@ -42,7 +33,6 @@ class YoutubeApiController {
             if (isset($data['items'][0]['id']['videoId'])) {
                 $trailerUrl = "https://www.youtube.com/embed/" . $data['items'][0]['id']['videoId'];
     
-                // Almacenar el trailer en caché para la próxima vez
                 $this->storeInCache($cacheKey, $trailerUrl);
     
                 return $trailerUrl;
@@ -55,9 +45,8 @@ class YoutubeApiController {
     }
 
     public function getContenidoCompleto($titulo) {
-        // Verificar si ya tenemos un trailer almacenado en caché
-        $cacheKey = 'fullcontenido_' . md5($titulo); // Genera una clave única basada en el título
-        $cachedContent = $this->getFromCache($cacheKey); // Obtener del caché (puede ser base de datos o archivos)
+        $cacheKey = 'fullcontenido_' . md5($titulo); 
+        $cachedContent = $this->getFromCache($cacheKey); 
     
         if ($cachedContent) {
             return $cachedContent;
@@ -88,9 +77,8 @@ class YoutubeApiController {
         }
     }
     public function getCapituloCompleto($titulo) {
-        // Verificar si ya tenemos un trailer almacenado en caché
-        $cacheKey = 'capituloFull_' . md5($titulo); // Genera una clave única basada en el título
-        $cachedCapitulo = $this->getFromCache($cacheKey); // Obtener del caché (puede ser base de datos o archivos)
+        $cacheKey = 'capituloFull_' . md5($titulo); 
+        $cachedCapitulo = $this->getFromCache($cacheKey); 
     
         if ($cachedCapitulo) {
             return $cachedCapitulo;
@@ -121,16 +109,16 @@ class YoutubeApiController {
         }
     }
     
-    // Métodos de caché simples
     private function getFromCache($key) {
-        // Recupera el valor de la caché (puedes implementarlo en una base de datos o archivo)
-        return isset($_SESSION[$key]) ? $_SESSION[$key] : null; // Ejemplo de caché en sesión
+        return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
     }
     
     private function storeInCache($key, $value) {
-        // Almacena el valor en caché (puedes implementarlo en una base de datos o archivo)
-        $_SESSION[$key] = $value; // Ejemplo de caché en sesión
+        $_SESSION[$key] = $value; 
     }
     
     
 }
+
+
+

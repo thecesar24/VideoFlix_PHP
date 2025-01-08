@@ -31,7 +31,7 @@ $favoritos = $data["favoritos"]??NULL;
                             </div>
                         <?php } ?>
                         
-                        <a href="<?= htmlspecialchars(Parameters::$BASE_URL . "ver/" . $serie->slug) ?>" class="card-link">
+                        <a href="<?= htmlspecialchars(Parameters::$BASE_URL . "Contenido/verInfo?slug=" . $serie->slug) ?>" class="card-link">
                         <?php if (isset($serie->portada)) { ?>
                             <img class="card-img" src="<?= htmlspecialchars(Parameters::$BASE_URL . 'assets/img/Portadas/' . $serie->portada) ?>" alt="<?= htmlspecialchars($serie->titulo) ?>">
                         <?php }else { ?>

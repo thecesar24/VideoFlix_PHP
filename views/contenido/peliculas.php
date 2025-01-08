@@ -38,7 +38,7 @@ if (isset($_SESSION['mensaje'])) {
                             </div>
                         <?php } ?>
                         
-                        <a href="<?= htmlspecialchars(Parameters::$BASE_URL . "ver/" . $pelicula->slug) ?>" class="card-link">
+                        <a href="<?= htmlspecialchars(Parameters::$BASE_URL . "Contenido/verInfo?slug=" . $pelicula->slug) ?>" class="card-link">
                         <?php if (isset($pelicula->portada)) { ?>
                             <img class="card-img" src="<?= htmlspecialchars(Parameters::$BASE_URL . 'assets/img/Portadas/' . $pelicula->portada) ?>" alt="<?= htmlspecialchars($pelicula->titulo) ?>">
                         <?php }else { ?>

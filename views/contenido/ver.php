@@ -5,7 +5,15 @@ use cesar\ProyectoTest\Helpers\Authentication;
 $contenido = $data["contenido"]??NULL;
 $recomendadas = $data["recomendadas"]??NULL;
 $comentarios = $data["comentarios"]??NULL;
+$capitulos = $data["capitulos"]??NULL;
 $idUsuario = 0;
+
+//PARA SERIES:
+    $capituloActual = $data["capituloActual"]??NULL;
+    $capituloAnterior = $data["capituloAnterior"]??NULL;
+    $capituloSiguiente = $data["capituloSiguiente"]??NULL;
+    $temporadas = $data["temporadas"]??NULL;
+    $capitulosPorTemporada = $data["capitulosPorTemporada"]??NULL;
 
 if (Authentication::isUserLogged()) {
     $idUsuario = $data["idUsuario"]??NULL;
@@ -32,9 +40,27 @@ if (isset($_SESSION['mensaje'])) {
             <h1><?=$contenido->titulo?></h1>
             <div class="video-responsive">
                 <div class="iframe-container">
-                    <iframe id="youtube-iframe" src="<?=$contenido->video?>" frameborder="0" sandbox="allow-scripts allow-same-origin" allowfullscreen></iframe>
-                </div>       
+                    <iframe id="youtube-iframe" src="<?=$contenido->video . '?enablejsapi=1'?>" frameborder="0" sandbox="allow-scripts allow-same-origin" allowfullscreen></iframe>
+                </div>    
+                <a href="<?=Parameters::$BASE_URL?>SeguirViendo/Add?slug=<?=$contenido->slug?>">HOLAAAAAAAAA</a>   
             </div>     
+            <?php if ($contenido->tipo_contenido == 'series') { ?>
+            <div class="seccion-episodios">
+                <?php 
+                    if ($capituloAnterior) {
+                        echo '<a href="'. Parameters::$BASE_URL . 'verSerie/' . $contenido->slug . '/'. $capituloAnterior['num_temporada'] . '/'. $capituloAnterior['num_capitulo'].'"><span class="material-symbols-outlined">chevron_left</span></a>';
+                    } else {
+                        echo '<a href="'. Parameters::$BASE_URL . 'verSerie/' . $contenido->slug . '/'. $capituloActual['num_temporada'] . '/'. $capituloActual['num_capitulo'].'"><span class="material-symbols-outlined">chevron_left</span></a>';
+                    } ?>
+                    <a id="botonMedioEpisodios" href="<?=Parameters::$BASE_URL . 'Contenido/verInfo?slug=' . $contenido->slug?>"><span class="material-symbols-outlined">menu</span></a>
+                    <?php 
+                    if ($capituloSiguiente) {
+                        echo '<a href="'. Parameters::$BASE_URL . 'verSerie/' . $contenido->slug . '/'. $capituloSiguiente['num_temporada'] . '/'. $capituloSiguiente['num_capitulo'].'"><span class="material-symbols-outlined">chevron_right</span></a>';
+                    } else {
+                        echo '<a href="'. Parameters::$BASE_URL . 'verSerie/' . $contenido->slug . '/'. $capituloActual['num_temporada'] . '/'. $capituloActual['num_capitulo'].'"><span class="material-symbols-outlined">chevron_right</span></a>';
+                    } ?>
+            </div>
+            <?php } ?>
             <div class="seccion-comentarios">
                 <button id="mostrar-comentarios">Mostrar Comentarios</button>
                 <div class="comentarios" id="comentarios">
@@ -96,3 +122,8 @@ if (isset($_SESSION['mensaje'])) {
             </div>  
         </div>
     </div>
+
+<script>
+    // PHP evalúa y pasa el valor de slug a una variable de JavaScript
+    const slug = "<?php echo $contenido->slug; ?>";
+</script>

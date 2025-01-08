@@ -189,3 +189,13 @@ if (is_null($contenido->portada)) {
         <?php } unset($_SESSION['errores-span']) ?>
     </section>
 </div>
+
+
+
+
+
+
+
+
+
+

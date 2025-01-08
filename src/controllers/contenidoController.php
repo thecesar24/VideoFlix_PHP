@@ -16,6 +16,7 @@ use cesar\ProyectoTest\Models\SeriesModel;
 use cesar\ProyectoTest\Models\PeliculasModel;
 use cesar\ProyectoTest\Models\CortosModel;
 use cesar\ProyectoTest\Models\DocumentalesModel;
+use cesar\ProyectoTest\Models\CapitulosModel;
 
 class ContenidoController {
     public function index(){
@@ -91,14 +92,31 @@ class ContenidoController {
                 
                 $recomendadas = $contenidoModel->getRecomendadasPorGenero($idGenero, $idContenido);
 
+                if ($tipoContenido == 'series') {
+                    $seriesModel = new SeriesModel();
+                    $capitulos = $seriesModel->getAllCapitulosPorSerie($idContenido);
+
+                }
+
                 if (Authentication::isUserLogged()) {
                     $userEntity = $_SESSION['user'];
                     $idUsuario = $userEntity->getId();
-                    ViewController::show('views/contenido/ver.php', ['contenido'=> $contenido, 
-                    'recomendadas' => $recomendadas, 'comentarios' => $comentarios, 'idUsuario' => $idUsuario]);
+
+                    if ($tipoContenido == 'series') {
+                        ViewController::show('views/contenido/ver.php', ['contenido'=> $contenido, 
+                        'recomendadas' => $recomendadas, 'comentarios' => $comentarios, 'idUsuario' => $idUsuario, 'capitulos' => $capitulos]);   
+                    }else{
+                        ViewController::show('views/contenido/ver.php', ['contenido'=> $contenido, 
+                        'recomendadas' => $recomendadas, 'comentarios' => $comentarios, 'idUsuario' => $idUsuario]);
+                    }
                 } else {
-                    ViewController::show('views/contenido/ver.php', ['contenido'=> $contenido, 
-                    'recomendadas' => $recomendadas, 'comentarios' => $comentarios]);
+                    if ($tipoContenido == 'series') {
+                        ViewController::show('views/contenido/ver.php', ['contenido'=> $contenido, 
+                        'recomendadas' => $recomendadas, 'comentarios' => $comentarios, 'capitulos' => $capitulos]);   
+                    }else{
+                        ViewController::show('views/contenido/ver.php', ['contenido'=> $contenido, 
+                        'recomendadas' => $recomendadas, 'comentarios' => $comentarios]);
+                    }
                 }
                 exit();
             } else {
@@ -158,21 +176,42 @@ class ContenidoController {
                     $tipo = $peliculasModel->getPelicula($contenidoInfo->id);
                 } elseif($contenidoInfo->tipo_contenido == "series") {
                     $tipo = $seriesModel->getSerie($contenidoInfo->id);
+                    $capituloModel = new CapitulosModel();
+                    $temporadas = $capituloModel->getTemporadasPorContenido($resultado->id);
+                    $capitulosPorTemporada = [];
+                    foreach ($temporadas as $temporada) {
+                        $capitulosPorTemporada[$temporada] = $capituloModel->getCapitulosPorTemporada($resultado->id, $temporada);
+                    }
+
                 } else {
                     $tipo = '-';
                 }
 
-                
-                ViewController::show('views/contenido/info.php', [
-                    'informacion' => $informacion,
-                    'slug' => $slug, 
-                    'youtubeTrailer' => $youtubeTrailer,
-                    'tipo' => $tipo,
-                    'contenidoInfo' => $contenidoInfo,
-                    'genero' => $genero,
-                    'director' => $director,
-                    'idioma' => $idioma
-                ]);
+                if($contenidoInfo->tipo_contenido == 'series'){
+                    ViewController::show('views/contenido/info.php', [
+                        'informacion' => $informacion,
+                        'slug' => $slug, 
+                        'youtubeTrailer' => $youtubeTrailer,
+                        'tipo' => $tipo,
+                        'contenidoInfo' => $contenidoInfo,
+                        'genero' => $genero,
+                        'director' => $director,
+                        'idioma' => $idioma,
+                        'temporadas' => $temporadas,
+                        'capitulosPorTemporada' => $capitulosPorTemporada
+                    ]);
+                }else {
+                    ViewController::show('views/contenido/info.php', [
+                        'informacion' => $informacion,
+                        'slug' => $slug, 
+                        'youtubeTrailer' => $youtubeTrailer,
+                        'tipo' => $tipo,
+                        'contenidoInfo' => $contenidoInfo,
+                        'genero' => $genero,
+                        'director' => $director,
+                        'idioma' => $idioma
+                    ]);
+                }
             } else {
                 $_SESSION['errores'][] = 'No se encontraron resultados para la película.';
                 header("Location: " . Parameters::$BASE_URL . 'Inicio/index');
@@ -210,7 +249,6 @@ class ContenidoController {
     public function cambiarEstadoContenido() {
         if (Authentication::isAdminLogged()) {
             $errores = [];
-    
             $contenidoModel = new ContenidoModel();
             $idContenido = $_GET['idContenido'];
             $contenido = $contenidoModel->getOne($idContenido);
@@ -224,7 +262,6 @@ class ContenidoController {
                 header("Location: " . Parameters::$BASE_URL . "Contenido/gestionarContenido");
                 exit();
             }
-    
             if ($contenido) {
                 if ($contenido->estado == 1) {
                     $estado = 0;
@@ -333,6 +370,7 @@ class ContenidoController {
 
                 if ($informacion) {
                     $traduccion = $traduccionController->traducir($informacion['Plot'], 'ES');
+                    $generoTraducido = $traduccionController->traducir($informacion['Genre'], 'ES');
 
                     $youtubeApiController = new YoutubeApiController();
                     $tipoContenido = $informacion['Type'];
@@ -344,13 +382,16 @@ class ContenidoController {
                     } else {
                         $youtubeUrl = '';
                     }
+
+                    $_SESSION['Omdb'] = true;
                     
                     ViewController::show('views/contenido/addContenido.php', [
                         'informacion' => $informacion,
                         'contenidos' => $contenidos, 
                         'tipos' => $tipos,
                         'traduccion' => $traduccion,
-                        'youtubeUrl' => $youtubeUrl
+                        'youtubeUrl' => $youtubeUrl,
+                        'generoTraducido' => $generoTraducido
                     ]);
                 } else {
                     $_SESSION['errores'][] = 'No se encontraron resultados para la película.';
@@ -406,10 +447,6 @@ class ContenidoController {
                     $errores['puntuacion'] = "Inserte una puntuación válida (0-10).";
                 }
             }
-
-            if (empty($generoExistente && empty($nuevoGenero))) {
-                $errores['generos'] = "Seleccione un genero o añada uno nuevo.";
-            }
             if (!empty($temporadas)) {
                 if (!is_numeric($temporadas) || $temporadas <= 0) {
                     $errores['temporadas'] = "Inserte un número válido de temporadas.";
@@ -424,6 +461,18 @@ class ContenidoController {
                 }
             }
 
+            if ($_SESSION['Omdb']) {
+                if (empty($nuevoGenero)) {
+                    $errores['generos'] = "Seleccione un genero.";
+                }
+                unset($_SESSION['Omdb']);
+            }else{
+                if (empty($generoExistente && empty($nuevoGenero))) {
+                    $errores['generos'] = "Seleccione un genero o añada uno nuevo.";
+                }
+            }
+
+
             $slugExiste = $this->generarSlug($titulo);
             $contenidoExiste = $contenidoModel->getContenidoUrlAmigable($slugExiste);
 
@@ -431,7 +480,6 @@ class ContenidoController {
                 $errores['contenido'] = "El contenido ya existe.";
             }
 
-            
             if (empty($directorExistente) && empty($nuevoDirector)) {
                 $errores['director'] = "Seleccione un director o añada uno nuevo.";
             }
@@ -469,16 +517,16 @@ class ContenidoController {
                     $idDirector = $directorExistente;
                 }
 
-                $defaultPoster = 'Default_Portada.png'; // Solo el nombre del archivo
+                $defaultPoster = 'Default_Portada.png';
                 $rutaPoster = $defaultPoster;
 
                 if ($posterFile['error'] === UPLOAD_ERR_OK) {
-                    $uploadDir = Parameters::$BASE_URL . 'assets/img/Portadas/';
+                    $uploadDir = 'assets/img/Portadas/';
                     $imageName = uniqid('poster_') . '.jpg';
                     $uploadFile = $uploadDir . $imageName;
                 
                     if (move_uploaded_file($posterFile['tmp_name'], $uploadFile)) {
-                        $rutaPoster = basename($uploadFile); // Solo el nombre del archivo
+                        $rutaPoster = basename($uploadFile);
                     } else {
                         $_SESSION['errores'][] = "Error al subir el poster.";
                         header("Location: " . Parameters::$BASE_URL . "Contenido/addContenido");
@@ -486,14 +534,14 @@ class ContenidoController {
                     }
                 }
                 elseif (!empty($posterUrl)) {
-                    $uploadDir = Parameters::$BASE_URL . 'assets/img/Portadas/';
+                    $uploadDir = 'assets/img/Portadas/';
                     $imageName = uniqid('poster_') . '.jpg';
                     $uploadFile = $uploadDir . $imageName;
                 
                     $imageData = file_get_contents($posterUrl);
                     if ($imageData !== false) {
                         file_put_contents($uploadFile, $imageData);
-                        $rutaPoster = basename($uploadFile); // Solo el nombre del archivo
+                        $rutaPoster = basename($uploadFile);
                     } else {
                         $_SESSION['errores'][] = "Error al descargar el poster desde OMDB.";
                         header("Location: " . Parameters::$BASE_URL . "Contenido/addContenido");
@@ -531,7 +579,29 @@ class ContenidoController {
                     if (!empty($generoExistenteId)) {
                         $idGenero = $generoExistenteId;
                     } elseif (!empty($nuevoGeneroNombre)) {
-                        $idGenero = $generoModel->obtenerOInsertarGenero($nuevoGeneroNombre);
+                        $ultimoContenido = $contenidoModel->getOne($idContenido);
+
+                        // Separar los géneros por comas y limpiar espacios
+                        $generos = array_map('trim', explode(',', $nuevoGeneroNombre));
+
+                        // Array para almacenar los IDs de los géneros
+                        $generoIds = [];
+
+                        // Insertar o obtener los IDs de los géneros
+                        foreach ($generos as $nombreGenero) {
+                            $nombreGenero = strtolower(trim($nombreGenero)); // Limpiar y normalizar el nombre
+                            if (!empty($nombreGenero)) {
+                                $idGenero = $generoModel->obtenerOInsertarGenero($nombreGenero); // Insertar o obtener el género
+                                $generoIds[] = $idGenero; // Guardar el ID del género
+                            }
+                        }
+                    
+                        // Asociar solo el primer género al contenido
+                        if (!empty($generoIds)) {
+                            $idPrimerGenero = $generoIds[0]; // Tomar el primer género
+                            $generoModel->asociarContenidoGenero($idPrimerGenero, $idContenido); // Asociar el primer género
+                        }
+
                     } else {
                         $_SESSION['errores'][] = "Debes seleccionar un género existente o ingresar uno nuevo.";
                         header('Location: ' . Parameters::$BASE_URL . "Contenido/addContenido");
@@ -552,6 +622,12 @@ class ContenidoController {
                             break;
                         case 'series':
                             $seriesModel->insertarDetallesSeries($idContenido, $contenidoData['sinopsis'], $contenidoData['temporadas'], $contenidoData['capitulos'], $contenidoData['puntuacion']);
+                            
+                            //Añadir cap 1 temp 1
+                            $num_capitulo = 1;
+                            $num_temporada = 1;
+                            $seriesModel->insertarCapitulo($num_capitulo, $num_temporada, $contenidoData['video'], $idContenido);
+                            
                             break;
                     }
 

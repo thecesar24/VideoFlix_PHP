@@ -56,25 +56,43 @@ class SeriesModel extends Model{
         }
     }
 
-    public function insertarCapitulo($idContenido, $sinopsis, $temporadas, $capitulos) {
+    public function insertarCapitulo($num_capitulo, $num_temporada, $url_cap, $id_serie) {
         try {
-            $sqlSeries = "INSERT INTO capitulos (id_contenido, sinopsis, temporadas, capitulos)
-                          VALUES (:id_contenido, :sinopsis, :temporadas, :capitulos)";
-            $stmtSeries = $this->conn->prepare($sqlSeries);
-            $stmtSeries->execute([
-                'id_contenido' => $idContenido,
-                'sinopsis' => $sinopsis,
-                'temporadas' => (int)$temporadas,
-                'capitulos' => (int)$capitulos,
+            $consulta = "INSERT INTO capitulos (num_capitulo, num_temporada, url_cap, id_serie)
+                         VALUES (:num_capitulo, :num_temporada, :url_cap, :id_serie)";
+            
+            $sentencia = $this->conn->prepare($consulta);
+            $sentencia->execute([
+                'num_capitulo' => $num_capitulo,
+                'num_temporada' => $num_temporada,
+                'id_serie' => $id_serie,
+                'url_cap' => $url_cap
             ]);
         } catch (\Exception $e) {
             echo "Error en insertarDetallesSeries: " . $e->getMessage();
+            exit();
+        }
+    }
+
+    public function getAllCapitulosPorSerie($id_serie){
+        try {
+            $consulta = "SELECT * FROM capitulos WHERE id_serie = :id_serie";
+            
+            $sentencia = $this->conn->prepare($consulta);
+            $sentencia->bindParam(':id_serie' , $id_serie);
+
+            $sentencia->execute();
+            return $sentencia->fetchAll(\PDO::FETCH_OBJ);
+            
+        } catch (\Exception $e) {
+            echo "Error en getAllCapitulos: " . $e->getMessage();
+            exit();
         }
     }
 
     public function getSerie($id){
         try {
-            $consulta = "select * from {$this->tabla} where id_contenido = :id";
+            $consulta = "SELECT * FROM {$this->tabla} WHERE id_contenido = :id";
 
             $sentencia = $this->conn->prepare($consulta);
             $sentencia->bindParam(':id', $id);
@@ -87,7 +105,6 @@ class SeriesModel extends Model{
 
         } catch (\PDOException $e) {
             echo '<p>Fallo en la conexion:' . $e->getMessage() . '</p>';
-            // Registrar en un sistema de Log
             return NULL;
         }
     }

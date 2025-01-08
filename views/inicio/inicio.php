@@ -14,7 +14,7 @@ if (isset($_SESSION['errores'])) {
 }
 
 ?>
-<div id="carouselExample" class="carousel slide" data-ride="carousel" data-interval="4000">
+<div id="carouselExample" class="carousel slide" data-ride="carousel" data-interval="400000">
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <img src="<?= Parameters::$BASE_URL . 'assets/img/pelis-españolas.jpeg' ?>" class="d-block w-100" alt="Películas Españolas">

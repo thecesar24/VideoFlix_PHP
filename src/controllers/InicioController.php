@@ -13,7 +13,10 @@ class InicioController {
         $cortos = $inicioModel->get4RandByTipoContenido('cortos');
         $documentales = $inicioModel->get4RandByTipoContenido('documentales');
 
-        ViewController::show("views/inicio/inicio.php", ['peliculas' => $peliculas, 'cortos' => $cortos, 'documentales' => $documentales, 'series' => $series]);
+        ViewController::show("views/inicio/inicio.php", ['peliculas' => $peliculas, 
+                                                         'cortos' => $cortos, 
+                                                         'documentales' => $documentales, 
+                                                         'series' => $series]);
     }
 
     

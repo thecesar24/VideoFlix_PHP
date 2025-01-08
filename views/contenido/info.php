@@ -10,6 +10,13 @@ $genero = $data["genero"]??NULL;
 $director = $data["director"]??NULL;
 $idioma = $data["idioma"]??NULL;
 
+$temporadaActual = 1 ?? NULL;
+$capituloActual = 1 ?? NULL;
+
+$temporadas = $data['temporadas'] ?? NULL;
+$capitulosPorTemporada = $data['capitulosPorTemporada'] ?? NULL;
+
+
 if (isset($_SESSION['errores'])) {
     foreach ($_SESSION['errores'] as $error) {
         echo "<p class='error'>$error</p>"; // Muestra cada mensaje de error
@@ -62,12 +69,38 @@ if (isset($_SESSION['mensaje'])) {
                         </div>
                     </div>
                 <?php } ?>
+                <?php if ($contenidoInfo->tipo_contenido == 'series') { ?>
+                    <div class="temporadas-container">
+                        <div class="temporadas">
+                            <?php foreach ($temporadas as $temporada): ?>
+                                <button data-temporada="<?php echo $temporada; ?>">Temporada <?php echo $temporada; ?></button>
+                            <?php endforeach; ?>
+                        </div>
+                        <div class="capitulos-container">
+                            <?php foreach ($temporadas as $temporada): ?>
+                                <ul class="capitulos" id="capitulos-temporada-<?php echo $temporada; ?>">
+                                    <?php foreach ($capitulosPorTemporada[$temporada] as $capitulo): ?>
+                                        <li>
+                                            <a href="<?= Parameters::$BASE_URL . "verSerie/" . $slug . "/" . $temporada . "/" . $capitulo->num_capitulo ?>">
+                                                Capítulo <?php echo $capitulo->num_capitulo; ?>
+                                            </a>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                <?php } ?>
                 <p>
-                    <a href="<?=Parameters::$BASE_URL . "ver/" . $slug?>">
+                <?php if ($contenidoInfo->tipo_contenido == 'series') { ?>
+                    <a href="<?=Parameters::$BASE_URL . "verSerie/" . $slug . "/" . $temporadaActual . "/" . $capituloActual?>">
+                    <?php }else{ ?>
+                        <a href="<?=Parameters::$BASE_URL . "ver/" . $slug?>">
+                    <?php } ?>
                         <?php if ($contenidoInfo->tipo_contenido == 'peliculas') { ?>
                             <button>Ver Pelicula</button>
                         <?php } if ($contenidoInfo->tipo_contenido == 'series') { ?>
-                            <button>Ver Serie</button>
+                            <button>Ver Serie (Cap 1)</button>
                         <?php } if ($contenidoInfo->tipo_contenido == 'documentales') { ?>
                             <button>Ver Documental</button>
                         <?php } if ($contenidoInfo->tipo_contenido == 'cortos') { ?>

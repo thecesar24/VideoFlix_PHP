@@ -8,21 +8,23 @@ class SeguirViendoModel extends Model{
 
     public function __construct(){
         parent::__construct();
-        $this->tabla = "seguir_viendo";
+        $this->tabla = "seguirviendo";
     }
     
-    public function nuevoContenidoVisto($userId, $contenidoId) {
+    public function nuevoContenidoVisto($idUsuario, $idContenido) {
         try {
-            $consulta = "INSERT INTO {$this->tabla} 
-                         (usuario_id, contenido_id) 
-                         VALUES (:usuario_id, :contenido_id)";
-
+            $consulta = "INSERT INTO seguirviendo (id_usuario, id_contenido) VALUES (:id_usuario, :id_contenido)";
+    
             $sentencia = $this->conn->prepare($consulta);
-            $sentencia->bindParam(':usuario_id', $userId);
-            $sentencia->bindParam(':contenido_id', $contenidoId);
-            return $sentencia->execute();
+            $sentencia->bindParam(':id_contenido', $idContenido, \PDO::PARAM_INT); 
+            $sentencia->bindParam(':id_usuario', $idUsuario, \PDO::PARAM_INT); 
+    
+            $resultado = $sentencia->execute();
+    
+            return $resultado; 
+    
         } catch (\PDOException $e) {
-            return null;
+            return $e;
         }
     }
 
