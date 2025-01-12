@@ -336,7 +336,6 @@ main .container {
     cursor: pointer;
 }
 
-/* Estilo cuando se hace hover (corazón relleno) */
 .favorito .material-symbols-outlined:hover {
     color: red;
 }
@@ -546,7 +545,6 @@ main .container {
     border: 0;
 }
 
-    /* Contenedor de episodios */
     .seccion-episodios {
         display: flex;
         justify-content: center;
@@ -558,11 +556,11 @@ main .container {
     
     .seccion-episodios a {
         text-decoration: none;
-        color: #fff; /* Texto blanco */
+        color: #fff;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: #007bff; /* Azul */
+        background-color: #007bff;
         padding: 10px;
         border-radius: 20px;
         width: 80px;
@@ -580,7 +578,7 @@ main .container {
     }
     
     .seccion-episodios a:hover {
-        background-color: #0056b3; /* Azul más oscuro al pasar el mouse */
+        background-color: #0056b3;
     }
     
     /* Estilos para los íconos de navegación */
@@ -689,9 +687,9 @@ main .container {
 
 .input-contenedor input {
     width: 100%;
-    padding: 8px; /* Ajusta el relleno interno para mejor estética */
-    border: 1px solid #ccc; /* Estilo del borde */
-    border-radius: 4px; /* Bordes redondeados */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
     padding-right: 40px; 
 }
 
@@ -884,13 +882,12 @@ main .container {
 }
 
 .temporadas button:hover {
-    background-color: #0056b3; /* Color de fondo de los botones al pasar el mouse */
+    background-color: #0056b3;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Estilos para el contenedor de capítulos */
 .capitulos-container {
-    background-color: #666; /* Fondo secundario */
+    background-color: #666;
     padding: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -902,7 +899,7 @@ main .container {
     list-style: none;
     padding: 0;
     margin: 0;
-    display: none; /* Oculta los capítulos por defecto */
+    display: none;
 }
 
 .capitulos li {
@@ -911,32 +908,31 @@ main .container {
 
 .capitulos li a {
     text-decoration: none;
-    color: #fff; /* Color de texto de los enlaces */
+    color: #fff;
     font-size: 14px;
     display: block;
     padding: 8px 12px;
-    background-color: #444; /* Color de fondo de los enlaces */
+    background-color: #444;
     border-radius: 5px;
     transition: background-color 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .capitulos li a:hover {
-    background-color: #555; /* Color de fondo de los enlaces al pasar el mouse */
+    background-color: #555;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Mostrar los capítulos de la temporada activa */
 .capitulos.active {
     display: block;
 }
 
 .capitulos {
-    display: none; /* Oculta todos los capítulos por defecto */
+    display: none;
 }
 
 #capitulos-temporada-1 {
-    display: block; /* Muestra los capítulos de la primera temporada por defecto */
+    display: block;
 }
 
 
@@ -944,7 +940,7 @@ main .container {
    Tabla Usuarios 
 ----------------------- */
 .carousel-item {
-    transition: transform 2s ease; /* Cambia la duración a 2 segundos */
+    transition: transform 2s ease; 
   }
 
 .container-gestion {
@@ -1036,7 +1032,7 @@ main .container {
 }
 
 .tabla-todosUsuarios .fila {
-    display: grid; /* Mantiene la estructura de grid */
+    display: grid; 
     grid-template-columns:  1fr 1fr 2.5fr 1fr 1fr 1fr 1fr ;
     color: #696969;
 }
@@ -1045,15 +1041,15 @@ main .container {
     padding: 10px 15px;
     border-bottom: 1px solid #ddd;
     margin: 0;
-    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-    overflow: hidden; /* Oculta el texto que se desborda */
-    text-overflow: ellipsis; /* Añade puntos suspensivos si el contenido se desborda */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; 
     text-align: left;
 }
 
 .tabla-todosUsuarios .fila1 div {
-    font-weight: bold; /* Aumenta el peso de la fuente del encabezado */
-    background-color: #f2f2f2; /* Color de fondo del encabezado */
+    font-weight: bold; 
+    background-color: #f2f2f2;
     height: 50px;
     display: flex;
     align-items: center;
@@ -1127,7 +1123,7 @@ main .container {
 }
 
 .tabla-todosContenidos .fila {
-    display: grid; /* Mantiene la estructura de grid */
+    display: grid;
     grid-template-columns:  2fr 1fr 1fr 1fr 1fr 1.5fr 1fr ;
     color: #696969;
 }
@@ -1136,15 +1132,15 @@ main .container {
     padding: 10px 15px;
     border-bottom: 1px solid #ddd;
     margin: 0;
-    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
-    overflow: hidden; /* Oculta el texto que se desborda */
-    text-overflow: ellipsis; /* Añade puntos suspensivos si el contenido se desborda */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     text-align: left;
 }
 
 .tabla-todosContenidos .fila1 div {
-    font-weight: bold; /* Aumenta el peso de la fuente del encabezado */
-    background-color: #f2f2f2; /* Color de fondo del encabezado */
+    font-weight: bold;
+    background-color: #f2f2f2;
     height: 50px;
     display: flex;
     align-items: center;
@@ -1312,7 +1308,6 @@ main .container {
    Aniadir Contenido 
 ----------------------- */
 
-/** Estilos generales **/
 .anadir-container {
     max-width: 100%;
     display: flex;
@@ -1331,7 +1326,6 @@ main .container {
     border-radius: 10px;
 }
 
-/** Estilos para el formulario **/
 .anadir-form {
     display: flex;
     flex-direction: column;
@@ -1406,7 +1400,6 @@ main .container {
     background-color: #c82333;
 }
 
-/** Estilos para la sección de la imagen **/
 .anadir-image {
     display: flex;
     justify-content: center;
@@ -1420,7 +1413,6 @@ main .container {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/** Estilos para mensajes de error y éxito **/
 .error {
     color: #dc3545;
     font-weight: bold;
@@ -1436,7 +1428,6 @@ main .container {
     text-align: center;
 }
 
-/** Estilos específicos para los contenedores dinámicos **/
 #temporadas-container,
 #capitulos-container {
     display: none;
@@ -1447,18 +1438,16 @@ main .container {
     display: block;
 }
 
-/** Estilos para la puntuación **/
 .puntuacion-Imdb {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.puntuacion-Imdb span {
-    color: #ffc107;
+.puntuacion-Imdb span:first {
+    color: #000;
 }
 
-/** Estilos para el input de archivo **/
 input[type="file"] {
     padding: 10px;
     border: 1px solid #ccc;
@@ -1995,7 +1984,7 @@ footer {
     position: fixed; 
     text-align: center;
     transition: opacity 0.5s ease;
-    width: 100%; /* Opcional: Ajustar el ancho */
+    width: 100%;
     box-sizing: border-box;
     z-index: 1001; 
 }
@@ -2011,7 +2000,7 @@ footer {
 
 #mensaje-temporal {
     position: fixed; 
-    top: 10%;  /* Cambiado a la parte superior */
+    top: 10%; 
     left: 50%; 
     transform: translate(-50%, 0); 
     background-color: #d4edda; 
@@ -2020,6 +2009,6 @@ footer {
     border-radius: 5px; 
     margin-bottom: 15px; 
     text-align: center;
-    z-index: 1000;  /* Asegura que esté encima de otros elementos */
-    transition: opacity 0.5s ease; /* Transición suave */
+    z-index: 1000;
+    transition: opacity 0.5s ease;
 }

@@ -1,5 +1,6 @@
 <?php
 use cesar\ProyectoTest\Config\Parameters;
+use cesar\ProyectoTest\Helpers\Authentication;
 
 $resultados = $data["resultados"]??NULL;
 
@@ -11,9 +12,11 @@ $resultados = $data["resultados"]??NULL;
             <?php if (!empty($resultados)){ ?>
                     <?php foreach ($resultados as $resultado){ ?>      
                         <div class="card-listar card">
-                            <a class="favorito" href="#">
-                                <span class="material-symbols-outlined">favorite</span>
-                            </a>
+                            <?php if (Authentication::isUserLogged()) {
+                                echo '<a class="favorito" href="#">
+                                        <span class="material-symbols-outlined">favorite</span>
+                                     </a>';
+                            } ?>
                             <a href="<?=Parameters::$BASE_URL . "ver/" . $resultado->slug ?>" class="card-link">
                                 <img class="card-img" src="<?= Parameters::$BASE_URL . 'assets/img/Portadas/' . $resultado->portada ?>" alt="<?=$resultado->titulo ?>">
                                 <div class="card-overlay">
