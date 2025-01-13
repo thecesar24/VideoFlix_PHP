@@ -13,8 +13,8 @@ class UsuarioModel extends Model{
     
     public function register(UserEntity $userEntity) {
         try {
-            $consulta = "INSERT INTO {$this->tabla}(nombre, apellidos, email, username, password) 
-                         VALUES(:nombre, :apellidos, :email, :username, :password)";
+            $consulta = "INSERT INTO {$this->tabla}(nombre, apellidos, email, username, password, estado) 
+                         VALUES(:nombre, :apellidos, :email, :username, :password, 1)";
     
             $nombre = $userEntity->getNombre();
             $apellidos = $userEntity->getApellidos();
@@ -57,7 +57,6 @@ class UsuarioModel extends Model{
             
             $sentencia = $this->conn->prepare($consulta);
     
-            // Asigna los valores a variables antes de pasarlos a bindParam()
             $nombre = $userEntity->getNombre();
             $apellidos = $userEntity->getApellidos();
             $email = $userEntity->getEmail();

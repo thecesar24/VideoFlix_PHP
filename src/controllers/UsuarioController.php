@@ -98,8 +98,16 @@ class UsuarioController {
                 $usuarioModel->register($userEntity);
                 $_SESSION['mensaje'] = "Usuario registrado correctamente.";
 
+                
                 $usuario = $usuarioModel->login($username);
-                $_SESSION['user'] = $userEntity;
+                $userEntity->setId($usuario->id);
+                $_SESSION['user'] = $userEntity;    
+
+                if ($usuario->estado == 0) {
+                    $_SESSION['errores'][] = "La cuenta esta bloqueada, contacta con un administrador.";
+                    header("Location: " . Parameters::$BASE_URL . "Usuario/login");
+                    exit();
+                }
                 
                 if ($username == Parameters::$ROL_ADMIN) {
                     $_SESSION['admin'] = $userEntity;
