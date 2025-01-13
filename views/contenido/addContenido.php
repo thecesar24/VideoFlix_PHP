@@ -180,7 +180,7 @@ if (isset($_SESSION['mensaje'])) {
                             <label for="">Url:</label>
                             <input type="text" name="url" id="url" value="" class="anadir-input" placeholder="Añadir url youtube embed"/>
                         </p>
-                        <p>
+                        <p class="poster-file">
                             <label for="poster_file">Subir otro poster:</label>
                             <input type="file" name="poster_file" id="poster_file" accept="image/*" class="anadir-input">
                         </p>
