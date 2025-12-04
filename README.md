@@ -8,28 +8,20 @@ Este proyecto me sirvió para consolidar conceptos clave del backend, el manejo 
 ## ✨ ¿Qué aprendí con este proyecto?
 
   - Cómo estructurar un proyecto real en PHP.
-
   - Conexión a base de datos y consultas con SQL Server.
-
   - Manejo de sesiones, rutas básicas y autenticación sencilla.
-
   - Organización de un proyecto por módulos y componentes reutilizables.
-
   - Diseño responsive básico con HTML y CSS.
-
   - Uso de formularios, validación y subida de recursos.
 
 En resumen: fue mi primera experiencia creando una aplicación web completa de principio a fin.
 
 ## 🧱 Tecnologías utilizadas
 
-  - PHP (lógica del servidor)
-
-  - SQL Server (gestión de datos)
-
-  - HTML & CSS (estructura y estilos)
-
-  - JavaScript (interactividad)
+  - `PHP` 
+  - `SQL Server` 
+  - `HTML & CSS` 
+  - `JavaScript` 
 
 ## ▶️ Cómo ejecutarlo (modo local)
 
